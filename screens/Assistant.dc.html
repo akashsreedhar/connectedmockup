@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assistant</title>
+</head>
+<body>
+<x-dc>
+<helmet><style>/* Styles live in app.css (.cx-*) because this component is mounted outside the screen. */</style></helmet>
+<div>
+  <sc-if value="{{ showLauncher }}">
+    <button type="button" class="cx-launch" onClick="{{ open }}" aria-label="Open the Connekted assistant (Ctrl+K)">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8zM19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"></path></svg>
+      Ask Connekted
+    </button>
+  </sc-if>
+
+  <sc-if value="{{ isOpen }}">
+    <aside class="cx-panel" role="dialog" aria-label="Connekted assistant">
+      <div class="cx-head">
+        <span class="cx-logo"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"></path></svg></span>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+          <span style="font-weight: 700">Connekted assistant</span>
+          <span class="cx-ctx"><span class="dot" style="background: #15803D"></span>Looking at: {{ screenName }}</span>
+        </div>
+        <button type="button" class="cx-icon" onClick="{{ reset }}" aria-label="New chat" title="New chat"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+        <button type="button" class="cx-icon" onClick="{{ close }}" aria-label="Close assistant" title="Close"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+
+      <div class="cx-log" id="cx-log" role="log" aria-live="polite">
+        <sc-if value="{{ empty }}">
+          <div style="display: flex; flex-direction: column; gap: 6px; padding: 8px 0 4px">
+            <span style="font-size: 20px; font-weight: 700; letter-spacing: -.3px">Hi Meera, what should we set up?</span>
+            <span class="muted">I can change agents, campaigns, channels and settings for you. I always show what will change and wait for your OK.</span>
+          </div>
+          <span class="lab" style="margin-top: 6px">Suggested for {{ screenName }}</span>
+          <div class="cx-sug">
+            <sc-for list="{{ suggestions }}" as="s"><button type="button" onClick="{{ s.ask }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F55D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"></path></svg>{{ s.text }}</button></sc-for>
+          </div>
+          <span class="lab" style="margin-top: 8px">Or try</span>
+          <div class="chips">
+            <sc-for list="{{ more }}" as="s"><button type="button" class="chip" onClick="{{ s.ask }}">{{ s.text }}</button></sc-for>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ msgs }}" as="m">
+          <sc-if value="{{ m.isUser }}"><div class="cx-u">{{ m.text }}</div></sc-if>
+          <sc-if value="{{ m.isBot }}">
+            <div class="cx-b">
+              <span class="tx">{{ m.text }}</span>
+
+              <sc-if value="{{ m.isPlan }}">
+                <div class="{{ m.cardCls }}">
+                  <div class="between" style="flex-wrap: nowrap"><b>{{ m.card.title }}</b><span class="{{ m.stateCls }}">{{ m.stateText }}</span></div>
+                  <div>
+                    <sc-for list="{{ m.card.rows }}" as="r"><div class="cx-row"><span class="k">{{ r.k }}</span><span><span class="from">{{ r.from }}</span> → <span class="to">{{ r.to }}</span></span></div></sc-for>
+                  </div>
+                  <sc-if value="{{ m.card.note }}"><span class="small muted">{{ m.card.note }}</span></sc-if>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                    <sc-if value="{{ m.pending }}"><button type="button" class="btn sm" onClick="{{ m.apply }}">Apply changes</button><a class="btn2 sm" href="{{ m.card.href }}" onClick="{{ close }}">Edit myself</a></sc-if>
+                    <sc-if value="{{ m.applied }}"><a class="btn2 sm" href="{{ m.card.href }}">{{ m.card.hrefLabel }}</a><button type="button" class="btn3 sm" onClick="{{ m.undo }}">Undo</button></sc-if>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ m.isSteps }}">
+                <div class="cx-card">
+                  <b>{{ m.card.title }}</b>
+                  <sc-for list="{{ m.card.steps }}" as="t"><div class="cx-step"><span class="c" style="{{ t.cStyle }}">{{ t.mark }}</span><span><span style="display: block; font-weight: 600">{{ t.t }}</span><span class="small muted">{{ t.d }}</span></span></div></sc-for>
+                  <a class="btn sm" href="{{ m.card.href }}" style="align-self: flex-start">{{ m.card.hrefLabel }}</a>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ m.isDraft }}">
+                <div class="cx-card">
+                  <div class="between" style="flex-wrap: nowrap"><b>{{ m.card.title }}</b><span class="pill">Draft</span></div>
+                  <sc-for list="{{ m.card.rows }}" as="r"><div class="kv" style="font-size: 13px"><span class="muted">{{ r.k }}</span><span style="text-align: right">{{ r.v }}</span></div></sc-for>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap"><a class="btn sm" href="{{ m.card.href }}">{{ m.card.hrefLabel }}</a><button type="button" class="btn2 sm" onClick="{{ m.followUp }}">Change something</button></div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ m.isStats }}">
+                <div class="cx-card">
+                  <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px">
+                    <sc-for list="{{ m.card.stats }}" as="x"><div style="display: flex; flex-direction: column"><span style="font-size: 20px; font-weight: 700">{{ x.v }}</span><span class="small muted">{{ x.l }}</span></div></sc-for>
+                  </div>
+                  <a href="{{ m.card.href }}" style="font-weight: 600; font-size: 13.5px">{{ m.card.hrefLabel }} →</a>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ m.isText }}">
+                <div class="cx-card">
+                  <span style="white-space: pre-line">{{ m.card.body }}</span>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap"><a class="btn sm" href="{{ m.card.href }}">{{ m.card.hrefLabel }}</a><button type="button" class="btn2 sm" onClick="{{ m.followUp }}">Make it shorter</button></div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ m.hasNext }}">
+                <div class="chips"><sc-for list="{{ m.next }}" as="s"><button type="button" class="chip" onClick="{{ s.ask }}" style="min-height: 32px">{{ s.text }}</button></sc-for></div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </sc-for>
+        <sc-if value="{{ thinking }}"><span class="cx-typing" aria-label="Assistant is typing"><i></i><i></i><i></i></span></sc-if>
+      </div>
+
+      <div class="cx-foot">
+        <div class="cx-box">
+          <textarea id="cx-input" rows="1" aria-label="Ask the assistant" placeholder="Ask or tell me what to set up…" onInput="{{ type }}" onKeydown="{{ key }}">{{ draft }}</textarea>
+          <button type="button" class="cx-icon" aria-label="Speak instead of typing" title="Speak"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>
+          <button type="button" class="cx-send" onClick="{{ send }}" aria-label="Send"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+        </div>
+        <span class="small muted" style="text-align: center">Changes only happen after you press Apply. Every change is logged and can be undone.</span>
+      </div>
+    </aside>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: false, msgs: [], thinking: false };
+    this.draftText = '';
+    this.seq = 0;
+    window.addEventListener('hashchange', () => this.forceUpdate());
+    window.addEventListener('cx-assistant', () => this.openPanel());
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); this.state.open ? this.closePanel() : this.openPanel(); }
+      if (e.key === 'Escape' && this.state.open) this.closePanel();
+    });
+  }
+  screen() { return (location.hash.replace(/^#\/?/, '').split('/')[0]) || 'Main'; }
+  openPanel() { this.setState({ open: true }); this.after(); }
+  closePanel() { this.setState({ open: false }); }
+  after() {
+    setTimeout(() => {
+      const log = document.getElementById('cx-log'); if (log) log.scrollTop = log.scrollHeight;
+      const box = document.getElementById('cx-input'); if (box && this.state.open) box.focus();
+    }, 0);
+  }
+  ask(text) {
+    const t = (text || '').trim();
+    if (!t || this.state.thinking) return;
+    this.draftText = '';
+    this.setState({ msgs: this.state.msgs.concat([{ id: ++this.seq, role: 'user', text: t }]), thinking: true });
+    this.after();
+    setTimeout(() => {
+      const r = this.reply(t.toLowerCase());
+      this.setState({ msgs: this.state.msgs.concat([{ id: ++this.seq, role: 'bot', ...r }]), thinking: false });
+      this.after();
+    }, 900);
+  }
+  say(text, next) {
+    this.setState({ msgs: this.state.msgs.concat([{ id: ++this.seq, role: 'bot', text, next: next || [] }]) });
+    this.after();
+  }
+  setCard(id, patch) {
+    this.setState({ msgs: this.state.msgs.map((m) => (m.id === id ? { ...m, card: { ...m.card, ...patch } } : m)) });
+  }
+  reply(q) {
+    const has = (...w) => w.some((x) => q.indexOf(x) >= 0);
+    // Specific follow-ups first, so broad words like "campaign" or "hour" don't catch them.
+    if (has('what else')) return {
+      text: 'Here’s where the 5.4 s goes on an average turn. Speech-to-text is most of it, so the change above fixes the biggest part.',
+      card: { type: 'stats', href: 'Agent.dc.html#perf', hrefLabel: 'See Performance', stats: [{ v: '3.6 s', l: 'Speech to text' }, { v: '1.2 s', l: 'Model' }, { v: '0.6 s', l: 'Voice' }] }, next: [] };
+    if (has('test')) return {
+      text: 'I ran the 6 test cases against the updated agent. Test calls never create contacts or touch the CRM.',
+      card: { type: 'steps', title: 'Test results · 6 of 6 passed', href: 'Agent.dc.html#test', hrefLabel: 'Open the Test tab', steps: [{ t: 'Books a visit when asked to “schedule the meeting”', d: 'Was failing: looped 5 times', s: 'done' }, { t: 'Handles “not interested” politely', d: '', s: 'done' }, { t: 'Captures bill, roof, shading', d: '', s: 'done' }, { t: 'Reply time under 1.5 s', d: 'Average 1.1 s', s: 'done' }] }, next: [] };
+    if (has('call rahul back', 'remind me')) return {
+      text: 'I’ll make it a task so it shows up on Home and in the Inbox:',
+      card: { type: 'plan', title: 'New task', href: 'Inbox.dc.html#rahul', hrefLabel: 'Open the conversation', rows: [{ k: 'Task', from: 'none', to: q.indexOf('her') >= 0 ? 'Call Meera Iyer about the quote' : 'Call Rahul Menon personally' }, { k: 'Due', from: '—', to: q.indexOf('wednesday') >= 0 ? 'Wed, 11:00' : 'Today, 18:00' }, { k: 'Owner', from: '—', to: 'Meera' }] }, next: [] };
+    if (has('template')) return {
+      text: 'Here are the 3 starter templates. Meta approves utility templates faster than marketing ones.',
+      card: { type: 'text', href: 'Settings.dc.html#whatsapp', hrefLabel: 'Submit for approval', body: '1. visit_confirmation (utility)\nYour free site visit is confirmed for {{date}} at {{time}}. Reply 1 to confirm, 2 to change.\n\n2. site_visit_offer (marketing)\nHi {{name}}, we tried calling about rooftop solar. Want a free site visit? Reply YES.\n\n3. visit_reminder (utility)\nReminder: our engineer visits tomorrow at {{time}}. Please keep the roof accessible.' }, next: [] };
+    if (has('sms step')) return {
+      text: 'Added an SMS after the AI call for people who still don’t answer. It uses your DLT-registered sender APXSLR.',
+      card: { type: 'draft', title: 'Missed calls: second try', href: 'Campaign.dc.html', hrefLabel: 'Open in campaign builder', rows: [{ k: 'Step 1', v: 'WhatsApp “site_visit_offer”' }, { k: 'Step 2', v: 'Wait 1 day, then AI call, 5–7 pm' }, { k: 'Step 3 (new)', v: 'SMS if still no answer' }, { k: 'Step 4', v: 'Email with subsidy guide' }] }, next: [] };
+    if (has('worst')) return {
+      text: '“RWA outreach Kakkanad” is weakest: 3 meetings from 58 people, and it’s been paused since 25 Oct. The LinkedIn step works; the emails don’t.',
+      card: { type: 'stats', href: 'Campaigns.dc.html', hrefLabel: 'Open Campaigns', stats: [{ v: '5%', l: 'Goal reached' }, { v: '22', l: 'LinkedIn accepts' }, { v: '0', l: 'Email replies' }] }, next: [] };
+    if (has('every monday', 'email me')) return {
+      text: 'I’ll send a weekly summary to your inbox.',
+      card: { type: 'plan', title: 'Reports · Scheduled email', href: 'Reports.dc.html', hrefLabel: 'Open Reports', rows: [{ k: 'Send', from: 'never', to: 'Mondays, 9:00 IST' }, { k: 'To', from: '—', to: 'meera@apexsolar.example' }, { k: 'Includes', from: '—', to: 'Visits, answer rate, reply time, flagged calls' }] }, next: [] };
+    if (has('sales rep')) return {
+      text: 'A Sales rep can see and work their own contacts, Inbox threads and deals, place calls and take over live calls if you allow it. They can’t edit agents, campaigns, settings or billing.', next: ['Invite my team'] };
+    if (has('hear diya', 'hear')) return {
+      text: 'Playing a 6-second sample of Diya in Malayalam (in the real product this plays audio): “Namaskaram, ithu Apex Solar-il ninnu Diya aanu…”', next: ['Add a Malayalam voice'] };
+    if (has('change calling', 'calling hours')) return {
+      text: 'Here’s a calling-hours change based on when people answer. Campaigns can only narrow these hours, never widen them.',
+      card: { type: 'plan', title: 'Settings · Calling hours', href: 'Settings.dc.html#hours', hrefLabel: 'See Calling hours',
+        rows: [{ k: 'Mon to Fri', from: '10:00 to 19:00', to: '10:00 to 13:00 and 16:00 to 19:30' }, { k: 'Saturday', from: '10:00 to 14:00', to: '10:00 to 13:00' }, { k: 'National holidays', from: 'Skip', to: 'Skip (no change)' }] },
+      next: [] };
+    if (has('use whatsapp after')) return this.reply('create a campaign for people who didn’t answer');
+    if (has('faster', 'slow', 'reply time', 'latency', '5.4')) return {
+      text: 'Apex Solar Advisor takes 5.4 s to reply. Most of that is speech-to-text waiting for the caller to finish. Here’s what I’d change:',
+      card: { type: 'plan', title: 'Apex Solar Advisor · Voice and model', href: 'Agent.dc.html#voice', hrefLabel: 'See it in Voice and model',
+        rows: [{ k: 'Speech to text', from: 'Batch', to: 'Streaming' }, { k: 'Language model', from: 'Connekted Smart', to: 'Connekted Fast' }, { k: 'Expected reply time', from: '5.4 s', to: 'about 1.1 s' }],
+        note: 'Applies to new calls only. Calls already running are not affected.' },
+      next: ['Run a test call after', 'What else slows it down?'] };
+    if (has('loop', 'repeat', 'rahul', 'stuck', 'schedule')) return {
+      text: 'On Rahul Menon’s call the caller said “I want to schedule the meeting”, but no step listens for that, so the agent repeated itself 5 times. I’ll add an intent and a fallback:',
+      card: { type: 'plan', title: 'Apex Solar Advisor · Conversation', href: 'Agent.dc.html#conv', hrefLabel: 'See it in Conversation',
+        rows: [{ k: 'New route: “Wants to book a meeting”', from: 'none', to: 'Go to “Book site visit”' }, { k: 'Matching', from: 'Keywords', to: 'Intent (understands rephrasing)' }, { k: 'After 2 misses', from: 'Repeat the question', to: 'Offer booking → transfer to Meera → end politely' }],
+        note: 'I’ll also add a test case from Rahul’s call so this can’t come back unnoticed.' },
+      next: ['Re-run the test cases', 'Call Rahul back for me'] };
+    if (has('whatsapp')) return {
+      text: 'WhatsApp needs a Meta Business account and a number that isn’t already on the WhatsApp app. It takes about 10 minutes, and template approval can take a few hours.',
+      card: { type: 'steps', title: 'Set up WhatsApp', href: 'Settings.dc.html#whatsapp', hrefLabel: 'Continue in Settings',
+        steps: [{ t: 'Connect Meta Business account', d: 'Log in with Facebook, pick “Apex Solar”', s: 'done' }, { t: 'Verify the number +91 80 •••• 4210', d: 'We call it with a 6-digit code', s: 'now' }, { t: 'Display name “Apex Solar”', d: 'Meta reviews it, usually same day', s: 'todo' }, { t: 'Approve 3 starter templates', d: 'Visit confirmation, missed-call follow-up, reminder. I’ve written them for you', s: 'todo' }] },
+      next: ['Show me the templates', 'Use WhatsApp after missed calls'] };
+    if (has('campaign', 'didn', 'no answer', 'not answer', 'missed')) return {
+      text: 'I found 31 people who didn’t answer in the last 7 days. 3 are on the DND registry, so I left them out. Here’s a draft. Nothing is sent until you launch it.',
+      card: { type: 'draft', title: 'Missed calls: second try', href: 'Campaign.dc.html', hrefLabel: 'Open in campaign builder',
+        rows: [{ k: 'Agent', v: 'Apex Solar Advisor' }, { k: 'People', v: '28 (31 minus 3 on DND)' }, { k: 'Step 1', v: 'WhatsApp “site_visit_offer”' }, { k: 'Step 2', v: 'Wait 1 day, then AI call, 5–7 pm' }, { k: 'Step 3', v: 'Email with subsidy guide' }, { k: 'Stops when', v: 'Visit booked or opted out' }] },
+      next: ['Why 5–7 pm?', 'Add an SMS step'] };
+    if (has('hour', 'time to call', '5–7', '5-7')) return {
+      text: 'In the last 90 days people answered most often on weekdays from 5 to 7 pm (about 70%) and on Saturday mornings from 10 to 12. Lunch time, 1 to 2 pm, is worst at about 22%.',
+      card: { type: 'stats', href: 'Reports.dc.html', hrefLabel: 'See the heatmap in Reports', stats: [{ v: '71%', l: 'Weekdays 5–7 pm' }, { v: '68%', l: 'Sat 10–12' }, { v: '22%', l: 'Daily 1–2 pm' }] },
+      next: ['Change calling hours to match'] };
+    if (has('invite', 'team', 'teammate')) return {
+      text: 'Who should I invite? I’ve guessed from people in your contacts with an @apexsolar.example address:',
+      card: { type: 'plan', title: 'Settings · Team and roles', href: 'Settings.dc.html#team', hrefLabel: 'See Team and roles',
+        rows: [{ k: 'ravi@apexsolar.example', from: 'not invited', to: 'Sales rep' }, { k: 'anu@apexsolar.example', from: 'invited (pending)', to: 'Resend invite' }], note: 'Uses 1 more seat (4 of 5).' },
+      next: ['What can a Sales rep do?'] };
+    if (has('visit', 'how many', 'report', 'month', 'booked')) return {
+      text: 'This month: 38 site visits booked from 412 calls. Your best source is “Website leads, call in 5 min”, where 87% answer.',
+      card: { type: 'stats', href: 'Reports.dc.html', hrefLabel: 'Open Reports', stats: [{ v: '38', l: 'Visits booked' }, { v: '64%', l: 'Answered' }, { v: '₹23', l: 'Cost per visit' }] },
+      next: ['Which campaign is worst?', 'Email me this every Monday'] };
+    if (has('malayalam', 'hindi', 'tamil', 'language', 'voice')) return {
+      text: 'I can add Malayalam so the agent switches language when the caller does. Here’s the change:',
+      card: { type: 'plan', title: 'Apex Solar Advisor · Voice and model', href: 'Agent.dc.html#voice', hrefLabel: 'See it in Voice and model',
+        rows: [{ k: 'Languages', from: 'English (India)', to: 'English (India) + Malayalam' }, { k: 'Malayalam voice', from: 'none', to: 'Diya · Malayalam' }, { k: 'Knowledge base', from: 'English only', to: 'Translated answers, reviewed by you' }] },
+      next: ['Let me hear Diya'] };
+    if (has('draft', 'reply', 'message')) return {
+      text: 'Here’s a reply to Rahul on WhatsApp. He’s inside the 24-hour window, so a normal message is fine:',
+      card: { type: 'text', href: 'Inbox.dc.html#rahul', hrefLabel: 'Put it in the Inbox', body: 'Hi Rahul, sorry about yesterday’s call, our assistant didn’t understand you. Meera from our team will call you personally at 6 pm today. If another time suits you better, just reply here.' },
+      next: [] };
+    if (has('quote', 'opened', 'hot')) return {
+      text: 'Meera Iyer (Green Valley Apartments) opened quote Q-2026-031 three times since Sunday. Her residents’ association votes on 9 Nov, so this one is hot.',
+      card: { type: 'stats', href: 'Deals.dc.html', hrefLabel: 'Open the deal', stats: [{ v: '3×', l: 'Quote opened' }, { v: '9 Nov', l: 'AGM vote' }, { v: '60%', l: 'Likely' }] },
+      next: ['Remind me to call her Wednesday'] };
+    if (has('number', 'plivo', 'phone')) return {
+      text: 'You have 2 numbers on Plivo. +91 80 •••• 4210 is answered by Apex Solar Advisor and +91 80 •••• 7781 by Front Desk. Want another one for a different city?',
+      card: { type: 'steps', title: 'Add a number', href: 'Numbers.dc.html', hrefLabel: 'Open Phone numbers', steps: [{ t: 'Pick a city code', d: 'Kochi 484, Bengaluru 80, Mumbai 22…', s: 'now' }, { t: 'Choose which agent answers', d: 'Required. No more “newest call flow”', s: 'todo' }, { t: 'Test call', d: 'We ring your phone to check it works', s: 'todo' }] },
+      next: [] };
+    return {
+      text: 'I can do that kind of thing, but this is a mockup and I only know a few examples. Try one of these:',
+      next: ['Make my agent reply faster', 'Fix the looping call', 'Set up WhatsApp', 'Create a campaign for people who didn’t answer'] };
+  }
+  renderVals() {
+    const s = this.state;
+    const sc = this.screen();
+    const NAMES = { Main: 'Home', Inbox: 'Inbox', Agents: 'Agents', Agent: 'Apex Solar Advisor', LiveCall: 'Live call', Campaigns: 'Campaigns', Campaign: 'Campaign builder', Automations: 'Automations', Contacts: 'Contacts', Contact: 'Priya Nair', Companies: 'Companies', Deals: 'Deals', Calls: 'Calls', Reports: 'Reports', Settings: 'Settings', Numbers: 'Phone numbers', Onboarding: 'Setup' };
+    const SUG = {
+      Main: ['Why are replies so slow?', 'Fix the looping call', 'Create a campaign for people who didn’t answer'],
+      Agents: ['Make my agent reply faster', 'Add a Malayalam voice', 'Fix the looping call'],
+      Agent: ['Make my agent reply faster', 'Fix the looping call', 'Add a Malayalam voice'],
+      LiveCall: ['What is the best time to call?', 'Draft a reply to Rahul'],
+      Campaigns: ['Create a campaign for people who didn’t answer', 'What is the best time to call?', 'Change calling hours to match'],
+      Campaign: ['Create a campaign for people who didn’t answer', 'What is the best time to call?'],
+      Inbox: ['Draft a reply to Rahul', 'Set up WhatsApp'],
+      Contacts: ['Create a campaign for people who didn’t answer', 'Whose quote is hot right now?'],
+      Contact: ['Draft a reply to Rahul', 'Whose quote is hot right now?'],
+      Companies: ['Whose quote is hot right now?'],
+      Deals: ['Whose quote is hot right now?', 'How many visits did we book this month?'],
+      Calls: ['Fix the looping call', 'Make my agent reply faster'],
+      Reports: ['How many visits did we book this month?', 'What is the best time to call?'],
+      Automations: ['Create a campaign for people who didn’t answer', 'Set up WhatsApp'],
+      Settings: ['Set up WhatsApp', 'Invite my team', 'Change calling hours to match'],
+      Numbers: ['Add a phone number for Kochi', 'Set up WhatsApp']
+    };
+    const toAsk = (text) => ({ text, ask: () => this.ask(text) });
+    const suggestions = (SUG[sc] || SUG.Main).map(toAsk);
+    const more = ['Invite my team', 'Set up WhatsApp', 'How many visits did we book this month?'].filter((t) => (SUG[sc] || []).indexOf(t) < 0).map(toAsk);
+    const msgs = s.msgs.map((m) => {
+      const c = m.card || {};
+      const isBot = m.role === 'bot';
+      const steps = (c.steps || []).map((t) => ({ ...t, mark: t.s === 'done' ? '✓' : (t.s === 'now' ? '•' : ''), cStyle: t.s === 'done' ? 'background:#15803D;color:#FFFFFF' : (t.s === 'now' ? 'background:#2F55D4;color:#FFFFFF' : 'border:2px solid #D6D3CC') }));
+      return {
+        ...m, isUser: m.role === 'user', isBot,
+        card: { ...c, steps, note: c.note || '' },
+        isPlan: c.type === 'plan', isSteps: c.type === 'steps', isDraft: c.type === 'draft', isStats: c.type === 'stats', isText: c.type === 'text',
+        pending: c.type === 'plan' && !c.applied, applied: !!c.applied,
+        cardCls: c.applied ? 'cx-card ok' : 'cx-card', stateCls: c.applied ? 'pill g' : 'pill b', stateText: c.applied ? 'Applied' : 'Needs your OK',
+        apply: () => { this.setCard(m.id, { applied: true }); this.say('Done. ' + c.title + ' is updated. I logged it in the activity history.', m.next); },
+        undo: () => { this.setCard(m.id, { applied: false }); this.say('Undone. Everything is back the way it was.'); },
+        followUp: () => { const box = document.getElementById('cx-input'); if (box) box.focus(); },
+        next: (m.next || []).map(toAsk), hasNext: isBot && (m.next || []).length > 0 && !c.type
+      };
+    });
+    // Follow-up chips for card replies show under the latest bot message only.
+    const lastBot = msgs.filter((m) => m.isBot).pop();
+    if (lastBot && lastBot.next.length) lastBot.hasNext = true;
+    const authScreen = sc === 'Login' || sc === 'Signup';
+    return {
+      isOpen: s.open && !authScreen, showLauncher: !s.open && !authScreen,
+      screenName: NAMES[sc] || 'Home', suggestions, more,
+      msgs, empty: s.msgs.length === 0, thinking: s.thinking,
+      draft: this.draftText,
+      open: () => this.openPanel(), close: () => this.closePanel(),
+      reset: () => { this.draftText = ''; this.setState({ msgs: [], thinking: false }); },
+      type: (e) => { this.draftText = e.target.value; },
+      key: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.ask(this.draftText); } },
+      send: () => this.ask(this.draftText)
+    };
+  }
+}
+</script>
+</body>
+</html>

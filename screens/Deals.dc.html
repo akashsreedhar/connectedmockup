@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Deals</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.board{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
+.col{flex:1 0 196px;background:#EFEDE8;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.col-h{display:flex;justify-content:space-between;align-items:baseline;padding:4px 4px 6px;font-weight:700;font-size:13.5px}
+.deal{display:flex;flex-direction:column;gap:6px;width:100%;padding:12px;border-radius:10px;border:1px solid #E4E2DC;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit;box-sizing:border-box}
+.deal:hover{border-color:#CCD7FA}
+.deal[aria-pressed="true"]{border:2px solid #2F55D4;padding:11px}
+.qrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border:1px solid #E4E2DC;border-radius:10px;flex-wrap:wrap}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="deals"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Deals</h1>
+          <p class="sub">Calls move deals forward automatically. Quotes and documents live inside each deal.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+          <select class="input" aria-label="Pipeline" style="width: auto"><option>Residential rooftop</option><option>Commercial and RWA</option><option>Service contracts</option></select>
+          <div class="seg" role="group" aria-label="View">
+            <sc-for list="{{ views }}" as="v"><button type="button" aria-pressed="{{ v.pressed }}" onClick="{{ v.pick }}">{{ v.label }}</button></sc-for>
+          </div>
+          <button type="button" class="btn">New deal</button>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))">
+        <sc-for list="{{ kpis }}" as="k">
+          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 4px"><span class="lab">{{ k.l }}</span><span style="font-size: 24px; font-weight: 700">{{ k.v }}</span><span class="small muted">{{ k.s }}</span></div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ isBoard }}">
+        <div class="board" role="list" aria-label="Pipeline stages">
+          <sc-for list="{{ cols }}" as="c">
+            <section class="col" role="listitem" aria-label="{{ c.name }}">
+              <div class="col-h"><span>{{ c.name }} <span class="muted" style="font-weight: 500">{{ c.count }}</span></span><span class="small muted">{{ c.total }}</span></div>
+              <sc-for list="{{ c.deals }}" as="d">
+                <button type="button" class="deal" aria-pressed="{{ d.pressed }}" onClick="{{ d.pick }}">
+                  <span style="font-weight: 600">{{ d.name }}</span>
+                  <span class="small muted">{{ d.contact }}</span>
+                  <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font-weight: 700">{{ d.value }}</span><span class="{{ d.nextCls }}" style="font-size: 11.5px">{{ d.nextShort }}</span></span>
+                  <sc-if value="{{ d.byAgent }}"><span class="small" style="color: #1E3A8A">Moved here by Apex Solar Advisor</span></sc-if>
+                </button>
+              </sc-for>
+            </section>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isList }}">
+        <section class="card flush scroll-x">
+          <table>
+            <thead><tr><th>Deal</th><th>Stage</th><th>Value</th><th>Close date</th><th>Next step</th><th>Owner</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ allDeals }}" as="d">
+                <tr class="{{ d.rowCls }}">
+                  <td style="padding: 0 12px"><button type="button" class="rowbtn" onClick="{{ d.pick }}"><span><span style="display: block; font-weight: 600">{{ d.name }}</span><span class="small muted">{{ d.contact }}</span></span></button></td>
+                  <td><span class="pill">{{ d.stageName }}</span></td>
+                  <td style="font-weight: 600">{{ d.value }}</td>
+                  <td class="muted">{{ d.close }}</td>
+                  <td class="small">{{ d.next }}</td>
+                  <td class="small muted">{{ d.owner }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </section>
+      </sc-if>
+
+      <!-- Deal detail -->
+      <section class="card" style="display: flex; flex-direction: column; gap: 16px">
+        <div class="between" style="align-items: flex-start">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span class="lab">{{ sel.stageName }} · {{ sel.prob }} likely · closes {{ sel.close }}</span>
+            <h2 style="font-size: 21px; font-weight: 700">{{ sel.name }}</h2>
+            <span class="muted"><a href="Contact.dc.html">{{ sel.contact }}</a> · Owner {{ sel.owner }}</span>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+            <span style="font-size: 24px; font-weight: 700">{{ sel.value }}</span>
+            <button type="button" class="btn2 sm" onClick="{{ moveBack }}" disabled="{{ atStart }}">Previous stage</button>
+            <button type="button" class="btn sm" onClick="{{ moveNext }}" disabled="{{ atEnd }}">Move to {{ nextStage }}</button>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <sc-for list="{{ tabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for>
+        </div>
+
+        <sc-if value="{{ tabOverview }}">
+          <div class="row">
+            <div style="flex: 2 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+              <div class="note"><span><b>From the last call:</b> {{ sel.callNote }}</span></div>
+              <div><span class="lab">Next step</span><p style="margin-top: 6px; font-weight: 600">{{ sel.next }}</p></div>
+              <div><span class="lab">Stage history</span>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px">
+                  <sc-for list="{{ path }}" as="p"><span class="{{ p.cls }}">{{ p.n }}</span></sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="flex: 1 1 240px; min-width: 0">
+              <div class="kv"><span class="muted">System size</span><span>{{ sel.size }}</span></div>
+              <div class="kv"><span class="muted">Subsidy</span><span>{{ sel.subsidy }}</span></div>
+              <div class="kv"><span class="muted">Source</span><span>{{ sel.source }}</span></div>
+              <div class="kv"><span class="muted">Created</span><span>{{ sel.created }}</span></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabQuotes }}">
+          <div class="stack">
+            <sc-for list="{{ sel.quotes }}" as="q">
+              <div class="qrow"><span><span style="display: block; font-weight: 600">{{ q.n }}</span><span class="small muted">{{ q.d }}</span></span><span style="display: flex; gap: 10px; align-items: center"><b>{{ q.v }}</b><span class="{{ q.cls }}">{{ q.st }}</span></span></div>
+            </sc-for>
+            <sc-if value="{{ noQuotes }}"><p class="muted">No quote yet. Quotes are usually made after the site visit.</p></sc-if>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn sm">Create quote</button><button type="button" class="btn2 sm">Use a price book item</button></div>
+            <p class="small muted">Quotes include GST and the PM Surya Ghar subsidy line. Sent by email or WhatsApp with a link the customer can accept.</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabDocs }}">
+          <div class="stack">
+            <sc-for list="{{ sel.docs }}" as="q">
+              <div class="qrow"><span style="display: flex; gap: 10px; align-items: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"></path></svg><span><span style="display: block; font-weight: 600">{{ q.n }}</span><span class="small muted">{{ q.d }}</span></span></span><span class="{{ q.cls }}">{{ q.st }}</span></div>
+            </sc-for>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn2 sm">Upload</button><button type="button" class="btn2 sm">Send for e-sign</button></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabTasks }}">
+          <div class="stack">
+            <sc-for list="{{ sel.tasks }}" as="k">
+              <label style="display: flex; gap: 10px; align-items: center; cursor: pointer"><input type="checkbox" style="width: 18px; height: 18px"><span style="flex: 1"><b>{{ k.t }}</b> <span class="muted small">· {{ k.d }}</span></span><span class="pill">{{ k.who }}</span></label>
+            </sc-for>
+            <button type="button" class="btn3 sm" style="align-self: flex-start; padding: 0">+ Add task or meeting</button>
+          </div>
+        </sc-if>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'board', sel: 'd1', tab: 'overview', moved: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const STAGES = ['New', 'Contacted', 'Site visit', 'Proposal', 'Negotiation', 'Won'];
+    const PROB = ['10%', '20%', '40%', '60%', '80%', '100%'];
+    const deals = [
+      { id: 'd1', name: 'Rooftop 3 kW', contact: 'Priya Nair', stage: 2, value: '[₹ add quote]', amt: 0, close: '15 Nov', owner: 'You', next: 'Site visit Sat 1 Nov, 11:00', nextShort: 'Visit Sat', nextCls: 'pill b', byAgent: true,
+        callNote: 'Bill about ₹3,200 a month, roof partly shaded by a neighbour’s tree. Interested in the subsidy.', size: '3 kW (estimate)', subsidy: 'PM Surya Ghar, eligible', source: 'Campaign: October solar leads', created: 'Today',
+        quotes: [], docs: [{ n: 'Site survey checklist', d: 'Template · fill on the visit', st: 'Not started', cls: 'pill' }],
+        tasks: [{ t: 'Send site visit checklist on WhatsApp', d: 'Fri 31 Oct', who: 'Automation' }, { t: 'Site visit', d: 'Sat 1 Nov, 11:00', who: 'Ravi (field)' }] },
+      { id: 'd2', name: 'Rooftop 3 kW', contact: 'Rahul Menon', stage: 1, value: '₹1,85,000', amt: 185000, close: '30 Nov', owner: 'You', next: 'Call at 6 pm today (person)', nextShort: 'Call 6 pm', nextCls: 'pill o', byAgent: false,
+        callNote: 'Asked to schedule a meeting but the agent did not understand. Needs a personal call.', size: '3 kW', subsidy: 'Not checked', source: 'Campaign: October solar leads', created: 'Yesterday',
+        quotes: [], docs: [], tasks: [{ t: 'Call Rahul personally', d: 'Today 6 pm', who: 'You' }] },
+      { id: 'd3', name: 'Common area rooftop 25 kW', contact: 'Meera Iyer · Green Valley Apartments', stage: 3, value: '[₹ add quote]', amt: 0, close: '20 Nov', owner: 'Meera', next: 'Follow-up call Wed, before the AGM vote', nextShort: 'Call Wed', nextCls: 'pill', byAgent: false,
+        callNote: 'Committee likes the payback. AGM votes on 9 Nov. Wants a one-page summary for residents.', size: '25 kW', subsidy: 'Group housing, ₹18,000 per kW (check)', source: 'Referral', created: '12 Oct',
+        quotes: [{ n: 'Quote Q-2026-031', d: 'Sent 24 Oct · opened 3 times', v: '[₹ add quote]', st: 'Viewed', cls: 'pill b' }],
+        docs: [{ n: 'Site survey report', d: 'PDF · 20 Oct', st: 'Done', cls: 'pill g' }, { n: 'One-page summary for residents', d: 'Draft', st: 'Draft', cls: 'pill' }],
+        tasks: [{ t: 'Follow-up call with Meera', d: 'Wed', who: 'Meera' }] },
+      { id: 'd4', name: 'Warehouse 80 kW + net metering', contact: 'Karthik Reddy · Kochi Cold Storage', stage: 2, value: '[₹ add quote]', amt: 0, close: 'Dec', owner: 'Meera', next: 'Call back Fri 31 Oct', nextShort: 'Call Fri', nextCls: 'pill', byAgent: true,
+        callNote: 'Wants to understand net metering with KSEB before the visit.', size: '80 kW', subsidy: 'Not eligible (commercial)', source: 'Inbound call · Front Desk', created: '18 Oct',
+        quotes: [], docs: [{ n: 'KSEB net metering guide', d: 'Shared by email', st: 'Sent', cls: 'pill b' }], tasks: [{ t: 'Call back', d: 'Fri 31 Oct', who: 'Meera' }] },
+      { id: 'd5', name: 'Block C expansion 30 kW', contact: 'Suresh K · Malabar Textiles', stage: 4, value: '₹14,20,000', amt: 1420000, close: 'Dec', owner: 'You', next: 'Send revised quote with 5-year AMC', nextShort: 'Revise quote', nextCls: 'pill', byAgent: false,
+        callNote: 'Asked for 5% off if AMC is bundled for 5 years.', size: '30 kW', subsidy: 'Not eligible (commercial)', source: 'Existing customer', created: '2 Sep',
+        quotes: [{ n: 'Quote Q-2026-022', d: 'Sent 24 Sep', v: '₹14,95,000', st: 'Declined', cls: 'pill o' }, { n: 'Quote Q-2026-029 (revised)', d: 'Draft', v: '₹14,20,000', st: 'Draft', cls: 'pill' }],
+        docs: [{ n: 'Purchase agreement', d: 'Waiting for quote approval', st: 'Not sent', cls: 'pill' }], tasks: [{ t: 'Get manager approval for 5% discount', d: 'Thu', who: 'You' }] },
+      { id: 'd6', name: 'Rooftop 6 kW', contact: 'Fatima Sheikh', stage: 5, value: '₹3,40,000', amt: 340000, close: 'Won 12 Oct', owner: 'You', next: 'Ask for a Google review', nextShort: 'Review', nextCls: 'pill g', byAgent: false,
+        callNote: 'Installed 12 Oct. Happy with the install team.', size: '6 kW', subsidy: '₹78,000 claimed', source: 'Facebook lead form', created: '2 Aug',
+        quotes: [{ n: 'Quote Q-2026-014', d: 'Accepted 20 Aug', v: '₹3,40,000', st: 'Accepted', cls: 'pill g' }],
+        docs: [{ n: 'Purchase agreement', d: 'e-signed 21 Aug', st: 'Signed', cls: 'pill g' }, { n: 'Subsidy application', d: 'Submitted 14 Oct', st: 'In review', cls: 'pill b' }], tasks: [] },
+      { id: 'd7', name: 'Rooftop 2 kW', contact: 'New web lead', stage: 0, value: '₹1,20,000', amt: 120000, close: '—', owner: 'Unassigned', next: 'Agent will call within 5 minutes', nextShort: 'Agent calling', nextCls: 'pill b', byAgent: false,
+        callNote: 'No call yet.', size: '2 kW', subsidy: 'Unknown', source: 'Website form', created: 'Just now', quotes: [], docs: [], tasks: [] }
+    ];
+    const stageOf = (d) => (s.moved[d.id] !== undefined ? s.moved[d.id] : d.stage);
+    const fmt = (n) => (n ? '₹' + n.toLocaleString('en-IN') : '—');
+    const decorated = deals.map((d) => ({ ...d, st: stageOf(d), stageName: STAGES[stageOf(d)], pressed: String(d.id === s.sel), rowCls: d.id === s.sel ? 'sel' : '', pick: () => this.setState({ sel: d.id, tab: 'overview' }) }));
+    const cols = STAGES.map((name, i) => {
+      const ds = decorated.filter((d) => d.st === i);
+      return { name, count: ds.length, total: fmt(ds.reduce((a, d) => a + d.amt, 0)), deals: ds };
+    });
+    const open = decorated.filter((d) => d.st < 5);
+    const raw = decorated.find((d) => d.id === s.sel) || decorated[0];
+    const sel = { ...raw, prob: PROB[raw.st] };
+    const path = STAGES.map((n, i) => ({ n, cls: i < raw.st ? 'pill g' : (i === raw.st ? 'pill b' : 'pill') }));
+    const tabs = [{ id: 'overview', label: 'Overview' }, { id: 'quotes', label: 'Quotes · ' + raw.quotes.length }, { id: 'docs', label: 'Documents · ' + raw.docs.length }, { id: 'tasks', label: 'Tasks and meetings · ' + raw.tasks.length }]
+      .map((t) => ({ ...t, sel: String(t.id === s.tab), pick: () => this.setState({ tab: t.id }) }));
+    const setStage = (n) => this.setState({ moved: { ...s.moved, [raw.id]: n } });
+    return {
+      views: [{ id: 'board', label: 'Board' }, { id: 'list', label: 'List' }].map((v) => ({ ...v, pressed: String(v.id === s.view), pick: () => this.setState({ view: v.id }) })),
+      isBoard: s.view === 'board', isList: s.view === 'list',
+      kpis: [
+        { l: 'Open pipeline', v: fmt(open.reduce((a, d) => a + d.amt, 0)), s: open.length + ' open deals · 4 need a quote' },
+        { l: 'Won this month', v: '₹3,40,000', s: '1 deal' },
+        { l: 'Win rate', v: '32%', s: 'Last 90 days' },
+        { l: 'Avg. days to close', v: '41', s: 'From first call' }
+      ],
+      cols, allDeals: decorated, sel, path, tabs,
+      nextStage: STAGES[Math.min(raw.st + 1, 5)], atStart: raw.st === 0, atEnd: raw.st === 5,
+      moveNext: () => setStage(Math.min(raw.st + 1, 5)), moveBack: () => setStage(Math.max(raw.st - 1, 0)),
+      noQuotes: raw.quotes.length === 0,
+      tabOverview: s.tab === 'overview', tabQuotes: s.tab === 'quotes', tabDocs: s.tab === 'docs', tabTasks: s.tab === 'tasks'
+    };
+  }
+}
+</script>
+</body>
+</html>

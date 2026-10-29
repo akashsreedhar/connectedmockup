@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reports</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.kpi{display:flex;flex-direction:column;gap:4px;padding:16px}
+.delta{font-size:12.5px;font-weight:600}
+.cols{display:flex;align-items:flex-end;gap:6px;height:180px;padding:0 4px;border-bottom:1px solid #D6D3CC}
+.colw{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;height:100%;cursor:default}
+.colw span{display:block;border-radius:4px 4px 0 0}
+.colw:hover span{filter:brightness(.9)}
+.xl{display:flex;gap:6px;padding:6px 4px 0}
+.xl span{flex:1;text-align:center;font-size:11.5px;color:#5B6070}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#3A3D46}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.fun{display:grid;grid-template-columns:minmax(110px,150px) 1fr 90px;gap:12px;align-items:center;font-size:13.5px}
+.fun .bar{height:26px;border-radius:0 4px 4px 0;background:#2F55D4}
+.heat{display:grid;grid-template-columns:44px repeat(11,1fr);gap:3px;font-size:11px;color:#5B6070}
+.heat span.c{height:26px;border-radius:4px}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="reports"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Reports</h1>
+          <p class="sub">Are the agents and campaigns turning calls into booked visits and revenue?</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+          <div class="seg" role="group" aria-label="Date range">
+            <sc-for list="{{ ranges }}" as="r"><button type="button" aria-pressed="{{ r.pressed }}" onClick="{{ r.pick }}">{{ r.label }}</button></sc-for>
+          </div>
+          <button type="button" class="btn2">Export</button>
+          <button type="button" class="btn2">Email weekly</button>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <sc-for list="{{ tabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for>
+      </div>
+
+      <sc-if value="{{ tabOverview }}">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr))">
+          <sc-for list="{{ kpis }}" as="k">
+            <div class="card kpi" style="{{ k.border }}"><span class="lab">{{ k.l }}</span><span style="font-size: 26px; font-weight: 700; letter-spacing: -.4px">{{ k.v }}</span><span class="delta" style="{{ k.dStyle }}">{{ k.d }}</span></div>
+          </sc-for>
+        </div>
+
+        <div class="row">
+          <section class="card" style="flex: 3 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div class="between"><h2 class="h2">Calls per day</h2>
+              <div class="legend"><span><i style="background: #2F55D4"></i>Answered</span><span><i style="background: #D6D3CC"></i>Not answered</span></div>
+            </div>
+            <div class="cols" role="img" aria-label="{{ dailyLabel }}">
+              <sc-for list="{{ daily }}" as="d">
+                <div class="colw" title="{{ d.tip }}"><span style="{{ d.no }}"></span><span style="{{ d.yes }}"></span></div>
+              </sc-for>
+            </div>
+            <div class="xl"><sc-for list="{{ daily }}" as="d"><span>{{ d.x }}</span></sc-for></div>
+          </section>
+
+          <section class="card" style="flex: 2 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+            <h2 class="h2">From call to sale</h2>
+            <sc-for list="{{ funnel }}" as="f">
+              <div class="fun" title="{{ f.tip }}"><span>{{ f.l }}</span><span style="background: #F1EFEA; border-radius: 0 4px 4px 0"><span class="bar" style="{{ f.w }}"></span></span><span style="text-align: right"><b>{{ f.n }}</b> <span class="small muted">{{ f.p }}</span></span></div>
+            </sc-for>
+            <p class="small muted">Biggest drop: answered → qualified. Calls that loop or reply slowly lose people here.</p>
+          </section>
+        </div>
+
+        <div class="row">
+          <section class="card" style="flex: 3 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+            <div class="between"><h2 class="h2">Best time to call</h2><span class="small muted">Answer rate by hour, last 90 days</span></div>
+            <div class="heat" role="img" aria-label="Answer rate is highest on weekday evenings from 5 to 7 pm and Saturday mornings">
+              <span></span><sc-for list="{{ hours }}" as="h"><span style="text-align: center">{{ h }}</span></sc-for>
+              <sc-for list="{{ heat }}" as="r">
+                <span style="align-self: center">{{ r.day }}</span>
+                <sc-for list="{{ r.cells }}" as="c"><span class="c" style="{{ c.style }}" title="{{ c.tip }}"></span></sc-for>
+              </sc-for>
+            </div>
+            <div class="legend"><span>Lower</span><span style="display: flex; gap: 3px"><i style="background: #E8EDFF; margin: 0"></i><i style="background: #B4C4F5; margin: 0"></i><i style="background: #7C96E8; margin: 0"></i><i style="background: #4A6CDB; margin: 0"></i><i style="background: #1E3A8A; margin: 0"></i></span><span>Higher answer rate</span></div>
+          </section>
+          <section class="card" style="flex: 2 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+            <h2 class="h2">Call outcomes</h2>
+            <sc-for list="{{ outcomes }}" as="o">
+              <div class="hbar" title="{{ o.tip }}"><span>{{ o.l }}</span><span class="track" style="height: 10px"><span style="{{ o.w }}"></span></span><span style="text-align: right" class="small"><b>{{ o.n }}</b></span></div>
+            </sc-for>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabAgents }}">
+        <section class="card flush scroll-x">
+          <table>
+            <thead><tr><th>Agent</th><th>Calls</th><th>Answered</th><th>Goal reached</th><th>Avg. length</th><th>Reply time</th><th>Flagged calls</th><th>Cost per goal</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ agents }}" as="a">
+                <tr><td><a href="Agent.dc.html" style="font-weight: 600; color: #15171E">{{ a.n }}</a></td><td>{{ a.calls }}</td><td>{{ a.ans }}</td><td><b>{{ a.goal }}</b></td><td class="muted">{{ a.len }}</td><td><span class="{{ a.rCls }}">{{ a.reply }}</span></td><td>{{ a.flag }}</td><td>{{ a.cost }}</td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </section>
+        <div class="note o"><span><b>Apex Solar Advisor replies in 5.4 s.</b> Callers who wait more than 3 s hang up twice as often. Turn on streaming speech-to-text in <a href="Agent.dc.html">Voice and model</a>.</span></div>
+      </sc-if>
+
+      <sc-if value="{{ tabCampaigns }}">
+        <section class="card flush scroll-x">
+          <table>
+            <thead><tr><th>Campaign</th><th>People</th><th>Reached</th><th>Goal reached</th><th>Best step</th><th>Spend</th><th>Pipeline created</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ camps }}" as="c">
+                <tr><td><a href="Campaigns.dc.html" style="font-weight: 600; color: #15171E">{{ c.n }}</a></td><td>{{ c.p }}</td><td>{{ c.r }}</td><td><b>{{ c.g }}</b></td><td class="small">{{ c.best }}</td><td>{{ c.s }}</td><td>{{ c.pipe }}</td></tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ tabChannels }}">
+        <div class="row">
+          <section class="card" style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+            <h2 class="h2">Reply rate by channel</h2>
+            <sc-for list="{{ channels }}" as="c">
+              <div class="hbar" title="{{ c.tip }}"><span>{{ c.l }}</span><span class="track" style="height: 10px"><span style="{{ c.w }}"></span></span><span style="text-align: right" class="small"><b>{{ c.v }}</b></span></div>
+            </sc-for>
+          </section>
+          <section class="card flush scroll-x" style="flex: 1 1 420px; min-width: 0">
+            <table>
+              <thead><tr><th>Channel</th><th>Sent</th><th>Delivered</th><th>Replied</th><th>Cost each</th></tr></thead>
+              <tbody><sc-for list="{{ channels }}" as="c"><tr><td style="font-weight: 600">{{ c.l }}</td><td>{{ c.sent }}</td><td>{{ c.del }}</td><td>{{ c.v }}</td><td>{{ c.cost }}</td></tr></sc-for></tbody>
+            </table>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tabUsage }}">
+        <div class="grid">
+          <sc-for list="{{ usage }}" as="u">
+            <div class="card stack"><span class="lab">{{ u.l }}</span><span style="font-size: 24px; font-weight: 700">{{ u.v }}</span><div class="track"><span style="{{ u.w }}"></span></div><span class="small muted">{{ u.s }}</span></div>
+          </sc-for>
+        </div>
+        <a href="Settings.dc.html" class="btn2" style="align-self: flex-start">Billing and limits</a>
+      </sc-if>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { range: '30', tab: 'overview' };
+  }
+  renderVals() {
+    const s = this.state;
+    const f = s.range === '7' ? 0.25 : (s.range === '90' ? 2.8 : 1);
+    const n = (x) => Math.round(x * f);
+    const ranges = [{ id: '7', label: '7 days' }, { id: '30', label: '30 days' }, { id: '90', label: '90 days' }]
+      .map((r) => ({ ...r, pressed: String(r.id === s.range), pick: () => this.setState({ range: r.id }) }));
+    const tabs = [{ id: 'overview', label: 'Overview' }, { id: 'agents', label: 'Agents' }, { id: 'campaigns', label: 'Campaigns' }, { id: 'channels', label: 'Channels' }, { id: 'usage', label: 'Usage and cost' }]
+      .map((t) => ({ ...t, sel: String(t.id === s.tab), pick: () => this.setState({ tab: t.id }) }));
+    const good = 'color:#14672F', bad = 'color:#9A3412';
+    const kpis = [
+      { l: 'Calls', v: String(n(412)), d: '+18% vs previous', dStyle: good },
+      { l: 'Answered', v: '64%', d: '+3 pts', dStyle: good },
+      { l: 'Visits booked', v: String(n(38)), d: '+9', dStyle: good },
+      { l: 'Reply time', v: '5.4 s', d: 'Target about 1 s', dStyle: bad, border: 'border-color:#F3C9B3' },
+      { l: 'Cost per visit', v: '₹' + (412 * 2.1 / 38).toFixed(0), d: 'Calls + messages', dStyle: 'color:#5B6070' },
+      { l: 'Pipeline created', v: '₹' + (n(2140000)).toLocaleString('en-IN'), d: 'Won ₹3,40,000', dStyle: 'color:#5B6070' }
+    ].map((k) => ({ ...k, border: k.border || '' }));
+    const raw = [[14, 6], [18, 9], [11, 7], [22, 10], [19, 8], [26, 11], [9, 6], [16, 9], [21, 10], [24, 12], [17, 8], [28, 12], [12, 7], [20, 9]];
+    const max = 40;
+    const days = ['16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29'];
+    const daily = raw.map(([a, u], i) => ({
+      x: days[i], tip: 'Oct ' + days[i] + ': ' + a + ' answered, ' + u + ' not answered',
+      yes: 'background:#2F55D4;height:' + (a / max) * 100 + '%', no: 'background:#D6D3CC;height:' + (u / max) * 100 + '%;border-radius:4px 4px 0 0;margin-bottom:2px'
+    }));
+    daily.forEach((d) => { d.yes += ';border-radius:0'; });
+    const F = [['Called', 412], ['Answered', 264], ['Qualified', 97], ['Visit booked', 38], ['Quote sent', 21], ['Won', 7]];
+    const funnel = F.map(([l, v]) => ({ l, n: String(n(v)), p: Math.round((v / 412) * 100) + '%', w: 'display:block;width:' + (v / 412) * 100 + '%', tip: l + ': ' + n(v) + ' (' + Math.round((v / 412) * 100) + '% of called)' }));
+    const hours = ['9', '10', '11', '12', '1', '2', '3', '4', '5', '6', '7'];
+    const ramp = ['#E8EDFF', '#B4C4F5', '#7C96E8', '#4A6CDB', '#1E3A8A'];
+    const H = { Mon: [1, 1, 2, 1, 0, 1, 1, 2, 3, 4, 3], Tue: [1, 2, 2, 1, 0, 1, 1, 2, 3, 4, 3], Wed: [1, 1, 1, 1, 0, 1, 2, 2, 4, 4, 2], Thu: [1, 2, 2, 1, 1, 1, 1, 2, 3, 3, 3], Fri: [1, 1, 2, 1, 0, 0, 1, 2, 3, 3, 2], Sat: [2, 4, 4, 3, 2, 2, 2, 2, 2, 2, 1] };
+    const pct = [22, 34, 46, 58, 71];
+    const heat = Object.keys(H).map((day) => ({ day, cells: H[day].map((v, i) => ({ style: 'background:' + ramp[v], tip: day + ' ' + hours[i] + (i < 3 ? ' am' : ' pm') + ': about ' + pct[v] + '% answered' })) }));
+    const O = [['Visit booked', 38], ['Call back later', 61], ['Not interested', 72], ['No answer', 148], ['Voicemail', 41], ['Wrong number', 12], ['Agent stuck (flagged)', 6]];
+    const outcomes = O.map(([l, v]) => ({ l, n: String(n(v)), w: 'width:' + (v / 148) * 100 + '%', tip: l + ': ' + n(v) + ' calls' }));
+    const agents = [
+      { n: 'Apex Solar Advisor', calls: n(371), ans: '63%', goal: n(34) + ' visits', len: '2:10', reply: '5.4 s', rCls: 'pill o', flag: '6', cost: '₹24' },
+      { n: 'Front Desk', calls: n(41), ans: '100%', goal: n(4) + ' bookings', len: '1:35', reply: '1.1 s', rCls: 'pill g', flag: '0', cost: '₹11' },
+      { n: 'Sales Follow-up', calls: '0', ans: '—', goal: '—', len: '—', reply: '—', rCls: 'pill', flag: '—', cost: '—' }
+    ];
+    const camps = [
+      { n: 'October solar leads', p: 240, r: '61%', g: '11 visits', best: 'WhatsApp after missed call (18 replies)', s: '₹2,940', pipe: '₹11,40,000' },
+      { n: 'Website leads, call in 5 min', p: 31, r: '87%', g: '7 qualified', best: 'Call within 5 minutes', s: '₹410', pipe: '₹6,80,000' },
+      { n: 'RWA outreach Kakkanad', p: 58, r: '52%', g: '3 meetings', best: 'LinkedIn note', s: '₹0', pipe: '[₹ add quote]' },
+      { n: 'September subsidy webinar', p: 410, r: '78%', g: '64 registered', best: 'WhatsApp reminder', s: '₹3,120', pipe: '₹3,40,000' }
+    ];
+    const CH = [['AI call', 64, 412, 398, '₹1.80 / min'], ['WhatsApp', 41, 310, 301, '₹0.88'], ['LinkedIn', 38, 30, 30, 'Free'], ['SMS', 6, 96, 91, '₹0.25'], ['Email', 4, 520, 507, '₹0.05']];
+    const channels = CH.map(([l, v, sent, del, cost]) => ({ l, v: v + '%', w: 'width:' + v + '%', sent: n(sent), del: n(del), cost, tip: l + ': ' + v + '% replied or answered' }));
+    const usage = [
+      { l: 'Call minutes', v: n(892) + ' of 2,000', w: 'width:' + Math.min(100, (n(892) / 2000) * 100) + '%', s: 'Plan resets 1 Nov' },
+      { l: 'WhatsApp conversations', v: n(310) + ' of 1,000', w: 'width:' + Math.min(100, n(31)) + '%', s: 'Meta charges billed separately' },
+      { l: 'AI spend this month', v: '₹' + n(4180).toLocaleString('en-IN'), w: 'width:42%', s: 'Speech, voice and model' },
+      { l: 'Seats', v: '3 of 5', w: 'width:60%', s: 'You, Meera, Ravi' }
+    ];
+    return {
+      ranges, tabs, kpis, daily, funnel, hours, heat, outcomes, agents, camps, channels, usage,
+      dailyLabel: 'Calls per day, Oct 16 to 29. Busiest day Oct 27 with 40 calls.',
+      tabOverview: s.tab === 'overview', tabAgents: s.tab === 'agents', tabCampaigns: s.tab === 'campaigns', tabChannels: s.tab === 'channels', tabUsage: s.tab === 'usage'
+    };
+  }
+}
+</script>
+</body>
+</html>

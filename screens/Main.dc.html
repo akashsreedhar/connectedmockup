@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
+a{color:#2F55D4}a:hover{color:#1E3A8A}
+h1,h2,h3,p{margin:0}
+.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.btn:hover{background:#2446B8;color:#FFFFFF}
+.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.btn2:hover{background:#F1EFEA;color:#15171E}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
+.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
+.muted{color:#5B6070}
+.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;font-weight:600;color:#5B6070;padding:10px 12px;border-bottom:1px solid #E4E2DC;white-space:nowrap}
+td{padding:12px;border-bottom:1px solid #EFEDE8;vertical-align:middle}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
+  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
+    <dc-import name="Sidebar" active="home" hint-size="232px,1060px"></dc-import>
+  </div>
+  <main style="flex: 999 1 560px; min-width: 0; padding: 32px 36px 56px; box-sizing: border-box">
+    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.4px">Good evening</h1>
+          <p class="muted" style="font-size: 15px">Here is what your agents did this week.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <a class="btn2" href="LiveCall.dc.html">Place a call</a>
+          <a class="btn" href="Campaign.dc.html">New campaign</a>
+        </div>
+      </div>
+
+      <section class="card" style="display: flex; flex-wrap: wrap; gap: 28px; align-items: stretch; background: #F3F6FF; border-color: #CCD7FA">
+        <div style="flex: 3 1 420px; display: flex; flex-direction: column; gap: 10px; justify-content: center">
+          <span class="lab" style="color: #1E3A8A">Next step</span>
+          <h2 style="font-size: 22px; font-weight: 700; letter-spacing: -0.2px">Your agent passed its test call. Launch your first campaign.</h2>
+          <p class="muted" style="font-size: 15px">Pick who to call and Apex Solar Advisor does the rest. About 2 minutes to set up.</p>
+          <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap">
+            <a class="btn" href="Campaign.dc.html">Launch a campaign</a>
+            <a class="btn2" href="Agent.dc.html">Review the agent</a>
+          </div>
+        </div>
+        <div style="flex: 2 1 280px; background: #FFFFFF; border: 1px solid #E4E2DC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="font-weight: 600">Getting started</span>
+            <span class="pill b">4 of 5</span>
+          </div>
+          <sc-for list="{{ setup }}" as="s" hint-placeholder-count="5">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <sc-if value="{{ s.done }}" hint-placeholder-val="{{ true }}">
+                <svg role="img" aria-label="Done" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#2F55D4"></circle><path d="m7.5 12.5 3 3 6-6.5" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </sc-if>
+              <sc-if value="{{ s.todo }}" hint-placeholder-val="{{ false }}">
+                <svg role="img" aria-label="To do" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#9AA6E8" stroke-width="2"></circle></svg>
+              </sc-if>
+              <span style="{{ s.style }}">{{ s.label }}</span>
+            </div>
+          </sc-for>
+          <a href="Onboarding.dc.html" style="font-size: 13px; font-weight: 600">Replay setup</a>
+        </div>
+      </section>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+        <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+          <span class="lab">Calls this week</span>
+          <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.5px">4</span>
+          <span class="muted">All by Apex Solar Advisor</span>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+          <span class="lab">Answered</span>
+          <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.5px">75%</span>
+          <span class="muted">3 of 4 calls connected</span>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 6px">
+          <span class="lab">Meetings booked</span>
+          <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.5px">1</span>
+          <span class="muted">From 3 conversations</span>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; gap: 6px; border-color: #F3C9B3">
+          <span class="lab">Agent reply time</span>
+          <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.5px; color: #9A3412">5.4 s</span>
+          <span class="pill o" style="align-self: flex-start">Slow. Aim for about 1 s</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section class="card" style="flex: 2 1 560px; min-width: 0; padding: 0">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 20px 8px">
+            <h2 style="font-size: 17px; font-weight: 700">Recent calls</h2>
+            <a href="Calls.dc.html" style="font-size: 13.5px; font-weight: 600">View all</a>
+          </div>
+          <div style="overflow-x: auto">
+            <table>
+              <thead><tr><th>Contact</th><th>Agent</th><th>Outcome</th><th>Length</th><th>When</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ calls }}" as="c" hint-placeholder-count="4">
+                  <tr>
+                    <td><a href="Contact.dc.html" style="font-weight: 600; color: #15171E; text-decoration: none">{{ c.name }}</a><div class="muted" style="font-size: 12.5px">{{ c.phone }}</div></td>
+                    <td class="muted">{{ c.agent }}</td>
+                    <td><span class="{{ c.pillClass }}">{{ c.outcome }}</span></td>
+                    <td class="muted">{{ c.len }}</td>
+                    <td class="muted" style="white-space: nowrap">{{ c.when }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+          <section class="card" style="display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px">
+              <h2 style="font-size: 17px; font-weight: 700">Needs attention</h2>
+              <span class="pill o">{{ attentionCount }} open</span>
+            </div>
+            <sc-for list="{{ attention }}" as="a">
+              <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-top: 1px solid #EFEDE8">
+                <span style="{{ a.iconWrap }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.icon }}"></path></svg></span>
+                <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1">
+                  <span style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span style="font-weight: 600">{{ a.title }}</span><span class="{{ a.tagCls }}" style="font-size: 11.5px; padding: 1px 8px">{{ a.tag }}</span></span>
+                  <span class="muted" style="font-size: 13px">{{ a.why }}</span>
+                  <a href="{{ a.href }}" style="font-size: 13.5px; font-weight: 600; align-self: flex-start; padding: 4px 0">{{ a.cta }} →</a>
+                </div>
+              </div>
+            </sc-for>
+          </section>
+
+          <section class="card" style="display: flex; flex-direction: column; gap: 12px">
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <h2 style="font-size: 17px; font-weight: 700">Add a channel</h2>
+              <span class="muted" style="font-size: 12.5px">Optional</span>
+            </div>
+            <p class="muted">Follow up on calls by WhatsApp, email or SMS.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <a class="btn2" href="Settings.dc.html#whatsapp" style="min-height: 40px">WhatsApp</a>
+              <a class="btn2" href="Settings.dc.html#email" style="min-height: 40px">Email</a>
+              <a class="btn2" href="Settings.dc.html#sms" style="min-height: 40px">SMS</a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const setup = [
+      { label: 'Pick a goal', done: true },
+      { label: 'Build your agent', done: true },
+      { label: 'Connect a number', done: true },
+      { label: 'Call yourself', done: true },
+      { label: 'Launch first campaign', done: false }
+    ].map((s) => ({ ...s, todo: !s.done, style: s.done ? 'color:#5B6070' : 'font-weight:600;color:#15171E' }));
+    const pill = { b: 'pill b', g: 'pill g', o: 'pill o', n: 'pill' };
+    const calls = [
+      { name: 'Priya Nair', phone: '+91 98450 •• •12', agent: 'Apex Solar Advisor', outcome: 'Visit booked', tone: 'b', len: '2:56', when: 'Today, 2:33 pm' },
+      { name: 'Rahul Menon', phone: '+91 99610 •• •48', agent: 'Apex Solar Advisor', outcome: 'Needs review', tone: 'o', len: '1:23', when: 'Yesterday' },
+      { name: 'Anjali Das', phone: '+91 90370 •• •05', agent: 'Apex Solar Advisor', outcome: 'No answer', tone: 'o', len: '—', when: 'Yesterday' },
+      { name: 'Vikram Rao', phone: '+91 97440 •• •61', agent: 'Apex Solar Advisor', outcome: 'Not interested', tone: 'n', len: '0:48', when: 'Mon' }
+    ].map((c) => ({ ...c, pillClass: pill[c.tone] }));
+    const wrap = (bg, fg) => 'width:32px;height:32px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:' + bg + ';color:' + fg;
+    const attention = [
+      { title: 'Agent repeated itself on 1 call', tag: 'Urgent', tagCls: 'pill o', icon: 'M12 3 2 20h20zM12 10v4M12 17v.5', iconWrap: wrap('#FDEEE6', '#C2410C'),
+        why: 'Rahul Menon asked to schedule a meeting. No step matched, so the agent looped 5 times.', cta: 'Review the call', href: 'Calls.dc.html#rahul' },
+      { title: 'Rahul Menon is waiting for a call', tag: 'Due 6 pm today', tagCls: 'pill b', icon: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z', iconWrap: wrap('#E8EDFF', '#1E3A8A'),
+        why: 'He asked for a person to call him after the looping call. Replied on WhatsApp at 9:12 am.', cta: 'Open the conversation', href: 'Inbox.dc.html#rahul' },
+      { title: 'Replies take 5.4 s', tag: 'Slow', tagCls: 'pill o', icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', iconWrap: wrap('#FDEEE6', '#C2410C'),
+        why: 'Callers hang up more often after 3 s. Streaming speech-to-text brings it to about 1 s.', cta: 'Fix in Voice and model', href: 'Agent.dc.html#voice' }
+    ];
+    return { setup, calls, attention, attentionCount: attention.length };
+  }
+}
+</script>
+</body>
+</html>

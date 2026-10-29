@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Companies</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.tl{display:flex;gap:12px;font-size:13.5px}
+.tl .ic{width:28px;height:28px;border-radius:8px;background:#F1EFEA;display:flex;align-items:center;justify-content:center;flex:none;color:#3A3D46}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="companies"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Companies</h1>
+          <p class="sub">Businesses you sell to, with everyone you know there and every deal in one place.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <button type="button" class="btn2">Import</button>
+          <button type="button" class="btn">Add company</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+        <label class="search" style="flex: 0 1 360px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="search" placeholder="Search companies" aria-label="Search companies"></label>
+        <div class="chips" role="group" aria-label="Type">
+          <sc-for list="{{ types }}" as="t"><button type="button" class="chip" aria-pressed="{{ t.pressed }}" onClick="{{ t.pick }}">{{ t.label }} <span class="n">{{ t.n }}</span></button></sc-for>
+        </div>
+      </div>
+
+      <div class="row">
+        <section class="card flush scroll-x" style="flex: 3 1 520px; min-width: 0">
+          <table>
+            <thead><tr><th>Company</th><th>Type</th><th>People</th><th>Open deals</th><th>Last touch</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ rows }}" as="c">
+                <tr class="{{ c.rowCls }}">
+                  <td style="padding: 0 12px"><button type="button" class="rowbtn" aria-pressed="{{ c.pressed }}" onClick="{{ c.pick }}" style="min-height: 60px"><span class="av sq">{{ c.initials }}</span><span><span style="display: block; font-weight: 600">{{ c.name }}</span><span class="small muted">{{ c.industry }} · {{ c.city }}</span></span></button></td>
+                  <td><span class="{{ c.typeCls }}">{{ c.type }}</span></td>
+                  <td>{{ c.people.length }}</td>
+                  <td><span style="display: block; font-weight: 600">{{ c.value }}</span><span class="small muted">{{ c.dealCount }}</span></td>
+                  <td class="small muted">{{ c.last }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </section>
+
+        <aside class="card" style="flex: 2 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; gap: 14px; align-items: center">
+            <span class="av sq lg">{{ sel.initials }}</span>
+            <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+              <h2 style="font-size: 19px; font-weight: 700">{{ sel.name }}</h2>
+              <span class="small muted">{{ sel.industry }} · {{ sel.size }} · {{ sel.city }}</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <a class="btn sm" href="LiveCall.dc.html">Call {{ sel.dm }}</a>
+            <a class="btn2 sm" href="Deals.dc.html">New deal</a>
+            <a class="btn2 sm" href="Inbox.dc.html">Email</a>
+          </div>
+
+          <div class="tabs" role="tablist">
+            <sc-for list="{{ tabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for>
+          </div>
+
+          <sc-if value="{{ tabPeople }}">
+            <div class="stack" style="gap: 0">
+              <sc-for list="{{ sel.people }}" as="p">
+                <div class="kv" style="align-items: center">
+                  <a href="Contact.dc.html" style="display: flex; gap: 10px; align-items: center; text-decoration: none; color: #15171E"><span class="av">{{ p.i }}</span><span><span style="display: block; font-weight: 600">{{ p.n }}</span><span class="small muted">{{ p.r }}</span></span></a>
+                  <span class="{{ p.cls }}">{{ p.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabDeals }}">
+            <div class="stack">
+              <sc-for list="{{ sel.deals }}" as="d">
+                <a href="Deals.dc.html" style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid #E4E2DC; border-radius: 10px; text-decoration: none; color: #15171E">
+                  <span><span style="display: block; font-weight: 600">{{ d.n }}</span><span class="small muted">{{ d.s }}</span></span>
+                  <span style="font-weight: 700; white-space: nowrap">{{ d.v }}</span>
+                </a>
+              </sc-for>
+              <sc-if value="{{ noDeals }}"><p class="muted">No deals yet.</p></sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabActivity }}">
+            <div class="stack">
+              <sc-for list="{{ sel.activity }}" as="a">
+                <div class="tl"><span class="ic"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.icon }}"></path></svg></span><span><span style="display: block">{{ a.t }}</span><span class="small muted">{{ a.w }}</span></span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabDetails }}">
+            <div>
+              <div class="kv"><span class="muted">Website</span><span>{{ sel.web }}</span></div>
+              <div class="kv"><span class="muted">GSTIN</span><span>{{ sel.gst }}</span></div>
+              <div class="kv"><span class="muted">Main line</span><span>{{ sel.phone }}</span></div>
+              <div class="kv"><span class="muted">Roof / site</span><span>{{ sel.site }}</span></div>
+              <div class="kv"><span class="muted">Monthly power bill</span><span>{{ sel.bill }}</span></div>
+              <div class="kv"><span class="muted">Owner</span><span>{{ sel.owner }}</span></div>
+            </div>
+          </sc-if>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { type: 'all', sel: 'malabar', tab: 'people' };
+  }
+  renderVals() {
+    const s = this.state;
+    const IC = { call: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z', email: 'M3 5h18v14H3zM3 6l9 7 9-7', deal: 'M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2', ticket: 'M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z' };
+    const P = (n, r, tag, cls) => ({ n, r, tag, cls: cls || 'pill', i: n.split(' ').map((w) => w[0]).join('').slice(0, 2) });
+    const data = [
+      { id: 'malabar', name: 'Malabar Textiles', industry: 'Textile mill', size: '120 staff', city: 'Ernakulam', type: 'Customer', dm: 'Suresh', value: '₹48,000 / yr', dealCount: 'Service contract', last: 'Ticket #142 · Tue',
+        web: 'malabartex.example', gst: '32AABCM••••1Z5', phone: '+91 484 •••• 220', site: '50 kW installed, block B', bill: '₹4.1 lakh before solar', owner: 'Support',
+        people: [P('Suresh K', 'Operations manager · decision maker', 'Customer', 'pill g'), P('Lakshmi Varma', 'Accounts', 'Billing contact')],
+        deals: [{ n: 'Service contract (AMC)', s: 'Won · renews 14 Feb 2027', v: '₹48,000' }, { n: 'Block C expansion 30 kW', s: 'Proposal · close Dec', v: '[₹ add quote]' }],
+        activity: [{ icon: IC.ticket, t: 'Ticket #142 opened: inverter error E04', w: 'Tue, 11:02 am' }, { icon: IC.email, t: 'Monthly generation report sent', w: '1 Oct' }, { icon: IC.deal, t: 'Block C expansion moved to Proposal', w: '24 Sep' }] },
+      { id: 'green', name: 'Green Valley Apartments', industry: 'Residents’ association', size: '84 flats', city: 'Kakkanad', type: 'Prospect', dm: 'Meera', value: '[₹ add quote]', dealCount: '1 open deal', last: 'Quote opened · Sun',
+        web: '—', gst: 'Not needed', phone: '+91 98470 •• •19', site: 'Common area roof, 1,800 sq ft', bill: '₹62,000 common areas', owner: 'Meera',
+        people: [P('Meera Iyer', 'RWA secretary · decision maker', 'Qualified', 'pill b'), P('Joseph Mathew', 'Treasurer', 'Lead')],
+        deals: [{ n: 'Common area rooftop 25 kW', s: 'Proposal sent · AGM vote 9 Nov', v: '[₹ add quote]' }],
+        activity: [{ icon: IC.email, t: 'Meera opened the quote email 3 times', w: 'Sun' }, { icon: IC.call, t: 'Apex Solar Advisor: call with Meera, site visit done', w: '20 Oct' }] },
+      { id: 'cold', name: 'Kochi Cold Storage', industry: 'Cold chain', size: '40 staff', city: 'Aroor', type: 'Prospect', dm: 'Karthik', value: '[₹ add quote]', dealCount: '1 open deal', last: 'Call · last week',
+        web: 'kochicold.example', gst: '32AAFCK••••2Z1', phone: '+91 478 •••• 881', site: 'Warehouse roof, 6,000 sq ft', bill: '₹2.6 lakh', owner: 'Meera',
+        people: [P('Karthik Reddy', 'Owner · decision maker', 'Qualified', 'pill b')],
+        deals: [{ n: 'Warehouse 80 kW + net metering', s: 'Site visit · Fri 31 Oct', v: '[₹ add quote]' }],
+        activity: [{ icon: IC.call, t: 'Karthik asked for a call back Friday', w: 'Last week' }] },
+      { id: 'info', name: 'Infopark office', industry: 'IT office', size: 'Unknown', city: 'Kochi', type: 'Lead', dm: 'Arun', value: '—', dealCount: 'No deals', last: 'LinkedIn · Mon',
+        web: '—', gst: '—', phone: 'Not known', site: 'Large roof (per Arun)', bill: 'Not known', owner: 'Unassigned',
+        people: [P('Arun Pillai', 'Facilities head', 'Lead')], deals: [],
+        activity: [{ icon: IC.email, t: 'Arun replied on LinkedIn', w: 'Mon, 4:15 pm' }] }
+    ];
+    const typeCls = { Customer: 'pill g', Prospect: 'pill b', Lead: 'pill' };
+    const types = [{ id: 'all', label: 'All' }, { id: 'Customer', label: 'Customers' }, { id: 'Prospect', label: 'Prospects' }, { id: 'Lead', label: 'Leads' }]
+      .map((t) => ({ ...t, n: data.filter((c) => t.id === 'all' || c.type === t.id).length, pressed: String(t.id === s.type), pick: () => this.setState({ type: t.id }) }));
+    const rows = data.filter((c) => s.type === 'all' || c.type === s.type).map((c) => ({
+      ...c, initials: c.name.split(' ').map((w) => w[0]).join('').slice(0, 2), typeCls: typeCls[c.type],
+      pressed: String(c.id === s.sel), rowCls: c.id === s.sel ? 'sel' : '', pick: () => this.setState({ sel: c.id })
+    }));
+    const raw = data.find((c) => c.id === s.sel) || data[0];
+    const sel = { ...raw, initials: raw.name.split(' ').map((w) => w[0]).join('').slice(0, 2) };
+    const tabs = [{ id: 'people', label: 'People · ' + raw.people.length }, { id: 'deals', label: 'Deals · ' + raw.deals.length }, { id: 'activity', label: 'Activity' }, { id: 'details', label: 'Details' }]
+      .map((t) => ({ ...t, sel: String(t.id === s.tab), pick: () => this.setState({ tab: t.id }) }));
+    return {
+      types, rows, sel, tabs, noDeals: raw.deals.length === 0,
+      tabPeople: s.tab === 'people', tabDeals: s.tab === 'deals', tabActivity: s.tab === 'activity', tabDetails: s.tab === 'details'
+    };
+  }
+}
+</script>
+</body>
+</html>

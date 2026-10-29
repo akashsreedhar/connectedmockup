@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create your workspace</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.su{min-height:100vh;background:#F6F5F2;display:flex;flex-direction:column}
+.su-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 28px;background:#FFFFFF;border-bottom:1px solid #E4E2DC}
+.su-body{flex:1;display:flex;flex-wrap:wrap;gap:28px;padding:32px 28px 56px;max-width:1180px;width:100%;margin:0 auto;box-sizing:border-box;align-items:flex-start}
+.rail{flex:1 1 210px;max-width:240px;display:flex;flex-direction:column;gap:2px}
+.rail .ph{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070;padding:12px 10px 6px}
+.rs{display:flex;align-items:center;gap:10px;min-height:38px;padding:0 10px;border-radius:9px;font-size:13.5px;font-weight:500;color:#5B6070}
+.rs .n{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;flex:none;background:#EFEDE8;color:#3A3D46}
+.rs.done{color:#3A3D46}.rs.done .n{background:#2F55D4;color:#FFFFFF}
+.rs.cur{background:#E8EDFF;color:#1E3A8A;font-weight:600}.rs.cur .n{background:#2F55D4;color:#FFFFFF}
+.panel{flex:3 1 520px;min-width:0;background:#FFFFFF;border:1px solid #E4E2DC;border-radius:16px;padding:32px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px}
+.why{flex:1 1 240px;max-width:300px;display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:14px;background:#F3F6FF;border:1px solid #CCD7FA;font-size:13.5px;color:#1E3A8A;box-sizing:border-box}
+.q{display:flex;flex-direction:column;gap:10px}
+.q>.qt{font-weight:700;font-size:15px}
+.q>.qh{font-size:13px;color:#5B6070;margin-top:-6px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.opt{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 14px;border-radius:10px;border:1px solid #E4E2DC;background:#FFFFFF;font:500 14px Inter,system-ui,sans-serif;color:#15171E;text-align:left;cursor:pointer;box-sizing:border-box}
+.opt:hover{border-color:#CCD7FA}
+.opt[aria-pressed="true"]{border:2px solid #2F55D4;padding:9px 13px;background:#F3F6FF;font-weight:600}
+.opt .box{width:18px;height:18px;border-radius:5px;border:2px solid #C9C6BF;flex:none;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:12px;box-sizing:border-box}
+.opt[aria-pressed="true"] .box{background:#2F55D4;border-color:#2F55D4}
+.opt.radio .box{border-radius:50%}
+.big-opt{flex-direction:column;align-items:flex-start;min-height:96px;gap:4px}
+.err-t{font-size:12.5px;color:#912018;font-weight:600}
+.code{display:flex;gap:8px}
+.code input{width:48px;height:56px;text-align:center;font:700 22px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;border-radius:10px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.sum>div{padding:16px;border-radius:12px;border:1px solid #E4E2DC;display:flex;flex-direction:column;gap:6px}
+.navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #EFEDE8}
+@media (max-width:900px){.rail,.why{max-width:none}}
+@media (max-width:640px){.su-body{padding:20px 16px 48px}.panel{padding:20px}.su-top{padding:14px 16px}}
+</style>
+</helmet>
+<div class="su">
+  <header class="su-top">
+    <span style="display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg></span><b style="font-size: 17px">Connekted</b></span>
+    <span class="small muted">{{ topNote }} <a href="Login.dc.html" style="font-weight: 600">{{ topLink }}</a></span>
+  </header>
+
+  <div class="su-body">
+    <nav class="rail" aria-label="Sign-up progress">
+      <sc-for list="{{ rail }}" as="p">
+        <span class="ph">{{ p.label }}</span>
+        <sc-for list="{{ p.steps }}" as="r"><span class="{{ r.cls }}" aria-current="{{ r.current }}"><span class="n">{{ r.mark }}</span>{{ r.label }}</span></sc-for>
+      </sc-for>
+      <span class="small muted" style="padding: 14px 10px">{{ timeLeft }}</span>
+    </nav>
+
+    <section class="panel">
+
+      <!-- 1. Account -->
+      <sc-if value="{{ at.account }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 1 of 8</span><h1 class="title">Create your account</h1><p class="muted">Free for 14 days. No card needed until you go live.</p></div>
+        <div class="row" style="gap: 10px">
+          <button type="button" class="btn2" style="flex: 1 1 200px" onClick="{{ google }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"></path><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"></path><path fill="#FBBC05" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"></path><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"></path></svg>Sign up with Google</button>
+          <button type="button" class="btn2" style="flex: 1 1 200px" onClick="{{ google }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><path fill="#F25022" d="M2 2h9.5v9.5H2z"></path><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"></path><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"></path><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"></path></svg>Sign up with Microsoft</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; color: #5B6070; font-size: 12.5px"><span style="flex: 1; height: 1px; background: #E4E2DC"></span>or with email<span style="flex: 1; height: 1px; background: #E4E2DC"></span></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+          <label class="field">Full name<input class="input" autocomplete="name" value="{{ f.name }}" onInput="{{ in.name }}" placeholder="Meera Iyer"><sc-if value="{{ err.name }}"><span class="err-t">{{ err.name }}</span></sc-if></label>
+          <label class="field">Work email<input class="input" type="email" autocomplete="email" value="{{ f.email }}" onInput="{{ in.email }}" placeholder="you@company.com"><sc-if value="{{ err.email }}"><span class="err-t">{{ err.email }}</span></sc-if></label>
+          <label class="field">Mobile (for OTP and test calls)<span style="display: flex; gap: 8px"><select class="input" style="width: 90px" aria-label="Country code"><option>+91</option><option>+971</option><option>+1</option></select><input class="input" type="tel" autocomplete="tel" value="{{ f.phone }}" onInput="{{ in.phone }}" placeholder="98450 12345"></span></label>
+          <label class="field">Password<input class="input" type="password" autocomplete="new-password" onInput="{{ in.pass }}" placeholder="8+ characters, one number"><sc-if value="{{ err.pass }}"><span class="err-t">{{ err.pass }}</span></sc-if></label>
+        </div>
+        <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; cursor: pointer"><input type="checkbox" checked="{{ f.terms }}" onChange="{{ in.terms }}" style="width: 18px; height: 18px; margin-top: 1px"><span>I agree to the <a href="#">Terms</a> and <a href="#">Privacy policy</a>, and to receive product updates on WhatsApp. <span class="muted">(You can opt out anytime.)</span></span></label>
+        <sc-if value="{{ err.terms }}"><span class="err-t">{{ err.terms }}</span></sc-if>
+        <p class="small muted">Tip: try an email ending in <b>@apexsolar.example</b> to see what happens when your company already has a workspace.</p>
+      </sc-if>
+
+      <!-- 2. Verify -->
+      <sc-if value="{{ at.verify }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 2 of 8</span><h1 class="title">Check your email</h1><p class="muted">We sent a 6-digit code to <b>{{ f.email }}</b>. It expires in 10 minutes.</p></div>
+        <div class="code" role="group" aria-label="6-digit code">
+          <input aria-label="Digit 1" inputmode="numeric" maxlength="1" value="4"><input aria-label="Digit 2" inputmode="numeric" maxlength="1" value="8"><input aria-label="Digit 3" inputmode="numeric" maxlength="1" value="2"><input aria-label="Digit 4" inputmode="numeric" maxlength="1" value="9"><input aria-label="Digit 5" inputmode="numeric" maxlength="1" value="1"><input aria-label="Digit 6" inputmode="numeric" maxlength="1" value="7">
+        </div>
+        <span class="small muted">No email? Check spam, <a href="#">resend in 0:42</a>, or <button type="button" class="btn3 sm" onClick="{{ back }}" style="min-height: 0; padding: 0">change the email</button>.</span>
+        <div class="note"><span>The code is filled in for the mockup. Press Continue.</span></div>
+      </sc-if>
+
+      <!-- 2b. Join existing -->
+      <sc-if value="{{ at.join }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Your company is already here</span><h1 class="title">Join Apex Solar?</h1><p class="muted">3 people from <b>apexsolar.example</b> already use Connekted. Joining keeps everyone’s contacts, calls and agents in one place.</p></div>
+        <div style="display: flex; gap: 14px; align-items: center; padding: 16px; border: 1px solid #E4E2DC; border-radius: 12px; flex-wrap: wrap">
+          <span class="av sq lg" style="background: #2F55D4; color: #FFFFFF">AS</span>
+          <span style="flex: 1 1 200px"><b style="display: block">Apex Solar</b><span class="small muted">Admin: Meera Iyer · 3 members · Kochi</span></span>
+          <a class="btn" href="Main.dc.html">Request to join</a>
+        </div>
+        <p class="small muted">Meera gets a request and picks your role. You can look around as a Viewer until then.</p>
+        <button type="button" class="btn3" onClick="{{ skipJoin }}" style="align-self: flex-start; padding: 0">No, create a separate workspace</button>
+      </sc-if>
+
+      <!-- 3. Workspace -->
+      <sc-if value="{{ at.workspace }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 3 of 8</span><h1 class="title">Set up your workspace</h1><p class="muted">A workspace is your company in Connekted: your team, numbers, agents and contacts.</p></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+          <label class="field">Company or brand name<input class="input" value="{{ f.company }}" onInput="{{ in.company }}" placeholder="Apex Solar"><sc-if value="{{ err.company }}"><span class="err-t">{{ err.company }}</span></sc-if></label>
+          <label class="field">Website (optional)<input class="input" value="{{ f.site }}" onInput="{{ in.site }}" placeholder="apexsolar.in"><span class="small muted" style="font-weight: 400">We read it to draft your agent’s brief and knowledge.</span></label>
+          <label class="field">Workspace address<span style="display: flex; align-items: center; border: 1px solid #D6D3CC; border-radius: 10px; overflow: hidden"><input id="su-slug" class="input" style="border: 0; border-radius: 0" value="{{ slug }}" aria-label="Workspace address"><span class="muted" style="padding: 0 12px; white-space: nowrap">.connekted.app</span></span></label>
+          <label class="field">Country<select class="input"><option>India</option><option>United Arab Emirates</option><option>Singapore</option><option>United States</option></select></label>
+        </div>
+        <div class="q">
+          <span class="qt">We set these from your country</span>
+          <div class="chips"><span class="pill">Time zone: Asia/Kolkata (IST)</span><span class="pill">Currency: ₹ INR, 1,00,000 format</span><span class="pill">Numbers: +91</span><span class="pill">DND registry checks: on</span><span class="pill">Data stored in: India</span></div>
+          <span class="small muted">You can change any of these later in Settings.</span>
+        </div>
+      </sc-if>
+
+      <!-- 4. Business -->
+      <sc-if value="{{ at.business }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 4 of 8</span><h1 class="title">Tell us about {{ companyName }}</h1><p class="muted">Three quick questions. They decide which agent templates and reports you see first.</p></div>
+        <div class="q"><span class="qt">Industry</span>
+          <div class="opts"><sc-for list="{{ industries }}" as="o"><button type="button" class="opt radio" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span>{{ o.label }}</button></sc-for></div>
+          <sc-if value="{{ err.industry }}"><span class="err-t">{{ err.industry }}</span></sc-if>
+        </div>
+        <div class="q"><span class="qt">Team size</span>
+          <div class="chips" role="group" aria-label="Team size"><sc-for list="{{ sizes }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Your role</span>
+          <div class="chips" role="group" aria-label="Your role"><sc-for list="{{ roles }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+        </div>
+      </sc-if>
+
+      <!-- 5. Use -->
+      <sc-if value="{{ at.use }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 5 of 8</span><h1 class="title">How will you use Connekted?</h1><p class="muted">Pick everything that applies. We’ll suggest your first agent from this.</p></div>
+        <div class="q"><span class="qt">What should your AI agents do?</span>
+          <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))"><sc-for list="{{ uses }}" as="o"><button type="button" class="opt big-opt" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span style="display: flex; gap: 10px; align-items: center"><span class="box">{{ o.tick }}</span><b>{{ o.label }}</b></span><span class="small muted" style="font-weight: 400">{{ o.d }}</span></button></sc-for></div>
+          <sc-if value="{{ err.uses }}"><span class="err-t">{{ err.uses }}</span></sc-if>
+        </div>
+        <div class="q"><span class="qt">Who do you call?</span>
+          <div class="chips" role="group" aria-label="Who you call"><sc-for list="{{ audiences }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Calls a month, roughly</span>
+          <div class="chips" role="group" aria-label="Call volume"><sc-for list="{{ volumes }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Languages your customers speak</span><span class="qh">Agents switch language when the caller does.</span>
+          <div class="chips" role="group" aria-label="Languages"><sc-for list="{{ langs }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+        </div>
+      </sc-if>
+
+      <!-- 6. Tools -->
+      <sc-if value="{{ at.tools }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 6 of 8</span><h1 class="title">Your tools and channels</h1><p class="muted">So we can bring your leads in and connect the right providers. Nothing connects until you say so.</p></div>
+        <div class="q"><span class="qt">Where are your leads today?</span>
+          <div class="opts"><sc-for list="{{ sources }}" as="o"><button type="button" class="opt" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span>{{ o.label }}</button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Phone provider</span><span class="qh">Connekted uses your own provider for calls. Not sure? We recommend Plivo for India.</span>
+          <div class="opts"><sc-for list="{{ providers }}" as="o"><button type="button" class="opt radio" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span><span>{{ o.label }}<sc-if value="{{ o.rec }}"><span class="pill b" style="margin-left: 6px; font-size: 11px; padding: 1px 7px">Recommended</span></sc-if></span></button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Channels you already use</span>
+          <div class="opts"><sc-for list="{{ channels }}" as="o"><button type="button" class="opt" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span>{{ o.label }}</button></sc-for></div>
+        </div>
+        <div class="q"><span class="qt">Is your company registered on DLT for SMS?</span>
+          <div class="chips" role="group" aria-label="DLT registration"><sc-for list="{{ dlt }}" as="o"><button type="button" class="chip" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for></div>
+          <sc-if value="{{ dltHelp }}"><div class="note o"><span>No problem. SMS stays off until you add a DLT entity ID. Calls, WhatsApp and email work without it.</span></div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- 7. Team -->
+      <sc-if value="{{ at.team }}">
+        <div class="stack" style="gap: 6px"><span class="lab">Step 7 of 8</span><h1 class="title">Invite your team</h1><p class="muted">Optional. People you invite can listen to calls, reply in the Inbox and work deals.</p></div>
+        <sc-for list="{{ invites }}" as="v">
+          <div class="row" style="gap: 10px; align-items: center">
+            <input class="input" style="flex: 3 1 240px" type="email" placeholder="name@company.com" value="{{ v.email }}" aria-label="{{ v.label }}">
+            <select class="input" style="flex: 1 1 150px" aria-label="Role"><option>{{ v.role }}</option><option>Admin</option><option>Manager</option><option>Agent builder</option><option>Sales rep</option><option>Viewer</option></select>
+          </div>
+        </sc-for>
+        <button type="button" class="btn3" onClick="{{ addInvite }}" style="align-self: flex-start; padding: 0">+ Add another person</button>
+        <label class="toggle"><input type="checkbox" checked><span class="tr"></span>Let anyone with an @{{ domain }} email ask to join</label>
+        <div class="note"><span><b>Roles in short:</b> Admin can do everything incl. billing · Manager runs campaigns and reports · Agent builder edits agents · Sales rep works their own contacts and deals · Viewer reads only.</span></div>
+      </sc-if>
+
+      <!-- 8. Ready -->
+      <sc-if value="{{ at.ready }}">
+        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
+          <span style="width: 56px; height: 56px; border-radius: 16px; background: #E3F4E8; color: #15803D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+          <div class="stack" style="gap: 4px"><h1 class="title">{{ companyName }} is ready</h1><p class="muted">Here’s what we set up from your answers. Next, build your first agent and hear it on a real call. About 10 minutes.</p></div>
+        </div>
+        <div class="sum">
+          <sc-for list="{{ summary }}" as="x"><div><span class="lab">{{ x.l }}</span><b>{{ x.v }}</b><span class="small muted">{{ x.d }}</span></div></sc-for>
+        </div>
+        <div class="card blue" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
+          <span class="av sq lg" style="background: #2F55D4; color: #FFFFFF">{{ agentInitials }}</span>
+          <span style="flex: 1 1 260px"><span class="lab" style="color: #1E3A8A">Suggested first agent</span><b style="display: block; font-size: 16px">{{ agentName }}</b><span class="small muted">{{ agentDesc }}</span></span>
+          <a class="btn" href="Onboarding.dc.html">Build this agent</a>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap"><a class="btn2" href="Main.dc.html">Skip, go to Home</a><a class="btn2" href="Agents.dc.html">See all templates</a></div>
+      </sc-if>
+
+      <sc-if value="{{ showNav }}">
+        <div class="navrow">
+          <sc-if value="{{ canBack }}"><button type="button" class="btn2" onClick="{{ back }}">Back</button></sc-if>
+          <sc-if value="{{ noBack }}"><span></span></sc-if>
+          <div style="display: flex; gap: 10px; align-items: center">
+            <sc-if value="{{ canSkip }}"><button type="button" class="btn3" onClick="{{ next }}">Skip for now</button></sc-if>
+            <button type="button" class="btn" onClick="{{ next }}">{{ nextLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+
+    <aside class="why">
+      <span style="display: flex; gap: 8px; align-items: center; font-weight: 700"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg>{{ why.t }}</span>
+      <sc-for list="{{ why.lines }}" as="l"><span>{{ l }}</span></sc-for>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const ORDER = ['account', 'verify', 'workspace', 'business', 'use', 'tools', 'team', 'ready'];
+    this.ORDER = ORDER;
+    this.state = {
+      step: ORDER.indexOf(props.sub) >= 0 ? props.sub : 'account', err: {},
+      industry: 'solar', size: '2–10', role: 'Founder or owner',
+      uses: { leads: true, follow: true }, audience: 'Consumers (B2C)', volume: '500–5,000', langs: { en: true, ml: true },
+      sources: { sheet: true, fb: true, web: true }, provider: 'plivo', channels: { wa: true, email: true }, dlt: 'Not sure',
+      invites: [{ email: 'ravi@apexsolar.in', role: 'Sales rep' }, { email: '', role: 'Viewer' }]
+    };
+    this.f = { name: '', email: '', phone: '', pass: '', terms: true, company: '', site: '' };
+  }
+  slugify(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'your-company'; }
+  go(step) { this.setState({ step, err: {} }); window.scrollTo(0, 0); }
+  renderVals() {
+    const s = this.state;
+    const ORDER = this.ORDER;
+    const idx = Math.max(0, ORDER.indexOf(s.step === 'join' ? 'verify' : s.step));
+    const LBL = { account: 'Account', verify: 'Verify email', workspace: 'Workspace', business: 'Your business', use: 'How you’ll use it', tools: 'Tools and channels', team: 'Invite team', ready: 'Ready' };
+    const railStep = (id) => {
+      const i = ORDER.indexOf(id);
+      const cur = i === idx, done = i < idx;
+      return { label: LBL[id], cls: 'rs' + (cur ? ' cur' : (done ? ' done' : '')), mark: done ? '✓' : String(i + 1), current: cur ? 'step' : false };
+    };
+    const rail = [{ label: 'Your account', steps: ['account', 'verify'].map(railStep) }, { label: 'Your organization', steps: ['workspace', 'business', 'use', 'tools', 'team'].map(railStep) }, { label: 'Done', steps: ['ready'].map(railStep) }];
+    const single = (key, list) => list.map((o) => { const id = o.id || o; const label = o.label || o; return { ...o, label, pressed: String(s[key] === id), tick: '', pick: () => this.setState({ [key]: id }) }; });
+    const multi = (key, list) => list.map((o) => ({ ...o, pressed: String(!!s[key][o.id]), tick: s[key][o.id] ? '✓' : '', pick: () => this.setState({ [key]: { ...s[key], [o.id]: !s[key][o.id] } }) }));
+    const industries = single('industry', [{ id: 'solar', label: 'Solar and energy' }, { id: 're', label: 'Real estate' }, { id: 'edu', label: 'Education and coaching' }, { id: 'health', label: 'Clinics and healthcare' }, { id: 'loans', label: 'Loans and finance' }, { id: 'ins', label: 'Insurance' }, { id: 'auto', label: 'Automotive' }, { id: 'd2c', label: 'E-commerce and D2C' }, { id: 'agency', label: 'Agency' }, { id: 'other', label: 'Something else' }]);
+    const sizes = single('size', ['Just me', '2–10', '11–50', '51–200', '200+']);
+    const roles = single('role', ['Founder or owner', 'Sales head', 'Marketing', 'Operations or support', 'Developer']);
+    const uses = multi('uses', [{ id: 'leads', label: 'Call new leads', d: 'Qualify and book meetings or visits' }, { id: 'follow', label: 'Follow up', d: 'Reminders, no-shows, quote follow-ups' }, { id: 'inbound', label: 'Answer my phone', d: 'Pick up, answer questions, book' }, { id: 'collect', label: 'Payment reminders', d: 'Polite reminders with a payment link' }, { id: 'support', label: 'Customer support', d: 'Status updates, tickets, FAQs' }, { id: 'survey', label: 'Surveys and feedback', d: 'NPS, reviews, renewals' }]);
+    const audiences = single('audience', ['Consumers (B2C)', 'Businesses (B2B)', 'Both']);
+    const volumes = single('volume', ['Under 500', '500–5,000', '5,000–50,000', '50,000+']);
+    const langs = multi('langs', [{ id: 'en', label: 'English' }, { id: 'hi', label: 'Hindi' }, { id: 'ml', label: 'Malayalam' }, { id: 'ta', label: 'Tamil' }, { id: 'te', label: 'Telugu' }, { id: 'kn', label: 'Kannada' }, { id: 'mr', label: 'Marathi' }, { id: 'bn', label: 'Bengali' }]);
+    const sources = multi('sources', [{ id: 'sheet', label: 'Spreadsheet or CSV' }, { id: 'fb', label: 'Facebook / Instagram lead ads' }, { id: 'web', label: 'Website forms' }, { id: 'crm', label: 'Another CRM (Zoho, HubSpot…)' }, { id: 'mart', label: 'IndiaMART / JustDial' }, { id: 'none', label: 'No leads yet' }]);
+    const providers = single('provider', [{ id: 'plivo', label: 'Plivo', rec: true }, { id: 'vonage', label: 'Vonage' }, { id: 'twilio', label: 'Twilio' }, { id: 'telnyx', label: 'Telnyx' }, { id: 'sip', label: 'My own SIP trunk' }, { id: 'none', label: 'None yet, help me pick' }]).map((o) => ({ ...o, rec: !!o.rec }));
+    const channels = multi('channels', [{ id: 'wa', label: 'WhatsApp Business' }, { id: 'email', label: 'Email (Google or Outlook)' }, { id: 'sms', label: 'SMS' }, { id: 'li', label: 'LinkedIn' }]);
+    const dlt = single('dlt', ['Yes', 'No', 'Not sure']);
+    const company = this.f.company || 'Apex Solar';
+    const domain = (this.f.email.split('@')[1]) || 'apexsolar.in';
+    const useLabels = uses.filter((u) => u.pressed === 'true').map((u) => u.label);
+    const langLabels = langs.filter((u) => u.pressed === 'true').map((u) => u.label);
+    const agentByIndustry = { solar: ['Solar lead qualifier', 'Calls new leads within 5 minutes, asks about bill, roof and shading, and books a free site visit.'], re: ['Property site-visit booker', 'Qualifies budget and location, books site visits.'], edu: ['Admissions counsellor', 'Calls enquiries, answers fee questions, books a counselling session.'], health: ['Clinic receptionist', 'Books, reschedules and reminds patients.'], loans: ['Loan eligibility caller', 'Checks basic eligibility and collects documents on WhatsApp.'] };
+    const ag = agentByIndustry[s.industry] || ['Lead qualifier', 'Asks 3 to 5 questions, scores the lead and books a meeting.'];
+    const summary = [
+      { l: 'Workspace', v: company, d: this.slugify(this.f.company || 'apex solar') + '.connekted.app · IST · ₹' },
+      { l: 'Agents will', v: useLabels.slice(0, 2).join(', ') || 'Call new leads', d: useLabels.length > 2 ? '+' + (useLabels.length - 2) + ' more' : 'Change anytime' },
+      { l: 'Languages', v: langLabels.join(', ') || 'English', d: 'en-IN voices: Anika, Arjun, Diya, Kabir' },
+      { l: 'Compliance', v: 'DND checks on', d: 'Calling hours 10 am to 7 pm · recording notice on' },
+      { l: 'To connect next', v: (s.provider === 'none' ? 'Plivo (recommended)' : providers.find((p) => p.pressed === 'true').label) + ' + ' + (s.channels.wa ? 'WhatsApp' : 'email'), d: 'From the Home checklist' },
+      { l: 'Team', v: s.invites.filter((v) => v.email).length + ' invited', d: 'They get an email now' }
+    ];
+    const WHY = {
+      account: { t: 'Why we ask', lines: ['Your mobile number is used for sign-in codes and for your first test call, so you can hear your agent on a real phone.', 'We never call or message it for marketing without your OK.'] },
+      verify: { t: 'Why verify', lines: ['Verified emails let teammates find and join your workspace safely.', 'It also protects call recordings and customer data.'] },
+      join: { t: 'Why we suggest this', lines: ['Two workspaces for one company split your contacts and caller history.', 'You can still create a separate one, for example for a second brand.'] },
+      workspace: { t: 'How this is used', lines: ['Country sets time zone, currency, number format and the DND rules your calls must follow.', 'Your website helps us write the agent’s first brief and knowledge base. You review everything before it goes live.'] },
+      business: { t: 'How this is used', lines: ['Industry picks the agent templates, sample questions and report you see first.', 'Team size decides whether we show approvals and roles up front.'] },
+      use: { t: 'How this is used', lines: ['We suggest your first agent from what you pick here.', 'Languages decide which voices we offer. Agents switch when the caller does.', 'Call volume helps us recommend concurrency and a plan. No sales call unless you ask.'] },
+      tools: { t: 'How this is used', lines: ['Lead sources become one-click imports on Home.', 'We only connect a provider after you log in to it. Your numbers stay in your own account.', 'DLT is required in India for business SMS.'] },
+      team: { t: 'Good to know', lines: ['Invites expire in 7 days.', 'Only Admins and Managers can launch campaigns. Change this in Settings › Team.'] },
+      ready: { t: 'What’s next', lines: ['1. Build your agent from the suggestion.', '2. Talk to it in your browser.', '3. Get a real call on your phone.', 'Then launch your first campaign.'] }
+    };
+    const inputs = {
+      name: (e) => { this.f.name = e.target.value; },
+      email: (e) => { this.f.email = e.target.value; },
+      phone: (e) => { this.f.phone = e.target.value; },
+      pass: (e) => { this.f.pass = e.target.value; },
+      terms: (e) => { this.f.terms = e.target.checked; },
+      company: (e) => { this.f.company = e.target.value; const el = document.getElementById('su-slug'); if (el) el.value = this.slugify(e.target.value); },
+      site: (e) => { this.f.site = e.target.value; }
+    };
+    const validate = () => {
+      const err = {};
+      if (s.step === 'account') {
+        if (!this.f.name.trim()) err.name = 'Add your name.';
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.f.email)) err.email = 'Use a work email, like you@company.com.';
+        if (this.f.pass.length < 8) err.pass = 'Use 8 or more characters.';
+        if (!this.f.terms) err.terms = 'Please accept the terms to continue.';
+      }
+      if (s.step === 'workspace' && !this.f.company.trim()) err.company = 'Add your company or brand name.';
+      if (s.step === 'use' && useLabels.length === 0) err.uses = 'Pick at least one.';
+      return err;
+    };
+    const next = () => {
+      const err = validate();
+      if (Object.keys(err).length) return this.setState({ err });
+      if (s.step === 'verify' && /@apexsolar\.example$/i.test(this.f.email)) return this.go('join');
+      const i = ORDER.indexOf(s.step);
+      this.go(ORDER[Math.min(i + 1, ORDER.length - 1)]);
+    };
+    const at = {}; ORDER.concat(['join']).forEach((k) => { at[k] = s.step === k; });
+    const remaining = ORDER.length - 1 - idx;
+    return {
+      at, rail, err: s.err, f: this.f, in: inputs, slug: this.slugify(this.f.company), companyName: company, domain,
+      industries, sizes, roles, uses, audiences, volumes, langs, sources, providers, channels, dlt, dltHelp: s.dlt !== 'Yes',
+      invites: s.invites.map((v, i) => ({ ...v, label: 'Email for person ' + (i + 1) })),
+      addInvite: () => this.setState({ invites: s.invites.concat([{ email: '', role: 'Sales rep' }]) }),
+      summary, agentName: ag[0], agentDesc: ag[1], agentInitials: ag[0].split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase(),
+      why: WHY[s.step],
+      timeLeft: remaining > 0 ? 'About ' + Math.max(1, Math.ceil(remaining * 0.4)) + ' min left' : 'All done',
+      topNote: s.step === 'account' ? 'Already have an account?' : 'Signed in as ' + (this.f.email || 'meera@apexsolar.in') + ' ·',
+      topLink: s.step === 'account' ? 'Sign in' : 'Sign out',
+      showNav: s.step !== 'ready' && s.step !== 'join',
+      canBack: idx > 0 && s.step !== 'workspace', noBack: !(idx > 0 && s.step !== 'workspace'),
+      canSkip: s.step === 'team' || s.step === 'tools',
+      nextLabel: s.step === 'account' ? 'Create account' : (s.step === 'verify' ? 'Verify' : (s.step === 'team' ? 'Send invites and finish' : 'Continue')),
+      next, back: () => this.go(ORDER[Math.max(0, ORDER.indexOf(s.step === 'join' ? 'verify' : s.step) - 1)]),
+      google: () => { this.f.name = 'Meera Iyer'; this.f.email = 'meera@apexsolar.in'; this.go('workspace'); },
+      skipJoin: () => this.go('workspace')
+    };
+  }
+}
+</script>
+</body>
+</html>

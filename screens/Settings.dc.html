@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.sec{display:flex;flex-direction:column;gap:18px}
+.line{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #EFEDE8;flex-wrap:wrap}
+.line:last-child{border-bottom:0}
+.line .t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 260px}
+.f2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.hours{display:grid;grid-template-columns:90px 1fr 1fr;gap:8px;align-items:center}
+.conn{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid #E4E2DC;border-radius:12px;flex-wrap:wrap}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="settings"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+      <div class="ph"><div class="ph-t"><h1 class="title">Settings</h1><p class="sub">Each setting has one home. Agent voice, model and language live on the agent itself.</p></div></div>
+
+      <div class="row" style="gap: 24px">
+        <aside class="subnav">
+          <nav class="vnav" aria-label="Settings sections">
+            <sc-for list="{{ groups }}" as="g">
+              <span class="grp">{{ g.label }}</span>
+              <sc-for list="{{ g.items }}" as="i"><button type="button" aria-pressed="{{ i.pressed }}" onClick="{{ i.pick }}">{{ i.label }}<sc-if value="{{ i.badge }}"><span class="{{ i.badgeCls }}" style="margin-left: auto; font-size: 11.5px; padding: 1px 8px">{{ i.badge }}</span></sc-if></button></sc-for>
+            </sc-for>
+          </nav>
+        </aside>
+
+        <section class="card" style="flex: 4 1 560px; min-width: 0">
+
+          <sc-if value="{{ is.general }}"><div class="sec">
+            <h2 class="h2">Workspace</h2>
+            <div class="f2">
+              <label class="field">Business name<input class="input" value="Apex Solar"></label>
+              <label class="field">Workspace URL<input class="input" value="apexsolar.connekted.app"></label>
+              <label class="field">Country<select class="input"><option>India</option></select></label>
+              <label class="field">Time zone<select class="input"><option>Asia/Kolkata (IST, UTC+5:30)</option></select></label>
+              <label class="field">Currency<select class="input"><option>₹ Indian rupee (1,00,000 format)</option></select></label>
+              <label class="field">Default language<select class="input"><option>English (India)</option><option>Hindi</option><option>Malayalam</option><option>Tamil</option></select></label>
+            </div>
+            <div><button type="button" class="btn">Save changes</button></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.team }}"><div class="sec">
+            <div class="between"><h2 class="h2">Team and roles</h2><button type="button" class="btn sm">Invite people</button></div>
+            <div class="scroll-x"><table>
+              <thead><tr><th>Person</th><th>Role</th><th>Can take over live calls</th><th>Status</th></tr></thead>
+              <tbody><sc-for list="{{ team }}" as="p"><tr><td><span style="display: flex; gap: 10px; align-items: center"><span class="av">{{ p.i }}</span><span><b style="display: block">{{ p.n }}</b><span class="small muted">{{ p.e }}</span></span></span></td><td><select class="input" style="width: auto; min-height: 36px" aria-label="Role"><option>{{ p.r }}</option><option>Admin</option><option>Manager</option><option>Agent builder</option><option>Sales rep</option><option>Viewer</option></select></td><td>{{ p.take }}</td><td><span class="{{ p.cls }}">{{ p.s }}</span></td></tr></sc-for></tbody>
+            </table></div>
+            <div class="note"><span><b>Roles:</b> Admin (everything incl. billing) · Manager (campaigns, reports, team) · Agent builder (agents and tests) · Sales rep (own contacts, inbox, deals) · Viewer (read only).</span></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.numbers }}"><div class="sec">
+            <h2 class="h2">Phone numbers</h2>
+            <p class="muted">Connect your own provider and pick which agent answers each number.</p>
+            <div class="conn"><span style="flex: 1 1 240px"><b style="display: block">2 numbers connected through Plivo</b><span class="small muted">+91 80 •••• 4210 → Apex Solar Advisor · +91 80 •••• 7781 → Front Desk</span></span><a class="btn sm" href="Numbers.dc.html">Manage numbers</a></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.whatsapp }}"><div class="sec">
+            <div class="between"><h2 class="h2">WhatsApp</h2><span class="pill g">Connected</span></div>
+            <div class="conn"><span class="av sq" style="background: #E3F4E8; color: #14672F">WA</span><span style="flex: 1 1 220px"><b style="display: block">+91 80 •••• 4210 · Apex Solar</b><span class="small muted">WhatsApp Business API via Meta Cloud · display name approved · quality rating High</span></span><button type="button" class="btn2 sm">Change</button></div>
+            <div><span class="lab">Message templates</span>
+              <div style="margin-top: 6px"><sc-for list="{{ templates }}" as="t"><div class="line"><span class="t"><b>{{ t.n }}</b><span class="small muted">{{ t.d }}</span></span><span class="{{ t.cls }}">{{ t.s }}</span></div></sc-for></div>
+              <button type="button" class="btn2 sm" style="margin-top: 8px">New template</button>
+            </div>
+            <div class="note"><span>Outside the 24-hour reply window only approved templates can be sent. Opt-ins are recorded on each contact automatically.</span></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.email }}"><div class="sec">
+            <div class="between"><h2 class="h2">Email</h2><span class="pill g">Connected</span></div>
+            <div class="conn"><span class="av sq">G</span><span style="flex: 1 1 220px"><b style="display: block">hello@apexsolar.example</b><span class="small muted">Google Workspace · 2-way sync · sends up to 500 a day</span></span><button type="button" class="btn2 sm">Add mailbox</button></div>
+            <div><span class="lab">Domain health</span>
+              <div class="line"><span class="t"><b>SPF</b><span class="small muted">Lets inboxes trust mail from Connekted</span></span><span class="pill g">Passing</span></div>
+              <div class="line"><span class="t"><b>DKIM</b><span class="small muted">Signs your email</span></span><span class="pill g">Passing</span></div>
+              <div class="line"><span class="t"><b>DMARC</b><span class="small muted">Recommended for campaigns over 100 a day</span></span><span class="pill o">Not set up</span></div>
+            </div>
+            <label class="field">Signature<textarea class="input">Meera Iyer · Apex Solar · +91 80 •••• 4210</textarea></label>
+          </div></sc-if>
+
+          <sc-if value="{{ is.sms }}"><div class="sec">
+            <div class="between"><h2 class="h2">SMS</h2><span class="pill g">Connected</span></div>
+            <div class="f2">
+              <label class="field">Provider<select class="input"><option>Plivo</option><option>MSG91</option><option>Twilio</option></select></label>
+              <label class="field">DLT sender ID (header)<input class="input" value="APXSLR"></label>
+              <label class="field">DLT entity ID<input class="input" value="1201••••••••3321"></label>
+            </div>
+            <div class="note o"><span>In India every SMS template must be registered on DLT. Unregistered templates are blocked before sending, so you are never charged for a failed message.</span></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.linkedin }}"><div class="sec">
+            <div class="between"><h2 class="h2">LinkedIn</h2><span class="pill">Not connected</span></div>
+            <p class="muted">Send connection requests and messages as a step in a campaign. Replies arrive in the Inbox.</p>
+            <div class="f2">
+              <div class="card" style="padding: 16px"><b>Safe daily limits</b><p class="small muted" style="margin-top: 4px">25 invites and 50 messages a day per account, spread through working hours.</p></div>
+              <div class="card" style="padding: 16px"><b>Your account only</b><p class="small muted" style="margin-top: 4px">Each teammate connects their own profile. We never share sessions.</p></div>
+            </div>
+            <div><button type="button" class="btn">Connect LinkedIn</button></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.hours }}"><div class="sec">
+            <h2 class="h2">Calling hours</h2>
+            <p class="muted">Agents only call inside these hours, in each contact’s own time zone. Campaigns can narrow them, never widen them.</p>
+            <div class="hours">
+              <span class="lab">Day</span><span class="lab">From</span><span class="lab">To</span>
+              <sc-for list="{{ week }}" as="d"><span style="font-weight: 600">{{ d.d }}</span><input class="input" value="{{ d.f }}" aria-label="{{ d.fl }}"><input class="input" value="{{ d.t }}" aria-label="{{ d.tl }}"></sc-for>
+            </div>
+            <label class="toggle"><input type="checkbox" checked><span class="tr"></span>Skip national holidays (Diwali, Onam, Republic Day…)</label>
+            <label class="toggle"><input type="checkbox" checked><span class="tr"></span>Inbound calls outside hours: agent answers and books a callback</label>
+          </div></sc-if>
+
+          <sc-if value="{{ is.dnd }}"><div class="sec">
+            <h2 class="h2">Limits and DND</h2>
+            <div class="line"><span class="t"><b>Check the national DND registry (NCPR)</b><span class="small muted">Promotional calls and SMS to registered numbers are skipped. 17 skipped this month.</span></span><label class="toggle"><input type="checkbox" checked><span class="tr"></span><span>On</span></label></div>
+            <div class="line"><span class="t"><b>Allow transactional calls to customers on DND</b><span class="small muted">Service, renewal and payment calls to existing customers</span></span><label class="toggle"><input type="checkbox" checked><span class="tr"></span><span>On</span></label></div>
+            <div class="line"><span class="t"><b>Max attempts per person</b><span class="small muted">Across all campaigns, any channel</span></span><select class="input" style="width: auto"><option>3 calls a week</option><option>2 calls a week</option><option>5 calls a week</option></select></div>
+            <div class="line"><span class="t"><b>Concurrent calls (workspace)</b><span class="small muted">Your Plivo plan allows 10</span></span><select class="input" style="width: auto"><option>5</option><option>3</option><option>10</option></select></div>
+            <div class="line"><span class="t"><b>Opt-out words</b><span class="small muted">If a person says or writes these, stop every campaign for them</span></span><input class="input" style="width: auto; flex: 0 1 300px" value="stop, don’t call, remove me, band karo"></div>
+            <div class="line"><span class="t"><b>Recording disclosure</b><span class="small muted">The agent says this at the start of every call</span></span><input class="input" style="width: auto; flex: 0 1 300px" value="This call may be recorded for quality."></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.ai }}"><div class="sec">
+            <h2 class="h2">AI engines</h2>
+            <div class="note"><span>These are the <b>defaults for new agents</b>. To change what an existing agent uses, open the agent’s <a href="Agent.dc.html">Voice and model</a> tab.</span></div>
+            <div class="line"><span class="t"><b>Speech to text</b><span class="small muted">Streaming, Indian English and Hinglish · biggest effect on reply time</span></span><select class="input" style="width: auto"><option>Streaming (recommended) · ~300 ms</option><option>Batch · ~2.5 s</option></select></div>
+            <div class="line"><span class="t"><b>Language model</b><span class="small muted">Used for conversation and summaries</span></span><select class="input" style="width: auto"><option>Connekted Fast (recommended)</option><option>Connekted Smart</option><option>Bring your own key</option></select></div>
+            <div class="line"><span class="t"><b>Default voice</b><span class="small muted">en-IN voices: Anika, Arjun, Diya, Kabir</span></span><select class="input" style="width: auto"><option>Anika · English (India)</option><option>Arjun · English (India)</option><option>Diya · English (India)</option><option>Kabir · English (India)</option></select></div>
+            <div class="line"><span class="t"><b>After every call</b><span class="small muted">Write a summary, outcome and captured fields onto the contact</span></span><label class="toggle"><input type="checkbox" checked><span class="tr"></span><span>On</span></label></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.fields }}"><div class="sec">
+            <h2 class="h2">Fields and stages</h2>
+            <div><span class="lab">Contact stages</span><div class="chips" style="margin-top: 8px"><span class="pill">Lead</span><span class="pill b">Qualified</span><span class="pill g">Customer</span><span class="pill o">Lost</span><button type="button" class="btn3 sm">Edit</button></div></div>
+            <div><span class="lab">Custom fields (agents can fill these on a call)</span>
+              <sc-for list="{{ fields }}" as="f"><div class="line"><span class="t"><b>{{ f.n }}</b><span class="small muted">{{ f.t }}</span></span><span class="{{ f.cls }}">{{ f.a }}</span></div></sc-for>
+              <button type="button" class="btn2 sm" style="margin-top: 8px">Add field</button>
+            </div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.integrations }}"><div class="sec">
+            <h2 class="h2">Integrations</h2>
+            <div class="f2"><sc-for list="{{ integrations }}" as="x"><div class="conn"><span class="av sq">{{ x.i }}</span><span style="flex: 1"><b style="display: block">{{ x.n }}</b><span class="small muted">{{ x.d }}</span></span><button type="button" class="{{ x.btnCls }}">{{ x.b }}</button></div></sc-for></div>
+          </div></sc-if>
+
+          <sc-if value="{{ is.api }}"><div class="sec">
+            <h2 class="h2">API and webhooks</h2>
+            <div class="line"><span class="t"><b>API key</b><span class="small muted">cx_live_••••••••••••7f2a · created 3 Oct by Meera</span></span><span style="display: flex; gap: 8px"><button type="button" class="btn2 sm">Copy</button><button type="button" class="btn2 sm">Rotate</button></span></div>
+            <div><span class="lab">Webhooks</span>
+              <div class="line"><span class="t"><b>call.completed</b><span class="small muted">https://hooks.apexsolar.example/calls · last delivery 200 OK, 2 min ago</span></span><span class="pill g">Healthy</span></div>
+              <div class="line"><span class="t"><b>deal.stage_changed</b><span class="small muted">https://hooks.apexsolar.example/deals · 3 failures today</span></span><span class="pill o">Failing</span></div>
+            </div>
+            <a href="#" style="font-weight: 600">API documentation</a>
+          </div></sc-if>
+
+          <sc-if value="{{ is.billing }}"><div class="sec">
+            <div class="between"><h2 class="h2">Billing and usage</h2><span class="pill b">Growth plan</span></div>
+            <div class="grid">
+              <div class="card stack"><span class="lab">Plan</span><span style="font-size: 22px; font-weight: 700">₹[add price] / month</span><span class="small muted">5 seats · 2,000 call minutes · renews 1 Nov</span></div>
+              <div class="card stack"><span class="lab">Call minutes</span><span style="font-size: 22px; font-weight: 700">892 of 2,000</span><div class="track"><span style="width: 45%"></span></div></div>
+              <div class="card stack"><span class="lab">Wallet for telephony</span><span style="font-size: 22px; font-weight: 700">₹6,240</span><span class="small muted">Auto top-up at ₹1,000</span></div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn">Change plan</button><button type="button" class="btn2">Invoices (GST)</button><button type="button" class="btn2">Add money</button></div>
+            <div class="line"><span class="t"><b>Spend alert</b><span class="small muted">Email admins when AI and call spend passes this amount in a month</span></span><input class="input" style="width: auto; flex: 0 1 160px" value="₹10,000"></div>
+          </div></sc-if>
+
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sec: props.sub || 'general' };
+  }
+  renderVals() {
+    const s = this.state;
+    const G = [
+      { label: 'Workspace', items: [['general', 'General'], ['team', 'Team and roles']] },
+      { label: 'Channels', items: [['numbers', 'Phone numbers', '2', 'pill'], ['whatsapp', 'WhatsApp', 'On', 'pill g'], ['email', 'Email', 'On', 'pill g'], ['sms', 'SMS', 'On', 'pill g'], ['linkedin', 'LinkedIn', 'Off', 'pill']] },
+      { label: 'Calling', items: [['hours', 'Calling hours'], ['dnd', 'Limits and DND']] },
+      { label: 'AI', items: [['ai', 'AI engines']] },
+      { label: 'Data', items: [['fields', 'Fields and stages'], ['integrations', 'Integrations'], ['api', 'API and webhooks']] },
+      { label: 'Account', items: [['billing', 'Billing and usage']] }
+    ];
+    const groups = G.map((g) => ({ label: g.label, items: g.items.map(([id, label, badge, badgeCls]) => ({ id, label, badge: badge || '', badgeCls: badgeCls || 'pill', pressed: String(id === s.sec), pick: () => this.setState({ sec: id }) })) }));
+    const is = {};
+    G.forEach((g) => g.items.forEach(([id]) => { is[id] = id === s.sec; }));
+    const team = [
+      { i: 'MI', n: 'Meera Iyer', e: 'meera@apexsolar.example', r: 'Admin', take: 'Yes', s: 'Active', cls: 'pill g' },
+      { i: 'YO', n: 'You', e: 'owner@apexsolar.example', r: 'Admin', take: 'Yes', s: 'Active', cls: 'pill g' },
+      { i: 'RK', n: 'Ravi Kumar', e: 'ravi@apexsolar.example', r: 'Sales rep', take: 'No', s: 'Active', cls: 'pill g' },
+      { i: 'AN', n: 'Anu Thomas', e: 'anu@apexsolar.example', r: 'Viewer', take: 'No', s: 'Invited', cls: 'pill' }
+    ];
+    const templates = [
+      { n: 'visit_confirmation', d: 'Utility · confirms date, time and address', s: 'Approved', cls: 'pill g' },
+      { n: 'site_visit_offer', d: 'Marketing · used after a missed call', s: 'Approved', cls: 'pill g' },
+      { n: 'sorry_we_got_cut_off', d: 'Utility', s: 'Approved', cls: 'pill g' },
+      { n: 'diwali_offer', d: 'Marketing', s: 'In review', cls: 'pill b' }
+    ];
+    const week = [['Mon', '10:00', '19:00'], ['Tue', '10:00', '19:00'], ['Wed', '10:00', '19:00'], ['Thu', '10:00', '19:00'], ['Fri', '10:00', '19:00'], ['Sat', '10:00', '14:00'], ['Sun', 'Closed', '']]
+      .map(([d, f, t]) => ({ d, f, t, fl: d + ' from', tl: d + ' to' }));
+    const fields = [
+      { n: 'Monthly power bill (₹)', t: 'Number', a: 'Captured by agents', cls: 'pill b' },
+      { n: 'Owns the home', t: 'Yes / No', a: 'Captured by agents', cls: 'pill b' },
+      { n: 'Roof type', t: 'Choice: RCC, sheet, tiled', a: 'Captured by agents', cls: 'pill b' },
+      { n: 'Shading', t: 'Choice: none, partial, heavy', a: 'Captured by agents', cls: 'pill b' },
+      { n: 'Subsidy eligible', t: 'Yes / No / Unknown', a: 'Manual', cls: 'pill' }
+    ];
+    const integrations = [
+      { i: 'GC', n: 'Google Calendar', d: 'Agents book into team calendars', b: 'Connected', btnCls: 'btn2 sm' },
+      { i: 'FB', n: 'Facebook lead ads', d: 'New leads land in Contacts', b: 'Connected', btnCls: 'btn2 sm' },
+      { i: 'SL', n: 'Slack', d: 'Alerts for hot leads and flagged calls', b: 'Connect', btnCls: 'btn sm' },
+      { i: 'RP', n: 'Razorpay', d: 'Payment links in WhatsApp', b: 'Connect', btnCls: 'btn sm' },
+      { i: 'ZB', n: 'Zoho Books', d: 'Push won deals as invoices', b: 'Connect', btnCls: 'btn sm' },
+      { i: 'ZP', n: 'Zapier', d: 'Anything else', b: 'Connect', btnCls: 'btn sm' }
+    ];
+    return { groups, is, team, templates, week, fields, integrations };
+  }
+}
+</script>
+</body>
+</html>

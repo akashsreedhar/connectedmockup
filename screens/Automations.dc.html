@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Automations</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.auto{display:flex;flex-direction:column;gap:4px;width:100%;padding:14px 16px;border:0;border-bottom:1px solid #EFEDE8;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.auto:hover{background:#FAF9F6}
+.auto[aria-pressed="true"]{background:#F3F6FF;box-shadow:inset 3px 0 0 #2F55D4}
+.node{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;border:1px solid #E4E2DC;background:#FFFFFF}
+.node .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+.link{width:2px;height:22px;background:#D6D3CC;margin-left:33px}
+.kind{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding:12px;border:1px dashed #CCD7FA;border-radius:12px;background:#F3F6FF}
+.pick button{min-height:44px;border-radius:9px;border:1px solid #E4E2DC;background:#FFFFFF;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;color:#15171E}
+.pick button:hover{border-color:#2F55D4}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="automations"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Automations</h1>
+          <p class="sub">When something happens, do the follow-up for you. Each one is a trigger, optional conditions and actions.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <button type="button" class="btn2">Templates</button>
+          <button type="button" class="btn">New automation</button>
+        </div>
+      </div>
+
+      <div class="row" style="gap: 16px">
+        <section class="card flush" style="flex: 1 1 300px; min-width: 0; overflow: hidden">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #E4E2DC" class="between"><span class="lab">{{ onCount }} on · {{ total }} total</span></div>
+          <sc-for list="{{ list }}" as="a">
+            <button type="button" class="auto" aria-pressed="{{ a.pressed }}" onClick="{{ a.pick }}">
+              <span class="between" style="flex-wrap: nowrap"><span style="font-weight: 600">{{ a.name }}</span><span class="{{ a.cls }}">{{ a.state }}</span></span>
+              <span class="small muted">{{ a.when }}</span>
+              <span class="small muted">{{ a.runs }}</span>
+            </button>
+          </sc-for>
+        </section>
+
+        <section class="card" style="flex: 2.2 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <div class="between" style="align-items: flex-start">
+            <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+              <h2 style="font-size: 20px; font-weight: 700">{{ sel.name }}</h2>
+              <span class="small muted">{{ sel.desc }}</span>
+            </div>
+            <label class="toggle"><input type="checkbox" checked="{{ sel.on }}" onChange="{{ toggleOn }}"><span class="tr"></span><span>{{ onLabel }}</span></label>
+          </div>
+
+          <div class="tabs" role="tablist">
+            <sc-for list="{{ tabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for>
+          </div>
+
+          <sc-if value="{{ tabFlow }}">
+            <div style="display: flex; flex-direction: column">
+              <sc-for list="{{ nodes }}" as="n">
+                <sc-if value="{{ n.notFirst }}"><div class="link"></div></sc-if>
+                <div class="node" style="{{ n.border }}">
+                  <span class="ic" style="{{ n.icStyle }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.icon }}"></path></svg></span>
+                  <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                    <span class="kind" style="{{ n.kindStyle }}">{{ n.kind }}</span>
+                    <span style="font-weight: 600">{{ n.title }}</span>
+                    <sc-if value="{{ n.detail }}"><span class="small muted">{{ n.detail }}</span></sc-if>
+                  </span>
+                  <button type="button" class="btn3 sm">Edit</button>
+                </div>
+              </sc-for>
+              <div class="link"></div>
+              <sc-if value="{{ picking }}">
+                <div class="pick" role="group" aria-label="Choose an action">
+                  <sc-for list="{{ actions }}" as="x"><button type="button" onClick="{{ x.add }}">{{ x.label }}</button></sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ notPicking }}">
+                <button type="button" class="btn2" onClick="{{ startPick }}" style="align-self: flex-start; border-style: dashed">+ Add a step</button>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabRuns }}">
+            <div class="scroll-x">
+              <table>
+                <thead><tr><th>When</th><th>For</th><th>Result</th><th>Detail</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ sel.history }}" as="h">
+                    <tr><td class="small muted" style="white-space: nowrap">{{ h.w }}</td><td style="font-weight: 600">{{ h.who }}</td><td><span class="{{ h.cls }}">{{ h.r }}</span></td><td class="small">{{ h.d }}</td></tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabSettings }}">
+            <div class="stack" style="max-width: 520px">
+              <label class="field">Name<input class="input" value="{{ sel.name }}"></label>
+              <label class="field">Run for the same person<select class="input"><option>Once only</option><option>Every time it is triggered</option><option>At most once a day</option></select></label>
+              <label class="field">If a step fails<select class="input"><option>Retry 3 times, then notify the owner</option><option>Stop and notify</option><option>Skip and continue</option></select></label>
+              <label class="toggle"><input type="checkbox" checked><span class="tr"></span>Respect calling hours and DND for call and SMS steps</label>
+            </div>
+          </sc-if>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'visit', tab: 'flow', on: {}, added: {}, picking: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const IC = {
+      trigger: 'M13 2 4 14h7l-1 8 9-12h-7z',
+      cond: 'M4 5h16l-6 8v6l-4-2v-4z',
+      wa: 'M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.5A8.5 8.5 0 1 1 21 11.5z',
+      email: 'M3 5h18v14H3zM3 6l9 7 9-7',
+      call: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z',
+      deal: 'M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2',
+      task: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9',
+      wait: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+      cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
+      hook: 'M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14'
+    };
+    const T = (title, detail) => ({ kind: 'When', icon: IC.trigger, title, detail });
+    const C = (title, detail) => ({ kind: 'Only if', icon: IC.cond, title, detail });
+    const A = (k, title, detail) => ({ kind: 'Then', icon: IC[k], title, detail });
+    const R = (w, who, r, d) => ({ w, who, r, d, cls: r === 'Done' ? 'pill g' : (r === 'Skipped' ? 'pill' : 'pill o') });
+    const data = [
+      { id: 'visit', name: 'Visit booked: confirm and prepare', on: true, when: 'When a call ends with “Visit booked”', runs: '11 runs this week · 0 failed',
+        desc: 'Confirms the slot on WhatsApp, moves the deal and creates the field visit.',
+        nodes: [T('A call ends with outcome “Site visit booked”', 'Any agent · any campaign'), C('Contact has a phone number that can receive WhatsApp', ''), A('wa', 'Send WhatsApp template “visit_confirmation”', 'Date, time and address filled from the call'), A('deal', 'Move deal to “Site visit”', 'Create a deal if there is none'), A('cal', 'Add the visit to Ravi’s calendar', 'Google Calendar · 1 hour'), A('wait', 'Wait until 1 day before the visit', ''), A('wa', 'Send reminder with checklist', 'Template “visit_reminder”')],
+        history: [R('Today, 2:36 pm', 'Priya Nair', 'Done', '5 of 5 steps · waiting for reminder'), R('Mon, 11:10 am', 'Karthik Reddy', 'Done', 'Calendar event created'), R('Sun', 'Joseph Mathew', 'Failed', 'WhatsApp template rejected: number not on WhatsApp. Owner notified.')] },
+      { id: 'review', name: 'Call flagged: send to review', on: true, when: 'When a call is flagged “Agent repeated itself”', runs: '1 run this week',
+        desc: 'Makes sure no stuck call goes unnoticed, and the person gets a human follow-up.',
+        nodes: [T('A call is flagged by quality checks', 'Repeated line, long silence or caller asked for a human'), A('task', 'Create a task “Call personally” for the contact owner', 'Due within 2 working hours'), A('wa', 'Send apology WhatsApp', 'Template “sorry_we_got_cut_off”'), A('email', 'Email the agent owner with the transcript link', '')],
+        history: [R('Yesterday, 10:54 pm', 'Rahul Menon', 'Done', 'Task created for You · WhatsApp read')] },
+      { id: 'web', name: 'New web lead: call in 5 minutes', on: true, when: 'When a website form is submitted', runs: '31 runs this month',
+        desc: 'Speed to lead. The agent calls while the person is still on your site.',
+        nodes: [T('Website form “Free solar estimate” is submitted', ''), C('Inside calling hours (9 am to 8 pm)', 'Otherwise queue for the next morning'), A('call', 'Apex Solar Advisor calls the person', 'Adds them to “Website leads, call in 5 min”')],
+        history: [R('Just now', 'New web lead', 'Done', 'Call queued, starts in 4 min'), R('Mon', 'Deepa Krishnan', 'Skipped', 'Outside calling hours, queued for 9 am')] },
+      { id: 'quote', name: 'Quote opened 3 times: alert owner', on: false, when: 'When a quote is opened 3 or more times', runs: 'Off since 20 Oct',
+        desc: 'Hot signal. Tell the owner to call while interest is high.',
+        nodes: [T('A quote is opened 3 times or more', ''), A('task', 'Create task “Call now, quote is hot”', ''), A('hook', 'Post in Slack #sales', '')],
+        history: [R('20 Oct', 'Meera Iyer', 'Done', 'Task created')] },
+      { id: 'won', name: 'Deal won: onboarding', on: true, when: 'When a deal moves to Won', runs: '1 run this month',
+        desc: 'Welcome message, subsidy paperwork and the installation task.',
+        nodes: [T('Deal stage changes to “Won”', ''), A('email', 'Send welcome email with documents list', ''), A('task', 'Create “Schedule installation” task', 'For the operations team'), A('deal', 'Set contact stage to Customer', '')],
+        history: [R('12 Oct', 'Fatima Sheikh', 'Done', '3 of 3 steps')] }
+    ];
+    const isOn = (a) => (s.on[a.id] !== undefined ? s.on[a.id] : a.on);
+    const list = data.map((a) => ({ ...a, state: isOn(a) ? 'On' : 'Off', cls: isOn(a) ? 'pill g' : 'pill', pressed: String(a.id === s.sel), pick: () => this.setState({ sel: a.id, picking: false }) }));
+    const raw = data.find((a) => a.id === s.sel) || data[0];
+    const allNodes = raw.nodes.concat(s.added[raw.id] || []);
+    const styleFor = (k) => (k === 'When' ? ['background:#E8EDFF;color:#1E3A8A', 'color:#1E3A8A', 'border-color:#CCD7FA'] : (k === 'Only if' ? ['background:#FFF4D6;color:#7A5A00', 'color:#7A5A00', ''] : ['background:#F1EFEA;color:#3A3D46', 'color:#5B6070', '']));
+    const nodes = allNodes.map((n, i) => { const st = styleFor(n.kind); return { ...n, detail: n.detail || '', notFirst: i > 0, icStyle: st[0], kindStyle: st[1], border: st[2] }; });
+    const AC = [['wa', 'Send WhatsApp'], ['email', 'Send email'], ['call', 'Agent calls'], ['task', 'Create task'], ['deal', 'Update deal or stage'], ['wait', 'Wait'], ['cond', 'Add a condition'], ['hook', 'Webhook or Slack']];
+    const actions = AC.map(([k, label]) => ({ label, add: () => {
+      const n = k === 'cond' ? C('New condition', 'Choose a field') : A(k, label, 'Set it up');
+      this.setState({ added: { ...s.added, [raw.id]: (s.added[raw.id] || []).concat([n]) }, picking: false });
+    } }));
+    const tabs = [{ id: 'flow', label: 'Steps' }, { id: 'runs', label: 'Run history' }, { id: 'settings', label: 'Settings' }]
+      .map((t) => ({ ...t, sel: String(t.id === s.tab), pick: () => this.setState({ tab: t.id }) }));
+    return {
+      list, total: data.length, onCount: data.filter(isOn).length,
+      sel: { ...raw, on: isOn(raw) }, onLabel: isOn(raw) ? 'On' : 'Off',
+      toggleOn: () => this.setState({ on: { ...s.on, [raw.id]: !isOn(raw) } }),
+      tabs, tabFlow: s.tab === 'flow', tabRuns: s.tab === 'runs', tabSettings: s.tab === 'settings',
+      nodes, actions, picking: s.picking, notPicking: !s.picking, startPick: () => this.setState({ picking: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

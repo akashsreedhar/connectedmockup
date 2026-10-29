@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connekted mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
+<style>
+body{margin:0;background:#F6F5F2;padding-bottom:72px}
+#jumpbar{position:fixed;right:16px;bottom:16px;z-index:50;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:999px;background:#11131A;color:#F3F1EC;font:600 13px Inter,system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#jump{min-height:36px;border-radius:999px;border:0;padding:0 12px;font:600 13px Inter,system-ui,sans-serif;background:#262A36;color:#F3F1EC;cursor:pointer}
+</style>
+<link rel="stylesheet" href="app.css">
+<style id="screen-css"></style>
+</head>
+<body>
+<div id="app"></div>
+<div id="assistant"></div>
+<label id="jumpbar">Mockup · go to <select id="jump" aria-label="Go to screen"></select></label>
+<script src="runtime.js"></script>
+</body>
+</html>

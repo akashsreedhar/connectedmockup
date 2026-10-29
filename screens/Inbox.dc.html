@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inbox</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.main{padding:24px 28px 40px}
+.th{display:flex;gap:12px;width:100%;padding:14px 16px;border:0;border-bottom:1px solid #EFEDE8;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.th:hover{background:#FAF9F6}
+.th[aria-pressed="true"]{background:#F3F6FF;box-shadow:inset 3px 0 0 #2F55D4}
+.ch{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:#F1EFEA;color:#3A3D46;flex:none}
+.msg{display:flex;flex-direction:column;gap:4px;max-width:78%}
+.msg.in{align-self:flex-start}.msg.out{align-self:flex-end;align-items:flex-end}
+.bub{padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5}
+.msg.in .bub{background:#F1EFEA;border-top-left-radius:4px}
+.msg.out .bub{background:#2F55D4;color:#FFFFFF;border-top-right-radius:4px}
+.msg.note .bub{background:#FFF8E1;border:1px dashed #E2C86A;color:#5A4A12}
+.meta{font-size:12px;color:#5B6070;display:flex;gap:6px;align-items:center}
+.sys{align-self:center;font-size:12.5px;color:#5B6070;padding:4px 12px;border-radius:999px;background:#F1EFEA}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="inbox"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide" style="gap: 16px">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Inbox</h1>
+          <p class="sub">Calls, WhatsApp, email, SMS and LinkedIn, one thread per person.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+          <div class="seg" role="group" aria-label="Whose conversations">
+            <sc-for list="{{ owners }}" as="o"><button type="button" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}">{{ o.label }}</button></sc-for>
+          </div>
+          <a class="btn2" href="Settings.dc.html">Inbox rules</a>
+        </div>
+      </div>
+
+      <div class="row" style="gap: 16px">
+
+        <!-- Thread list -->
+        <section class="card flush" style="flex: 1 1 300px; min-width: 0; overflow: hidden; display: flex; flex-direction: column">
+          <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #E4E2DC">
+            <label class="search" style="flex: none"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="search" placeholder="Search people or messages" aria-label="Search conversations"></label>
+            <div class="chips" role="group" aria-label="Filter">
+              <sc-for list="{{ folders }}" as="f"><button type="button" class="chip" aria-pressed="{{ f.pressed }}" onClick="{{ f.pick }}" style="min-height: 32px; padding: 0 10px">{{ f.label }} <span class="n">{{ f.n }}</span></button></sc-for>
+            </div>
+          </div>
+          <div>
+            <sc-for list="{{ threads }}" as="t">
+              <button type="button" class="th" aria-pressed="{{ t.pressed }}" onClick="{{ t.pick }}">
+                <span class="av">{{ t.initials }}</span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+                  <span style="display: flex; justify-content: space-between; gap: 8px"><span style="{{ t.nameStyle }}">{{ t.name }}</span><span class="small muted" style="white-space: nowrap">{{ t.when }}</span></span>
+                  <span style="display: flex; gap: 6px; align-items: center">
+                    <span class="ch" title="{{ t.chName }}"><svg role="img" aria-label="{{ t.chName }}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></span>
+                    <span class="small muted" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ t.preview }}</span>
+                  </span>
+                  <span style="display: flex; gap: 6px; flex-wrap: wrap">
+                    <sc-if value="{{ t.tag }}"><span class="{{ t.tagCls }}" style="font-size: 11.5px; padding: 1px 8px">{{ t.tag }}</span></sc-if>
+                    <sc-if value="{{ t.unread }}"><span class="pill b" style="font-size: 11.5px; padding: 1px 8px">New</span></sc-if>
+                  </span>
+                </span>
+              </button>
+            </sc-for>
+            <sc-if value="{{ empty }}"><p class="muted" style="padding: 24px 16px">Nothing here. You are all caught up.</p></sc-if>
+          </div>
+        </section>
+
+        <!-- Conversation -->
+        <section class="card flush" style="flex: 2.4 1 440px; min-width: 0; display: flex; flex-direction: column">
+          <div class="between" style="padding: 14px 18px; border-bottom: 1px solid #E4E2DC">
+            <div style="display: flex; gap: 12px; align-items: center">
+              <span class="av lg">{{ sel.initials }}</span>
+              <div style="display: flex; flex-direction: column">
+                <a href="Contact.dc.html" style="font-weight: 700; font-size: 16px; color: #15171E; text-decoration: none">{{ sel.name }}</a>
+                <span class="small muted">{{ sel.sub }}</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <a class="btn2 sm" href="LiveCall.dc.html"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg>Call</a>
+              <button type="button" class="btn2 sm">Assign: {{ sel.owner }}</button>
+              <button type="button" class="btn2 sm" onClick="{{ toggleDone }}">{{ doneLabel }}</button>
+            </div>
+          </div>
+
+          <div style="padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; background: #FCFBF9; flex: 1">
+            <sc-for list="{{ sel.items }}" as="m">
+              <sc-if value="{{ m.isSys }}"><span class="sys">{{ m.text }}</span></sc-if>
+              <sc-if value="{{ m.isCall }}">
+                <div style="align-self: stretch; border: 1px solid #CCD7FA; background: #FFFFFF; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+                  <div class="between">
+                    <span style="display: flex; gap: 8px; align-items: center; font-weight: 600"><span class="ch" style="background: #E8EDFF; color: #1E3A8A"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg></span>{{ m.title }}</span>
+                    <span class="{{ m.cls }}">{{ m.outcome }}</span>
+                  </div>
+                  <p style="font-size: 13.5px; color: #3A3D46">{{ m.text }}</p>
+                  <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px">
+                    <a href="Calls.dc.html" style="font-weight: 600">Transcript and recording</a>
+                    <span class="muted">{{ m.when }}</span>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ m.isMsg }}">
+                <div class="{{ m.msgCls }}">
+                  <span class="meta"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ m.icon }}"></path></svg>{{ m.who }} · {{ m.when }}</span>
+                  <sc-if value="{{ m.subject }}"><span style="font-weight: 600; font-size: 13.5px">{{ m.subject }}</span></sc-if>
+                  <div class="bub">{{ m.text }}</div>
+                  <sc-if value="{{ m.status }}"><span class="meta">{{ m.status }}</span></sc-if>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+
+          <!-- Composer -->
+          <div style="border-top: 1px solid #E4E2DC; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px">
+            <sc-if value="{{ sel.suggest }}">
+              <div class="note" style="align-items: center; justify-content: space-between; flex-wrap: wrap">
+                <span><b>Suggested reply:</b> {{ sel.suggest }}</span>
+                <button type="button" class="btn3 sm" onClick="{{ useSuggest }}">Use it</button>
+              </div>
+            </sc-if>
+            <div class="between">
+              <div class="seg" role="group" aria-label="Reply by">
+                <sc-for list="{{ replyChannels }}" as="c"><button type="button" aria-pressed="{{ c.pressed }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for>
+              </div>
+              <span class="small muted">{{ channelHint }}</span>
+            </div>
+            <textarea class="input" aria-label="Message" placeholder="{{ placeholder }}" onInput="{{ typeDraft }}">{{ draft }}</textarea>
+            <div class="between">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                <button type="button" class="btn2 sm">Template</button>
+                <button type="button" class="btn2 sm">Attach</button>
+                <button type="button" class="btn2 sm">Book a slot</button>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button type="button" class="btn2 sm">Schedule</button>
+                <button type="button" class="btn sm" onClick="{{ send }}">{{ sendLabel }}</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact panel -->
+        <aside style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <section class="card stack">
+            <span class="lab">About</span>
+            <div>
+              <div class="kv"><span class="muted">Stage</span><span class="{{ sel.stageCls }}">{{ sel.stage }}</span></div>
+              <div class="kv"><span class="muted">Phone</span><span>{{ sel.phone }}</span></div>
+              <div class="kv"><span class="muted">Email</span><span>{{ sel.email }}</span></div>
+              <div class="kv"><span class="muted">City</span><span>{{ sel.city }}</span></div>
+              <div class="kv"><span class="muted">WhatsApp opt-in</span><span>{{ sel.optin }}</span></div>
+            </div>
+            <a href="Contact.dc.html" style="font-weight: 600; font-size: 13.5px">Open full profile</a>
+          </section>
+          <section class="card stack">
+            <div class="between"><span class="lab">Deal</span><a href="Deals.dc.html" class="small" style="font-weight: 600">Pipeline</a></div>
+            <span style="font-weight: 600">{{ sel.deal }}</span>
+            <span class="small muted">{{ sel.dealSub }}</span>
+          </section>
+          <section class="card stack">
+            <span class="lab">Follow-ups</span>
+            <sc-for list="{{ sel.tasks }}" as="k">
+              <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; cursor: pointer"><input type="checkbox" style="width: 18px; height: 18px; margin-top: 1px"><span><span style="display: block; font-weight: 600">{{ k.t }}</span><span class="muted small">{{ k.d }}</span></span></label>
+            </sc-for>
+            <button type="button" class="btn3 sm" style="align-self: flex-start; padding: 0">+ Add follow-up</button>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { owner: 'all', folder: 'open', sel: props.sub || 'rahul', reply: 'wa', sent: {}, done: {} };
+    this.draftText = '';
+  }
+  renderVals() {
+    const s = this.state;
+    const IC = {
+      call: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z',
+      wa: 'M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.5A8.5 8.5 0 1 1 21 11.5z',
+      email: 'M3 5h18v14H3zM3 6l9 7 9-7',
+      sms: 'M4 4h16v12H8l-4 4z',
+      li: 'M4 9h4v11H4zM6 4.5a1.5 1.5 0 1 1 0 .01M10 20V9h4v2a4 4 0 0 1 7 2.5V20h-4v-6a2 2 0 0 0-4 0v6',
+      note: 'M4 4h12l4 4v12H4zM8 10h8M8 14h8'
+    };
+    const CHN = { call: 'Call', wa: 'WhatsApp', email: 'Email', sms: 'SMS', li: 'LinkedIn' };
+    const data = [
+      { id: 'rahul', name: 'Rahul Menon', initials: 'RM', ch: 'wa', when: '9:12 am', unread: true, owner: 'me', folder: 'open', tag: 'Needs reply', tagCls: 'pill o',
+        preview: 'Can someone just call me at 6? The bot kept asking me…', sub: 'Lead · Kochi · last call yesterday', stage: 'Lead', stageCls: 'pill', phone: '+91 99610 •• •48', email: 'rahul.m@example.in', city: 'Kochi', optin: 'Yes, 26 Oct', ownerName: 'You',
+        deal: 'Rooftop 3 kW · ₹1,85,000', dealSub: 'Stage: Contacted · no next step yet',
+        suggest: 'Sorry about yesterday’s call, Rahul. A person from our team will call you at 6 pm today. Does that still work?',
+        tasks: [{ t: 'Call Rahul at 6 pm (person, not agent)', d: 'Due today' }],
+        items: [
+          { type: 'call', title: 'Apex Solar Advisor called', outcome: 'Needs review', cls: 'pill o', when: 'Yesterday, 10:52 pm · 1:23', text: 'Caller asked to schedule a meeting. The agent did not understand and repeated itself. Flagged for review.' },
+          { type: 'msg', ch: 'wa', dir: 'out', who: 'Apex Solar (auto)', when: 'Yesterday, 10:54 pm', text: 'Hi Rahul, sorry we got cut off. Reply with a time that suits you and we will call back.', status: 'Read' },
+          { type: 'msg', ch: 'wa', dir: 'in', who: 'Rahul', when: '9:12 am', text: 'Can someone just call me at 6? The bot kept asking me the same thing.' },
+          { type: 'msg', ch: 'note', dir: 'note', who: 'Internal note · Meera', when: '9:20 am', text: 'This is the looping call from the solar agent. Fix is in progress. Please call him personally.' }
+        ] },
+      { id: 'priya', name: 'Priya Nair', initials: 'PN', ch: 'call', when: 'Today', unread: false, owner: 'me', folder: 'open', tag: 'Visit booked', tagCls: 'pill b',
+        preview: 'Site visit booked · Sat 1 Nov, 11:00', sub: 'Qualified · Kochi · score 82', stage: 'Qualified', stageCls: 'pill b', phone: '+91 98450 •• •12', email: 'priya.nair@example.in', city: 'Kochi', optin: 'Yes, 29 Oct', ownerName: 'You',
+        deal: 'Rooftop 3 kW · [₹ add quote]', dealSub: 'Stage: Site visit · Sat 1 Nov',
+        suggest: '',
+        tasks: [{ t: 'Send site visit checklist', d: 'Due Fri 31 Oct' }, { t: 'Prepare quote after visit', d: 'Due Mon 3 Nov' }],
+        items: [
+          { type: 'call', title: 'Apex Solar Advisor called', outcome: 'Visit booked', cls: 'pill b', when: 'Today, 2:33 pm · 2:56', text: 'Owns her home, bill about ₹3,200 a month, roof partly shaded. Booked a site visit for Sat 1 Nov at 11:00.' },
+          { type: 'msg', ch: 'wa', dir: 'out', who: 'Apex Solar (auto)', when: 'Today, 2:36 pm', text: 'Your free site visit is confirmed for Sat 1 Nov, 11:00 am. Reply 1 to confirm, 2 to change the time.', status: 'Delivered · Read' },
+          { type: 'msg', ch: 'wa', dir: 'in', who: 'Priya', when: 'Today, 2:41 pm', text: '1' },
+          { type: 'sys', text: 'Visit confirmed by WhatsApp · deal moved to Site visit' }
+        ] },
+      { id: 'meera', name: 'Malabar Textiles', initials: 'MT', ch: 'email', when: 'Tue', unread: true, owner: 'team', folder: 'open', tag: 'Ticket #142', tagCls: 'pill',
+        preview: 'Re: Inverter showing error E04 since Monday', sub: 'Customer · Company · 50 kW installed', stage: 'Customer', stageCls: 'pill g', phone: '+91 484 •••• 220', email: 'ops@malabartex.example', city: 'Ernakulam', optin: 'No', ownerName: 'Support',
+        deal: 'Service contract · ₹48,000 / year', dealSub: 'Renews 14 Feb 2027',
+        suggest: 'Thanks for the photo. E04 usually means a grid voltage trip. Our technician can visit on Thursday between 10 and 1. Shall I book it?',
+        tasks: [{ t: 'Reply within 4 working hours (SLA)', d: '1 h 20 m left' }],
+        items: [
+          { type: 'msg', ch: 'email', dir: 'in', who: 'Suresh K (Malabar Textiles)', when: 'Tue, 11:02 am', subject: 'Inverter showing error E04 since Monday', text: 'Hello, our 50 kW system inverter on block B shows E04 and generation dropped. Photo attached. Please send someone.' },
+          { type: 'sys', text: 'Ticket #142 opened · priority High · SLA 4 working hours' }
+        ] },
+      { id: 'arun', name: 'Arun Pillai', initials: 'AP', ch: 'li', when: 'Mon', unread: false, owner: 'team', folder: 'open', tag: '', tagCls: 'pill',
+        preview: 'Thanks for connecting. Yes, our new office in Infopark…', sub: 'Lead · Facilities head, Infopark Kochi', stage: 'Lead', stageCls: 'pill', phone: 'Not known', email: 'Not known', city: 'Kochi', optin: 'No', ownerName: 'Unassigned',
+        deal: 'No deal yet', dealSub: 'Create one from this conversation',
+        suggest: 'Great to hear, Arun. Could we do a 15 minute call this week to understand the roof area and monthly load?',
+        tasks: [],
+        items: [
+          { type: 'msg', ch: 'li', dir: 'out', who: 'You', when: 'Sat', text: 'Hi Arun, we help offices in Kochi cut power bills with rooftop solar. Happy to share what similar buildings save.' },
+          { type: 'msg', ch: 'li', dir: 'in', who: 'Arun', when: 'Mon, 4:15 pm', text: 'Thanks for connecting. Yes, our new office in Infopark has a large roof. Send details.' }
+        ] },
+      { id: 'anjali', name: 'Anjali Das', initials: 'AD', ch: 'sms', when: 'Mon', unread: false, owner: 'me', folder: 'done', tag: '', tagCls: 'pill',
+        preview: 'STOP', sub: 'Lead · opted out of SMS', stage: 'Lead', stageCls: 'pill', phone: '+91 90370 •• •05', email: 'Not known', city: 'Thrissur', optin: 'Opted out', ownerName: 'You',
+        deal: 'No deal', dealSub: '', suggest: '', tasks: [],
+        items: [
+          { type: 'call', title: 'Apex Solar Advisor called', outcome: 'No answer', cls: 'pill', when: 'Yesterday, 10:51 pm', text: 'No answer. Campaign sent an SMS follow-up.' },
+          { type: 'msg', ch: 'sms', dir: 'out', who: 'Apex Solar (auto)', when: 'Mon', text: 'Hi Anjali, we tried calling about rooftop solar. Reply CALL for a callback or STOP to opt out. -APXSLR', status: 'Delivered' },
+          { type: 'msg', ch: 'sms', dir: 'in', who: 'Anjali', when: 'Mon', text: 'STOP' },
+          { type: 'sys', text: 'Opted out of SMS · removed from all SMS steps' }
+        ] }
+    ];
+    const isDone = (t) => (s.done[t.id] !== undefined ? s.done[t.id] : t.folder === 'done');
+    const inFolder = (t) => {
+      if (s.folder === 'done') return isDone(t);
+      if (isDone(t)) return false;
+      if (s.folder === 'reply') return t.tag === 'Needs reply' || t.unread;
+      if (s.folder === 'tickets') return t.tag.indexOf('Ticket') === 0;
+      return true;
+    };
+    const ownerOk = (t) => s.owner === 'all' || (s.owner === 'me' ? t.owner === 'me' : t.ownerName === 'Unassigned');
+    const visible = data.filter((t) => ownerOk(t));
+    const folders = [
+      { id: 'open', label: 'Open' }, { id: 'reply', label: 'Needs reply' }, { id: 'tickets', label: 'Tickets' }, { id: 'done', label: 'Done' }
+    ].map((f) => {
+      const keep = s.folder; s.folder = f.id; const n = visible.filter(inFolder).length; s.folder = keep;
+      return { ...f, n, pressed: String(f.id === s.folder), pick: () => this.setState({ folder: f.id }) };
+    });
+    const owners = [{ id: 'all', label: 'All' }, { id: 'me', label: 'Mine' }, { id: 'un', label: 'Unassigned' }]
+      .map((o) => ({ ...o, pressed: String(o.id === s.owner), pick: () => this.setState({ owner: o.id }) }));
+    const list = visible.filter(inFolder);
+    const threads = list.map((t) => ({ ...t, icon: IC[t.ch], chName: CHN[t.ch], pressed: String(t.id === s.sel), nameStyle: t.unread ? 'font-weight:700' : 'font-weight:600', pick: () => { this.draftText = ''; this.setState({ sel: t.id }); } }));
+    const raw = data.find((t) => t.id === s.sel) || data[0];
+    const extra = s.sent[raw.id] || [];
+    const items = raw.items.concat(extra).map((m) => ({
+      ...m,
+      isSys: m.type === 'sys', isCall: m.type === 'call', isMsg: m.type === 'msg',
+      icon: IC[m.ch] || IC.note,
+      msgCls: 'msg ' + (m.dir || 'in'),
+      subject: m.subject || '', status: m.status || ''
+    }));
+    const sel = { ...raw, owner: raw.ownerName, items };
+    const RC = [{ id: 'wa', label: 'WhatsApp' }, { id: 'email', label: 'Email' }, { id: 'sms', label: 'SMS' }, { id: 'note', label: 'Internal note' }];
+    const replyChannels = RC.map((c) => ({ ...c, pressed: String(c.id === s.reply), pick: () => this.setState({ reply: c.id }) }));
+    const hints = {
+      wa: raw.optin.indexOf('Yes') === 0 ? 'Inside the 24 h window: free-form message allowed' : 'No opt-in: only approved templates can be sent',
+      email: 'Sends from hello@apexsolar.example',
+      sms: raw.optin === 'Opted out' ? 'Opted out. SMS is blocked for this person' : 'DLT-registered sender APXSLR',
+      note: 'Only your team sees notes. Type @ to mention someone'
+    };
+    const doneNow = isDone(raw);
+    return {
+      owners, folders, threads, empty: threads.length === 0, sel, replyChannels,
+      channelHint: hints[s.reply],
+      placeholder: s.reply === 'note' ? 'Write a note for your team…' : 'Write a reply to ' + raw.name.split(' ')[0] + '…',
+      sendLabel: s.reply === 'note' ? 'Add note' : 'Send',
+      draft: this.draftText,
+      doneLabel: doneNow ? 'Reopen' : 'Mark done',
+      typeDraft: (e) => { this.draftText = e.target.value; },
+      useSuggest: () => { this.draftText = raw.suggest; this.forceUpdate(); },
+      toggleDone: () => this.setState({ done: { ...s.done, [raw.id]: !doneNow } }),
+      send: () => {
+        const text = (this.draftText || '').trim();
+        if (!text) return;
+        const msg = { type: 'msg', ch: s.reply, dir: s.reply === 'note' ? 'note' : 'out', who: s.reply === 'note' ? 'Internal note · You' : 'You', when: 'Just now', text, status: s.reply === 'note' ? '' : 'Sending…' };
+        this.draftText = '';
+        this.setState({ sent: { ...s.sent, [raw.id]: extra.concat([msg]) } });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

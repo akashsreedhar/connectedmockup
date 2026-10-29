@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
+a{color:#2F55D4}a:hover{color:#1E3A8A}
+h1,h2,h3,p{margin:0}
+.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.btn:hover{background:#2446B8;color:#FFFFFF}
+.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.btn2:hover{background:#F1EFEA;color:#15171E}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
+.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
+.muted{color:#5B6070}
+.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
+  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
+    <dc-import name="Sidebar" active="agents" hint-size="232px,1060px"></dc-import>
+  </div>
+  <main style="flex: 999 1 560px; min-width: 0; padding: 32px 36px 56px; box-sizing: border-box">
+    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.4px">Agents</h1>
+          <p class="muted" style="font-size: 15px">Each agent has its own voice, number and way of talking. Campaigns and phone numbers pick an agent.</p>
+        </div>
+        <a class="btn" href="Onboarding.dc.html">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          New agent
+        </a>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+        <div role="group" aria-label="Filter agents" style="display: flex; gap: 6px; padding: 4px; background: #EFEDE8; border-radius: 12px">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+            <button type="button" onClick="{{ f.pick }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+        </div>
+        <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #D6D3CC; background: #FFFFFF; min-width: 260px; box-sizing: border-box">
+          <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <span style="position: absolute; left: -9999px">Search agents</span>
+          <input type="search" placeholder="Search agents" style="border: 0; outline: 0; font: 400 14px Inter, system-ui, sans-serif; flex: 1; background: transparent">
+        </label>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px">
+        <sc-for list="{{ shown }}" as="a" hint-placeholder-count="3">
+          <a href="Agent.dc.html" class="card" style="display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: #15171E">
+            <div style="display: flex; gap: 14px; align-items: flex-start">
+              <span style="{{ a.avatar }}">{{ a.initials }}</span>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center">
+                  <span style="font-size: 17px; font-weight: 700">{{ a.name }}</span>
+                  <span class="{{ a.statusClass }}">{{ a.status }}</span>
+                </div>
+                <span class="muted" style="font-size: 13.5px">{{ a.goal }}</span>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="pill">{{ a.dir }}</span>
+              <span class="pill">{{ a.voice }}</span>
+              <span class="pill">{{ a.number }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding-top: 14px; border-top: 1px solid #EFEDE8">
+              <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700">{{ a.calls }}</span><span class="muted" style="font-size: 12.5px">Calls, 7 days</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700">{{ a.booked }}</span><span class="muted" style="font-size: 12.5px">Goal reached</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px"><span style="{{ a.replyStyle }}">{{ a.reply }}</span><span class="muted" style="font-size: 12.5px">Reply time</span></div>
+            </div>
+            <sc-if value="{{ a.hasWarn }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 13px; color: #9A3412; background: #FDEEE6; border-radius: 8px; padding: 8px 10px">{{ a.warn }}</span>
+            </sc-if>
+          </a>
+        </sc-for>
+      </div>
+
+      <section style="display: flex; flex-direction: column; gap: 14px; margin-top: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <h2 style="font-size: 17px; font-weight: 700">Start from a template</h2>
+          <span class="muted" style="font-size: 13px">Each one comes with steps, fields to capture and test cases</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px">
+          <sc-for list="{{ templates }}" as="t" hint-placeholder-count="4">
+            <a href="Onboarding.dc.html" style="display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 12px; border: 1px dashed #C9C5BB; background: #FBFAF7; text-decoration: none; color: #15171E">
+              <span style="font-weight: 700">{{ t.name }}</span>
+              <span class="muted" style="font-size: 13px">{{ t.body }}</span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #1E3A8A">{{ t.dir }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'all' };
+  }
+  renderVals() {
+    const filter = this.state.filter;
+    const fbase = 'min-height:36px;padding:0 14px;border-radius:9px;border:0;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;';
+    const filters = [
+      { id: 'all', label: 'All · 3' }, { id: 'out', label: 'Outbound · 2' }, { id: 'in', label: 'Inbound · 1' }, { id: 'draft', label: 'Drafts · 1' }
+    ].map((f) => ({ ...f, pressed: filter === f.id ? 'true' : 'false', style: fbase + (filter === f.id ? 'background:#FFFFFF;color:#15171E;box-shadow:0 1px 2px rgba(0,0,0,.08)' : 'background:transparent;color:#3A3D46'), pick: () => this.setState({ filter: f.id }) }));
+    const av = (bg, fg) => 'width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;background:' + bg + ';color:' + fg;
+    const agents = [
+      { name: 'Apex Solar Advisor', initials: 'AS', avatar: av('#2F55D4', '#FFFFFF'), goal: 'Qualifies solar leads and books site visits', dir: 'Outbound', kind: 'out', voice: 'Anika · English (India)', number: '+91 80 •••• 4210', status: 'Live', statusClass: 'pill g', calls: '4', booked: '1', reply: '5.4 s', slow: true, warn: 'Slow replies. Callers wait over 5 seconds.' },
+      { name: 'Front Desk', initials: 'FD', avatar: av('#E8EDFF', '#1E3A8A'), goal: 'Answers the main line, books and reschedules', dir: 'Inbound', kind: 'in', voice: 'Arjun · English (India)', number: '+91 80 •••• 7781', status: 'Live', statusClass: 'pill g', calls: '0', booked: '—', reply: '1.1 s', slow: false },
+      { name: 'Sales Follow-up', initials: 'SF', avatar: av('#EFEDE8', '#3A3D46'), goal: 'Calls people who opened the quote email', dir: 'Outbound', kind: 'draft', voice: 'Diya · English (India)', number: 'No number yet', status: 'Draft', statusClass: 'pill', calls: '—', booked: '—', reply: '—', slow: false, warn: 'Needs a number and a test call before it can go live.' }
+    ].map((a) => ({ ...a, hasWarn: !!a.warn, replyStyle: 'font-size:18px;font-weight:700;' + (a.slow ? 'color:#9A3412' : 'color:#15171E') }));
+    const shown = agents.filter((a) => filter === 'all' || (filter === 'draft' ? a.kind === 'draft' : (filter === 'out' ? a.dir === 'Outbound' : a.dir === 'Inbound')));
+    const templates = [
+      { name: 'Lead qualification', body: 'Ask 3 to 5 questions, score the lead, book if ready', dir: 'Outbound' },
+      { name: 'Appointment booking', body: 'Find a slot, confirm by WhatsApp, handle reschedules', dir: 'Inbound or outbound' },
+      { name: 'Receptionist', body: 'Answer, route to the right person or take a message', dir: 'Inbound' },
+      { name: 'Payment reminder', body: 'Remind politely, offer a link, log the promise date', dir: 'Outbound' }
+    ];
+    return { filters, shown, templates };
+  }
+}
+</script>
+</body>
+</html>

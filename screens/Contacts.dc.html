@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contacts</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.cb{width:18px;height:18px;cursor:pointer;accent-color:#2F55D4}
+.bulk{position:sticky;top:12px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#11131A;color:#F3F1EC}
+.bulk .btn2{background:#262A36;color:#F3F1EC;border-color:#3A3F4E}
+.bulk .btn2:hover{background:#323746;color:#FFFFFF}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="contacts"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+
+      <div class="ph">
+        <div class="ph-t">
+          <h1 class="title">Contacts</h1>
+          <p class="sub">Everyone you talk to. Leads, qualified people and customers are stages, not separate lists.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <button type="button" class="btn2">Import CSV</button>
+          <button type="button" class="btn">Add contact</button>
+        </div>
+      </div>
+
+      <div class="note o" style="align-items: center; justify-content: space-between; flex-wrap: wrap">
+        <span><b>2 possible duplicates.</b> “Caller” records from old browser test calls match existing contacts by phone.</span>
+        <button type="button" class="btn2 sm">Review and merge</button>
+      </div>
+
+      <div class="row" style="gap: 16px">
+        <aside class="card subnav" style="padding: 12px">
+          <nav class="vnav" aria-label="Stages and lists">
+            <span class="grp" style="padding-top: 4px">Stage</span>
+            <sc-for list="{{ stages }}" as="v"><button type="button" aria-pressed="{{ v.pressed }}" onClick="{{ v.pick }}"><span class="dot" style="{{ v.dot }}"></span>{{ v.label }}<span class="n">{{ v.n }}</span></button></sc-for>
+            <span class="grp">Saved lists</span>
+            <sc-for list="{{ lists }}" as="v"><button type="button" aria-pressed="{{ v.pressed }}" onClick="{{ v.pick }}">{{ v.label }}<span class="n">{{ v.n }}</span></button></sc-for>
+            <button type="button" style="color: #2F55D4; font-weight: 600">+ New list from filters</button>
+          </nav>
+        </aside>
+
+        <div style="flex: 4 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+            <label class="search"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="search" placeholder="Search name, phone, email or company" aria-label="Search contacts"></label>
+            <select class="input" aria-label="Last call outcome" style="width: auto"><option>Any last outcome</option><option>Visit booked</option><option>Call back</option><option>No answer</option><option>Not interested</option></select>
+            <select class="input" aria-label="Owner" style="width: auto"><option>Any owner</option><option>Me</option><option>Unassigned</option></select>
+            <button type="button" class="btn2">More filters</button>
+          </div>
+
+          <sc-if value="{{ hasSel }}">
+            <div class="bulk" role="region" aria-label="Bulk actions">
+              <b>{{ selCount }} selected</b>
+              <a class="btn sm" href="Campaign.dc.html">Add to campaign</a>
+              <button type="button" class="btn2 sm">Call with agent</button>
+              <button type="button" class="btn2 sm">Send WhatsApp</button>
+              <button type="button" class="btn2 sm">Change stage</button>
+              <button type="button" class="btn2 sm">Assign</button>
+              <button type="button" class="btn2 sm">Export</button>
+              <button type="button" class="btn3 sm" onClick="{{ clearSel }}" style="color: #AFC0FF; margin-left: auto">Clear</button>
+            </div>
+          </sc-if>
+
+          <section class="card flush scroll-x">
+            <table>
+              <thead><tr>
+                <th style="width: 40px"><input type="checkbox" class="cb" aria-label="Select all" checked="{{ allSel }}" onChange="{{ toggleAll }}"></th>
+                <th>Name</th><th>Stage</th><th>Score</th><th>Last touch</th><th>Next step</th><th>Owner</th><th>Can call?</th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r">
+                  <tr class="{{ r.rowCls }}">
+                    <td><input type="checkbox" class="cb" aria-label="{{ r.selLabel }}" checked="{{ r.checked }}" onChange="{{ r.toggle }}"></td>
+                    <td style="white-space: nowrap"><a href="Contact.dc.html" style="display: flex; gap: 10px; align-items: center; text-decoration: none; color: #15171E"><span class="av">{{ r.initials }}</span><span><span style="display: block; font-weight: 600">{{ r.name }}</span><span class="small muted">{{ r.company }}</span></span></a></td>
+                    <td><span class="{{ r.stageCls }}">{{ r.stage }}</span></td>
+                    <td><span style="display: flex; align-items: center; gap: 8px"><span class="track" style="width: 48px"><span style="{{ r.scoreW }}"></span></span><span class="small">{{ r.score }}</span></span></td>
+                    <td><span style="display: block">{{ r.last }}</span><span class="small muted">{{ r.lastWhen }}</span></td>
+                    <td class="small">{{ r.next }}</td>
+                    <td class="small muted">{{ r.owner }}</td>
+                    <td><span class="{{ r.okCls }}">{{ r.ok }}</span></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            <div class="between" style="padding: 12px 16px"><span class="small muted">{{ countText }}</span><span class="small muted">Columns · Sort: last touch</span></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'all', sel: {} };
+  }
+  renderVals() {
+    const s = this.state;
+    const people = [
+      { id: 1, name: 'Priya Nair', company: 'Homeowner · Kochi', stage: 'Qualified', score: 82, last: 'Visit booked', lastWhen: 'Call · today', next: 'Site visit Sat 1 Nov, 11:00', owner: 'You', ok: 'Yes', lists: ['visit'] },
+      { id: 2, name: 'Rahul Menon', company: 'Homeowner · Kochi', stage: 'Lead', score: 55, last: 'Needs review', lastWhen: 'Call · yesterday', next: 'Call at 6 pm today', owner: 'You', ok: 'Yes', lists: ['hot'] },
+      { id: 3, name: 'Anjali Das', company: 'Homeowner · Thrissur', stage: 'Lead', score: 20, last: 'No answer', lastWhen: 'Call · yesterday', next: 'Retry Thu, then WhatsApp', owner: 'You', ok: 'SMS opt-out', lists: [] },
+      { id: 4, name: 'Vikram Rao', company: 'Homeowner · Kozhikode', stage: 'Lost', score: 8, last: 'Not interested', lastWhen: 'Call · Mon', next: '—', owner: 'You', ok: 'Do not call', lists: [] },
+      { id: 5, name: 'Suresh K', company: 'Malabar Textiles', stage: 'Customer', score: 91, last: 'Ticket #142 opened', lastWhen: 'Email · Tue', next: 'Technician visit', owner: 'Support', ok: 'Yes', lists: ['amc'] },
+      { id: 6, name: 'Arun Pillai', company: 'Infopark office', stage: 'Lead', score: 60, last: 'Replied', lastWhen: 'LinkedIn · Mon', next: 'Book intro call', owner: 'Unassigned', ok: 'No number', lists: ['hot'] },
+      { id: 7, name: 'Meera Iyer', company: 'Green Valley Apartments', stage: 'Qualified', score: 74, last: 'Quote opened 3 times', lastWhen: 'Email · Sun', next: 'Follow-up call Wed', owner: 'Meera', ok: 'Yes', lists: ['hot'] },
+      { id: 8, name: 'Fatima Sheikh', company: 'Homeowner · Kochi', stage: 'Customer', score: 88, last: 'Installed 6 kW', lastWhen: 'Visit · 12 Oct', next: 'Ask for a review', owner: 'You', ok: 'DND, transactional only', lists: ['amc'] },
+      { id: 9, name: 'Karthik Reddy', company: 'Kochi Cold Storage', stage: 'Qualified', score: 69, last: 'Call back Friday', lastWhen: 'Call · last week', next: 'Call Fri 31 Oct', owner: 'Meera', ok: 'Yes', lists: ['visit'] }
+    ];
+    const stageCls = { Lead: 'pill', Qualified: 'pill b', Customer: 'pill g', Lost: 'pill o' };
+    const stageDot = { all: '#5B6070', Lead: '#9AA0AE', Qualified: '#2F55D4', Customer: '#15803D', Lost: '#C2410C' };
+    const match = (p, v) => v === 'all' || p.stage === v || p.lists.indexOf(v) >= 0;
+    const stages = [{ id: 'all', label: 'Everyone' }, { id: 'Lead', label: 'Leads' }, { id: 'Qualified', label: 'Qualified' }, { id: 'Customer', label: 'Customers' }, { id: 'Lost', label: 'Lost' }]
+      .map((v) => ({ ...v, n: people.filter((p) => match(p, v.id)).length, dot: 'background:' + stageDot[v.id], pressed: String(v.id === s.view), pick: () => this.setState({ view: v.id }) }));
+    const lists = [{ id: 'hot', label: 'Hot leads this week' }, { id: 'visit', label: 'Site visit pending' }, { id: 'amc', label: 'Service contract (AMC)' }]
+      .map((v) => ({ ...v, n: people.filter((p) => match(p, v.id)).length, pressed: String(v.id === s.view), pick: () => this.setState({ view: v.id }) }));
+    const shown = people.filter((p) => match(p, s.view));
+    const okCls = (ok) => (ok === 'Yes' ? 'pill g' : (ok === 'Do not call' ? 'pill r' : 'pill o'));
+    const rows = shown.map((p) => ({
+      ...p,
+      initials: p.name.split(' ').map((w) => w[0]).join('').slice(0, 2),
+      stageCls: stageCls[p.stage], okCls: okCls(p.ok),
+      scoreW: 'width:' + p.score + '%;' + (p.score < 30 ? 'background:#C2410C' : ''),
+      checked: !!s.sel[p.id], rowCls: s.sel[p.id] ? 'sel' : '', selLabel: 'Select ' + p.name,
+      toggle: () => this.setState({ sel: { ...s.sel, [p.id]: !s.sel[p.id] } })
+    }));
+    const selCount = shown.filter((p) => s.sel[p.id]).length;
+    const allSel = shown.length > 0 && selCount === shown.length;
+    return {
+      stages, lists, rows, selCount, hasSel: selCount > 0, allSel,
+      countText: 'Showing ' + shown.length + ' of ' + people.length + ' contacts',
+      clearSel: () => this.setState({ sel: {} }),
+      toggleAll: () => { const next = {}; if (!allSel) shown.forEach((p) => { next[p.id] = true; }); this.setState({ sel: next }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

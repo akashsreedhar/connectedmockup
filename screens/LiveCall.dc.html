@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Live call</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.dark{background:#11131A;color:#F3F1EC;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.dark .muted{color:#A9ADBA}
+.dark .lab{color:#A9ADBA}
+.line-a,.line-c{display:flex;flex-direction:column;gap:4px;max-width:82%}
+.line-c{align-self:flex-end;align-items:flex-end}
+.bb{padding:10px 14px;border-radius:14px;font-size:14.5px;line-height:1.5}
+.line-a .bb{background:#262A36;border-top-left-radius:4px}
+.line-c .bb{background:#2F55D4;color:#FFFFFF;border-top-right-radius:4px}
+.line-y .bb{background:#14672F;color:#FFFFFF}
+.who{font-size:12px;color:#A9ADBA;display:flex;gap:8px;align-items:center}
+.lat{font-size:11.5px;padding:1px 7px;border-radius:999px;background:#262A36;color:#C9CCD6}
+.wave{display:flex;align-items:center;gap:3px;height:22px}
+.wave i{display:block;width:3px;border-radius:2px;background:#7C96E8;animation:w 1s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.4s}
+@keyframes w{0%,100%{height:5px}50%{height:20px}}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none;height:10px}}
+.ctl{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:96px;min-height:64px;padding:8px 12px;border-radius:12px;border:1px solid #3A3F4E;background:#1B1E28;color:#F3F1EC;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+.ctl:hover{background:#262A36}
+.ctl[aria-pressed="true"]{background:#2F55D4;border-color:#2F55D4}
+.ctl.end{background:#B42318;border-color:#B42318}
+.ctl.end:hover{background:#912018}
+.fld{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #EFEDE8}
+.fld:last-child{border-bottom:0}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="calls"></dc-import></div>
+  <main class="main">
+    <div class="wrap wide">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="Calls.dc.html">Calls</a> <span class="muted">/ Live now</span></nav>
+
+      <div class="row">
+        <section class="dark" style="flex: 3 1 520px; min-width: 0">
+          <div class="between">
+            <div style="display: flex; gap: 14px; align-items: center">
+              <span class="av lg" style="background: #262A36; color: #F3F1EC">DK</span>
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 18px; font-weight: 700">Deepa Krishnan</span>
+                <span class="small muted">+91 94470 •• •33 · Campaign: Website leads, call in 5 min</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center">
+              <span class="{{ statusCls }}">{{ statusText }}</span>
+              <span style="font-variant-numeric: tabular-nums; font-weight: 700; font-size: 18px" aria-label="Call length">{{ clock }}</span>
+            </div>
+          </div>
+
+          <div class="between" style="padding: 10px 14px; border-radius: 12px; background: #1B1E28">
+            <span style="display: flex; gap: 10px; align-items: center"><sc-if value="{{ talking }}"><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></sc-if><span class="small">{{ speaker }}</span></span>
+            <span class="small muted">Avg reply {{ avgReply }} · streaming speech-to-text</span>
+          </div>
+
+          <div role="log" aria-live="polite" aria-label="Live transcript" style="display: flex; flex-direction: column; gap: 12px; min-height: 320px">
+            <sc-for list="{{ lines }}" as="l">
+              <div class="{{ l.cls }}">
+                <span class="who">{{ l.who }}<sc-if value="{{ l.lat }}"><span class="lat">{{ l.lat }}</span></sc-if><sc-if value="{{ l.intent }}"><span class="lat" style="background: #1E3A8A; color: #E8EDFF">Intent: {{ l.intent }}</span></sc-if></span>
+                <span class="bb">{{ l.text }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ ended }}"><span style="align-self: center" class="small muted">Call ended · outcome card written to Deepa’s contact</span></sc-if>
+          </div>
+
+          <sc-if value="{{ whisperOpen }}">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <input class="input" style="flex: 1 1 260px; background: #1B1E28; border-color: #3A3F4E; color: #F3F1EC" placeholder="Tell the agent something the caller can’t hear, e.g. offer Saturday" aria-label="Whisper to the agent">
+              <button type="button" class="btn sm" onClick="{{ closeWhisper }}">Send to agent</button>
+            </div>
+          </sc-if>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap" role="group" aria-label="Call controls">
+            <button type="button" class="ctl" aria-pressed="{{ listenOn }}" onClick="{{ toggleListen }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2M3 14h3v6H3zM18 14h3v6h-3z"></path></svg>{{ listenLabel }}</button>
+            <button type="button" class="ctl" onClick="{{ openWhisper }}" disabled="{{ ended }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"></path></svg>Whisper</button>
+            <button type="button" class="ctl" aria-pressed="{{ tookOver }}" onClick="{{ takeOver }}" disabled="{{ ended }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>{{ takeLabel }}</button>
+            <button type="button" class="ctl" disabled="{{ ended }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l4 4-4 4M19 9H9M9 19l-4-4 4-4M5 15h10"></path></svg>Transfer</button>
+            <button type="button" class="ctl end" onClick="{{ hangUp }}" disabled="{{ ended }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c5-5 13-5 18 0l-2.5 2.5-3-1.5v-3a12 12 0 0 0-7 0v3l-3 1.5z"></path></svg>End call</button>
+          </div>
+        </section>
+
+        <aside style="flex: 2 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <section class="card stack">
+            <div class="between"><h2 class="h2">Captured so far</h2><span class="pill b">{{ filled }} of 5</span></div>
+            <div>
+              <sc-for list="{{ fields }}" as="f"><div class="fld"><span class="muted">{{ f.k }}</span><span style="{{ f.style }}">{{ f.v }}</span></div></sc-for>
+            </div>
+            <p class="small muted">Saved to the contact when the call ends. Fields come from the agent’s brief.</p>
+          </section>
+          <section class="card stack">
+            <h2 class="h2">Agent</h2>
+            <div class="kv"><span class="muted">Agent</span><a href="Agent.dc.html">Apex Solar Advisor</a></div>
+            <div class="kv"><span class="muted">Voice</span><span>Anika · English (India)</span></div>
+            <div class="kv"><span class="muted">Step</span><span>{{ step }}</span></div>
+            <div class="kv"><span class="muted">Misses</span><span>0 of 2 before fallback</span></div>
+          </section>
+          <section class="card stack">
+            <div class="between"><h2 class="h2">Other live calls</h2><span class="pill g">2</span></div>
+            <div class="kv"><span><b>Sanjay Kulkarni</b><br><span class="small muted">October solar leads · 0:41</span></span><button type="button" class="btn2 sm">Listen</button></div>
+            <div class="kv"><span><b>Front Desk · inbound</b><br><span class="small muted">+91 98950 •• •72 · 1:58</span></span><button type="button" class="btn2 sm">Listen</button></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { shown: 2, secs: 34, listen: false, took: false, whisper: false, ended: false };
+    // Simulated stream. Stops itself once you leave the screen.
+    window.__liveCall = this;
+    this.timer = setInterval(() => {
+      if (location.hash.indexOf('LiveCall') < 0 || window.__liveCall !== this) { clearInterval(this.timer); return; }
+      const s = this.state;
+      // Pause while ended or while typing a whisper, so the re-render doesn't wipe the input.
+      if (s.ended || s.whisper) return;
+      const next = { secs: s.secs + 1 };
+      if (!s.took && (s.secs - 34) % 3 === 2 && s.shown < this.script().length) next.shown = s.shown + 1;
+      this.setState(next);
+    }, 1000);
+  }
+  script() {
+    return [
+      { who: 'Agent', text: 'Hi Deepa, this is Anika from Apex Solar. You asked for a free solar estimate a few minutes ago. Is now a good time?' },
+      { who: 'Caller', text: 'Yes, I just filled the form. Tell me.' },
+      { who: 'Agent', lat: '0.9 s', text: 'Great. Do you own the house, or is it rented?', step: 'Qualify' },
+      { who: 'Caller', intent: 'owns home', text: 'It’s our own house, two floors.', set: { own: 'Yes' } },
+      { who: 'Agent', lat: '1.1 s', text: 'And roughly what is your monthly electricity bill?' },
+      { who: 'Caller', intent: 'gives bill', text: 'Around four thousand, more in summer.', set: { bill: '₹4,000' } },
+      { who: 'Agent', lat: '0.8 s', text: 'Thanks. What kind of roof is it, concrete or sheet? And is there much shade from trees?' },
+      { who: 'Caller', intent: 'roof details', text: 'Concrete. No trees, it gets full sun.', set: { roof: 'RCC', shade: 'None' } },
+      { who: 'Agent', lat: '1.0 s', text: 'That’s ideal for solar. Would Saturday at 11 or Monday at 5 work for a free site visit?', step: 'Book visit' },
+      { who: 'Caller', intent: 'book meeting', text: 'Can you do Sunday? I’m free Sunday.' },
+      { who: 'Agent', lat: '1.2 s', text: 'We don’t visit on Sundays, sorry. Monday at 5 or Saturday at 11?', step: 'Book visit' },
+      { who: 'Caller', intent: 'book meeting', text: 'Okay, Saturday at 11.', set: { visit: 'Sat 1 Nov, 11:00' } },
+      { who: 'Agent', lat: '0.9 s', text: 'Done. You’ll get a WhatsApp confirmation in a minute. Thank you, Deepa!', step: 'Wrap up' }
+    ];
+  }
+  renderVals() {
+    const s = this.state;
+    const all = this.script();
+    const shownLines = all.slice(0, s.shown);
+    const got = {};
+    let step = 'Greeting';
+    shownLines.forEach((l) => { Object.assign(got, l.set || {}); if (l.step) step = l.step; });
+    const lines = shownLines.map((l) => ({ ...l, lat: l.lat || '', intent: l.intent || '', cls: l.who === 'Caller' ? 'line-c' : 'line-a' }));
+    if (s.took) lines.push({ who: 'You (took over)', text: 'Hi Deepa, I’m Meera from Apex Solar, I’ll take it from here.', cls: 'line-a line-y', lat: '', intent: '' });
+    const F = [['own', 'Owns the home'], ['bill', 'Monthly bill'], ['roof', 'Roof type'], ['shade', 'Shading'], ['visit', 'Site visit']];
+    const fields = F.map(([k, label]) => ({ k: label, v: got[k] || 'Listening…', style: got[k] ? 'font-weight:600' : 'color:#9AA0AE' }));
+    const mm = String(Math.floor(s.secs / 60)), ss = String(s.secs % 60).padStart(2, '0');
+    const last = shownLines[shownLines.length - 1];
+    const talking = !s.ended && !!last;
+    const lats = shownLines.filter((l) => l.lat).map((l) => parseFloat(l.lat));
+    return {
+      lines, fields, step: s.took ? 'You are talking' : step,
+      filled: Object.keys(got).length,
+      clock: mm + ':' + ss,
+      statusText: s.ended ? 'Ended' : (s.took ? 'You are on the call' : 'Live'),
+      statusCls: s.ended ? 'pill' : 'pill g',
+      talking, speaker: s.ended ? 'Call ended' : (s.took ? 'You are speaking' : (last && last.who === 'Caller' ? 'Deepa is speaking' : 'Anika (agent) is speaking')),
+      avgReply: lats.length ? (lats.reduce((a, b) => a + b, 0) / lats.length).toFixed(1) + ' s' : '—',
+      ended: s.ended,
+      listenOn: String(s.listen), listenLabel: s.listen ? 'Listening' : 'Listen in',
+      tookOver: String(s.took), takeLabel: s.took ? 'You’re live' : 'Take over',
+      whisperOpen: s.whisper && !s.ended,
+      toggleListen: () => this.setState({ listen: !s.listen }),
+      openWhisper: () => this.setState({ whisper: !s.whisper }),
+      closeWhisper: () => this.setState({ whisper: false }),
+      takeOver: () => this.setState({ took: true, listen: true }),
+      hangUp: () => this.setState({ ended: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign in</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.auth{display:flex;flex-wrap:wrap;min-height:100vh;background:#FFFFFF}
+.auth-form{flex:1 1 480px;display:flex;flex-direction:column;padding:28px 40px 40px;box-sizing:border-box}
+.auth-in{width:100%;max-width:400px;margin:auto;display:flex;flex-direction:column;gap:18px;padding:32px 0}
+.auth-side{flex:1 1 420px;background:#11131A;color:#F3F1EC;display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:48px;box-sizing:border-box}
+.sso{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;border-radius:10px;border:1px solid #D6D3CC;background:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;color:#15171E;cursor:pointer;width:100%}
+.sso:hover{background:#F6F5F2}
+.or{display:flex;align-items:center;gap:12px;color:#5B6070;font-size:12.5px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:#E4E2DC}
+.err{display:flex;gap:8px;padding:10px 12px;border-radius:10px;background:#FDE8E7;color:#912018;font-size:13.5px}
+.org{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:12px;border:1px solid #E4E2DC;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:inherit;text-decoration:none;box-sizing:border-box}
+.org:hover{border-color:#2F55D4;background:#F3F6FF}
+.quote{border-left:3px solid #2F55D4;padding-left:16px;display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.auth-form{padding:20px 16px 32px}.auth-side{padding:32px 16px}}
+</style>
+</helmet>
+<div class="auth">
+  <section class="auth-form">
+    <div class="between">
+      <span style="display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg></span><b style="font-size: 17px">Connekted</b></span>
+      <span class="small muted">New here? <a href="Signup.dc.html" style="font-weight: 600">Create an account</a></span>
+    </div>
+
+    <div class="auth-in">
+      <sc-if value="{{ isPick }}">
+        <div class="stack">
+          <h1 class="title">Choose a workspace</h1>
+          <p class="muted">meera@apexsolar.example belongs to 2 workspaces.</p>
+        </div>
+        <div class="stack" style="gap: 10px">
+          <sc-for list="{{ orgs }}" as="o">
+            <a class="org" href="Main.dc.html"><span class="av sq" style="{{ o.style }}">{{ o.i }}</span><span style="flex: 1"><b style="display: block">{{ o.n }}</b><span class="small muted">{{ o.d }}</span></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"></path></svg></a>
+          </sc-for>
+          <a class="org" href="Signup.dc.html#workspace" style="border-style: dashed"><span class="av sq" style="background: #E8EDFF; color: #2F55D4">+</span><span style="flex: 1"><b style="display: block">Create a new workspace</b><span class="small muted">For another business or brand</span></span></a>
+        </div>
+        <button type="button" class="btn3" onClick="{{ toPassword }}" style="align-self: flex-start; padding: 0">Use a different account</button>
+      </sc-if>
+
+      <sc-if value="{{ isForgot }}">
+        <div class="stack">
+          <h1 class="title">Reset your password</h1>
+          <p class="muted">We’ll email you a link. It works for 30 minutes.</p>
+        </div>
+        <sc-if value="{{ sent }}"><div class="note g"><span>Check <b>meera@apexsolar.example</b>. If it isn’t there in 2 minutes, look in spam.</span></div></sc-if>
+        <label class="field">Work email<input class="input" type="email" autocomplete="email" value="meera@apexsolar.example"></label>
+        <button type="button" class="btn" onClick="{{ sendReset }}">{{ resetLabel }}</button>
+        <button type="button" class="btn3" onClick="{{ toPassword }}" style="align-self: flex-start; padding: 0">← Back to sign in</button>
+      </sc-if>
+
+      <sc-if value="{{ isMain }}">
+        <div class="stack">
+          <h1 class="title">Welcome back</h1>
+          <p class="muted">Sign in to see what your agents did while you were away.</p>
+        </div>
+        <button type="button" class="sso" onClick="{{ toPick }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"></path><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"></path><path fill="#FBBC05" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"></path><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"></path></svg>Continue with Google</button>
+        <button type="button" class="sso" onClick="{{ toPick }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><path fill="#F25022" d="M2 2h9.5v9.5H2z"></path><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"></path><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"></path><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"></path></svg>Continue with Microsoft</button>
+        <div class="or">or</div>
+        <div class="seg" role="group" aria-label="Sign in with" style="align-self: flex-start">
+          <sc-for list="{{ methods }}" as="m"><button type="button" aria-pressed="{{ m.pressed }}" onClick="{{ m.pick }}">{{ m.label }}</button></sc-for>
+        </div>
+        <sc-if value="{{ error }}"><div class="err" role="alert"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex: none"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16v.5"></path></svg><span>{{ error }}</span></div></sc-if>
+
+        <sc-if value="{{ isPassword }}">
+          <label class="field">Work email<input class="input" type="email" autocomplete="email" placeholder="you@company.com" value="{{ email }}" onInput="{{ setEmail }}"></label>
+          <label class="field"><span class="between"><span>Password</span><button type="button" class="btn3 sm" onClick="{{ toForgot }}" style="min-height: 0; padding: 0">Forgot password?</button></span><input class="input" type="password" autocomplete="current-password" placeholder="8+ characters" onInput="{{ setPass }}"></label>
+          <label style="display: flex; gap: 10px; align-items: center; font-size: 13.5px; cursor: pointer"><input type="checkbox" checked style="width: 18px; height: 18px">Keep me signed in on this device</label>
+          <button type="button" class="btn" onClick="{{ signIn }}">Sign in</button>
+        </sc-if>
+
+        <sc-if value="{{ isOtp }}">
+          <label class="field">Mobile number
+            <span style="display: flex; gap: 8px"><select class="input" style="width: 96px" aria-label="Country code"><option>+91</option><option>+971</option><option>+1</option></select><input class="input" type="tel" autocomplete="tel" placeholder="98450 12345" value="98450 12312"></span>
+          </label>
+          <sc-if value="{{ otpSent }}">
+            <label class="field">6-digit code sent by SMS<input class="input" inputmode="numeric" autocomplete="one-time-code" placeholder="••••••" style="letter-spacing: .4em; font-size: 18px"></label>
+            <span class="small muted">Didn’t get it? Resend in 0:28 · or <a href="#">get it on WhatsApp</a></span>
+          </sc-if>
+          <button type="button" class="btn" onClick="{{ otpAction }}">{{ otpLabel }}</button>
+        </sc-if>
+
+        <p class="small muted">Your company uses single sign-on? <a href="#">Sign in with SSO</a></p>
+      </sc-if>
+    </div>
+
+    <p class="small muted" style="text-align: center">By continuing you agree to the <a href="#">Terms</a> and <a href="#">Privacy policy</a>. Data hosted in India.</p>
+  </section>
+
+  <aside class="auth-side">
+    <span class="lab" style="color: #A9ADBA">Connekted</span>
+    <div style="display: flex; flex-direction: column; gap: 20px; max-width: 460px">
+      <h2 style="font-size: 32px; font-weight: 700; letter-spacing: -.6px; line-height: 1.2">Your AI agent makes the call. You close the deal.</h2>
+      <div style="display: flex; gap: 28px; flex-wrap: wrap">
+        <div><span style="display: block; font-size: 26px; font-weight: 700">~1 s</span><span class="small" style="color: #A9ADBA">reply time on calls</span></div>
+        <div><span style="display: block; font-size: 26px; font-weight: 700">5</span><span class="small" style="color: #A9ADBA">channels, one inbox</span></div>
+        <div><span style="display: block; font-size: 26px; font-weight: 700">10 min</span><span class="small" style="color: #A9ADBA">to your first real call</span></div>
+      </div>
+    </div>
+    <div class="quote">
+      <p style="font-size: 15.5px; line-height: 1.55">“Our agent calls every website lead within five minutes. Site visits went up and my team only talks to people who are ready.”</p>
+      <span class="small" style="color: #A9ADBA">[Customer name], [Role], [Company] · example quote</span>
+    </div>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: props.sub === 'forgot' || props.sub === 'pick' ? props.sub : 'main', method: 'password', error: '', otpSent: false, sent: false };
+    this.form = { email: 'meera@apexsolar.example', pass: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const methods = [{ id: 'password', label: 'Email and password' }, { id: 'otp', label: 'Phone OTP' }]
+      .map((m) => ({ ...m, pressed: String(m.id === s.method), pick: () => this.setState({ method: m.id, error: '' }) }));
+    const orgs = [
+      { i: 'AS', n: 'Apex Solar', d: 'Admin · 3 agents · 2 calls live now', style: 'background:#2F55D4;color:#FFFFFF' },
+      { i: 'TO', n: 'Test Organization', d: 'Viewer · sandbox, test calls only', style: '' }
+    ];
+    return {
+      isMain: s.view === 'main', isForgot: s.view === 'forgot', isPick: s.view === 'pick',
+      methods, isPassword: s.method === 'password', isOtp: s.method === 'otp',
+      error: s.error, email: this.form.email, orgs,
+      otpSent: s.otpSent, otpLabel: s.otpSent ? 'Verify and sign in' : 'Send code',
+      sent: s.sent, resetLabel: s.sent ? 'Send again' : 'Email me a reset link',
+      setEmail: (e) => { this.form.email = e.target.value; },
+      setPass: (e) => { this.form.pass = e.target.value; },
+      signIn: () => {
+        if (this.form.email.indexOf('@') < 0) return this.setState({ error: 'Enter your work email, like you@company.com.' });
+        if (this.form.pass.length < 8) return this.setState({ error: 'That password doesn’t match. Try again, or reset it. (Mockup: type any 8+ characters.)' });
+        this.setState({ view: 'pick', error: '' });
+      },
+      otpAction: () => (s.otpSent ? this.setState({ view: 'pick' }) : this.setState({ otpSent: true })),
+      toPick: () => this.setState({ view: 'pick', error: '' }),
+      toForgot: () => this.setState({ view: 'forgot', error: '' }),
+      toPassword: () => this.setState({ view: 'main', method: 'password', sent: false }),
+      sendReset: () => this.setState({ sent: true })
+    };
+  }
+}
+</script>
+</body>
+</html>
