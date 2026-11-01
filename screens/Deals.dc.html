@@ -9,12 +9,12 @@
 <helmet>
 <style>
 .board{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
-.col{flex:1 0 196px;background:#EFEDE8;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
-.col-h{display:flex;justify-content:space-between;align-items:baseline;padding:4px 4px 6px;font-weight:700;font-size:13.5px}
-.deal{display:flex;flex-direction:column;gap:6px;width:100%;padding:12px;border-radius:10px;border:1px solid #E4E2DC;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit;box-sizing:border-box}
-.deal:hover{border-color:#CCD7FA}
-.deal[aria-pressed="true"]{border:2px solid #2F55D4;padding:11px}
-.qrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border:1px solid #E4E2DC;border-radius:10px;flex-wrap:wrap}
+.col{flex:1 0 196px;background:#EEF0EE;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.col-h{display:flex;justify-content:space-between;align-items:baseline;padding:4px 4px 6px;font-weight:600;font-size:13.5px}
+.deal{display:flex;flex-direction:column;gap:6px;width:100%;padding:12px;border-radius:10px;border:1px solid #E2E5E3;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit;box-sizing:border-box}
+.deal:hover{border-color:#C9D3F6}
+.deal[aria-pressed="true"]{border:2px solid #2B4ACB;padding:11px}
+.qrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border:1px solid #E2E5E3;border-radius:10px;flex-wrap:wrap}
 </style>
 </helmet>
 <div class="shell">
@@ -38,7 +38,7 @@
 
       <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))">
         <sc-for list="{{ kpis }}" as="k">
-          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 4px"><span class="lab">{{ k.l }}</span><span style="font-size: 24px; font-weight: 700">{{ k.v }}</span><span class="small muted">{{ k.s }}</span></div>
+          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 4px"><span class="lab">{{ k.l }}</span><span style="font-size: 24px; font-weight: 600">{{ k.v }}</span><span class="small muted">{{ k.s }}</span></div>
         </sc-for>
       </div>
 
@@ -51,8 +51,8 @@
                 <button type="button" class="deal" aria-pressed="{{ d.pressed }}" onClick="{{ d.pick }}">
                   <span style="font-weight: 600">{{ d.name }}</span>
                   <span class="small muted">{{ d.contact }}</span>
-                  <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font-weight: 700">{{ d.value }}</span><span class="{{ d.nextCls }}" style="font-size: 11.5px">{{ d.nextShort }}</span></span>
-                  <sc-if value="{{ d.byAgent }}"><span class="small" style="color: #1E3A8A">Moved here by Apex Solar Advisor</span></sc-if>
+                  <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font-weight: 600">{{ d.value }}</span><span class="{{ d.nextCls }}" style="font-size: 11.5px">{{ d.nextShort }}</span></span>
+                  <sc-if value="{{ d.byAgent }}"><span class="small" style="color: #1D338C">Moved here by Apex Solar Advisor</span></sc-if>
                 </button>
               </sc-for>
             </section>
@@ -85,11 +85,11 @@
         <div class="between" style="align-items: flex-start">
           <div style="display: flex; flex-direction: column; gap: 4px">
             <span class="lab">{{ sel.stageName }} · {{ sel.prob }} likely · closes {{ sel.close }}</span>
-            <h2 style="font-size: 21px; font-weight: 700">{{ sel.name }}</h2>
+            <h2 style="font-size: 21px; font-weight: 600">{{ sel.name }}</h2>
             <span class="muted"><a href="Contact.dc.html">{{ sel.contact }}</a> · Owner {{ sel.owner }}</span>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
-            <span style="font-size: 24px; font-weight: 700">{{ sel.value }}</span>
+            <span style="font-size: 24px; font-weight: 600">{{ sel.value }}</span>
             <button type="button" class="btn2 sm" onClick="{{ moveBack }}" disabled="{{ atStart }}">Previous stage</button>
             <button type="button" class="btn sm" onClick="{{ moveNext }}" disabled="{{ atEnd }}">Move to {{ nextStage }}</button>
           </div>
@@ -133,7 +133,7 @@
         <sc-if value="{{ tabDocs }}">
           <div class="stack">
             <sc-for list="{{ sel.docs }}" as="q">
-              <div class="qrow"><span style="display: flex; gap: 10px; align-items: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"></path></svg><span><span style="display: block; font-weight: 600">{{ q.n }}</span><span class="small muted">{{ q.d }}</span></span></span><span class="{{ q.cls }}">{{ q.st }}</span></div>
+              <div class="qrow"><span style="display: flex; gap: 10px; align-items: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A6170" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"></path></svg><span><span style="display: block; font-weight: 600">{{ q.n }}</span><span class="small muted">{{ q.d }}</span></span></span><span class="{{ q.cls }}">{{ q.st }}</span></div>
             </sc-for>
             <div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" class="btn2 sm">Upload</button><button type="button" class="btn2 sm">Send for e-sign</button></div>
           </div>

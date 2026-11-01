@@ -9,7 +9,7 @@
 <helmet>
 <style>
 .tl{display:flex;gap:12px;font-size:13.5px}
-.tl .ic{width:28px;height:28px;border-radius:8px;background:#F1EFEA;display:flex;align-items:center;justify-content:center;flex:none;color:#3A3D46}
+.tl .ic{width:28px;height:28px;border-radius:8px;background:#F5F6F4;display:flex;align-items:center;justify-content:center;flex:none;color:#3B404B}
 </style>
 </helmet>
 <div class="shell">
@@ -29,7 +29,7 @@
       </div>
 
       <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
-        <label class="search" style="flex: 0 1 360px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="search" placeholder="Search companies" aria-label="Search companies"></label>
+        <label class="search" style="flex: 0 1 360px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A6170" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="search" placeholder="Search companies" aria-label="Search companies"></label>
         <div class="chips" role="group" aria-label="Type">
           <sc-for list="{{ types }}" as="t"><button type="button" class="chip" aria-pressed="{{ t.pressed }}" onClick="{{ t.pick }}">{{ t.label }} <span class="n">{{ t.n }}</span></button></sc-for>
         </div>
@@ -57,7 +57,7 @@
           <div style="display: flex; gap: 14px; align-items: center">
             <span class="av sq lg">{{ sel.initials }}</span>
             <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
-              <h2 style="font-size: 19px; font-weight: 700">{{ sel.name }}</h2>
+              <h2 style="font-size: 19px; font-weight: 600">{{ sel.name }}</h2>
               <span class="small muted">{{ sel.industry }} · {{ sel.size }} · {{ sel.city }}</span>
             </div>
           </div>
@@ -75,7 +75,7 @@
             <div class="stack" style="gap: 0">
               <sc-for list="{{ sel.people }}" as="p">
                 <div class="kv" style="align-items: center">
-                  <a href="Contact.dc.html" style="display: flex; gap: 10px; align-items: center; text-decoration: none; color: #15171E"><span class="av">{{ p.i }}</span><span><span style="display: block; font-weight: 600">{{ p.n }}</span><span class="small muted">{{ p.r }}</span></span></a>
+                  <a href="Contact.dc.html" style="display: flex; gap: 10px; align-items: center; text-decoration: none; color: #191C22"><span class="av">{{ p.i }}</span><span><span style="display: block; font-weight: 600">{{ p.n }}</span><span class="small muted">{{ p.r }}</span></span></a>
                   <span class="{{ p.cls }}">{{ p.tag }}</span>
                 </div>
               </sc-for>
@@ -85,9 +85,9 @@
           <sc-if value="{{ tabDeals }}">
             <div class="stack">
               <sc-for list="{{ sel.deals }}" as="d">
-                <a href="Deals.dc.html" style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid #E4E2DC; border-radius: 10px; text-decoration: none; color: #15171E">
+                <a href="Deals.dc.html" style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid #E2E5E3; border-radius: 10px; text-decoration: none; color: #191C22">
                   <span><span style="display: block; font-weight: 600">{{ d.n }}</span><span class="small muted">{{ d.s }}</span></span>
-                  <span style="font-weight: 700; white-space: nowrap">{{ d.v }}</span>
+                  <span style="font-weight: 600; white-space: nowrap">{{ d.v }}</span>
                 </a>
               </sc-for>
               <sc-if value="{{ noDeals }}"><p class="muted">No deals yet.</p></sc-if>

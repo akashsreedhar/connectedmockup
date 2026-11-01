@@ -2,144 +2,190 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Calls</title>
+<title>Call history</title>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
-a{color:#2F55D4}a:hover{color:#1E3A8A}
-h1,h2,h3,p{margin:0}
-.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn:hover{background:#2446B8;color:#FFFFFF}
-.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn2:hover{background:#F1EFEA;color:#15171E}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
-.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
-.muted{color:#5B6070}
-.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
-th{text-align:left;font-size:12px;font-weight:600;color:#5B6070;padding:10px 12px;border-bottom:1px solid #E4E2DC;white-space:nowrap}
-td{padding:0;border-bottom:1px solid #EFEDE8;vertical-align:middle}
+.ch{display:flex;flex:1;min-height:0}
+.ch-l{flex:1 1 600px;min-width:0;display:flex;flex-direction:column}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line)}
+.dd{position:relative}
+.menu{position:absolute;left:0;top:calc(100% + 6px);z-index:20;min-width:220px;padding:6px;border-radius:12px;background:var(--sheet);border:1px solid var(--line);box-shadow:0 12px 32px rgba(25,28,34,.14);display:flex;flex-direction:column}
+.menu .g{font-size:11.5px;color:var(--faint);padding:8px 10px 4px}
+.menu button{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 10px;border-radius:7px;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.menu button:hover{background:var(--fill)}
+.calls tr{cursor:pointer}
+.calls td{white-space:nowrap}
+.who b{font-weight:500;display:block}
+.drw{flex:0 0 440px;min-width:0;border-left:1px solid var(--line);display:flex;flex-direction:column;background:var(--sheet)}
+.drw-h{display:flex;align-items:flex-start;gap:10px;padding:16px 18px 12px}
+.drw-b{flex:1;overflow-y:auto;padding:0 18px 28px;display:flex;flex-direction:column;gap:16px}
+.player{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+.pbtn{width:34px;height:34px;border-radius:50%;border:0;background:var(--blue);color:#FFFFFF;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.bars{flex:1;display:flex;align-items:center;gap:2px;height:28px;min-width:0;overflow:hidden}
+.bars i{flex:1;max-width:3px;min-width:2px;border-radius:2px;background:#C9CFCB}
+.bars i.on{background:var(--blue)}
+.oc{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--fill)}
+.kvs{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.kvs span:nth-child(odd){color:var(--mut)}
+.turn{display:flex;flex-direction:column;gap:3px}
+.turn .who2{font-size:11.5px;color:var(--mut);display:flex;gap:8px}
+.turn p{padding:8px 12px;border-radius:10px;background:var(--fog);font-size:13px;max-width:92%}
+.turn.u{align-items:flex-end}
+.turn.u p{background:var(--blue-t);color:var(--blue-ink)}
+.turn.bad p{background:var(--warn-t);color:var(--warn-ink)}
+@media (max-width:1100px){.drw{flex:1 1 100%;border-left:0;border-top:1px solid var(--line)}.ch{flex-wrap:wrap}}
 </style>
 </helmet>
-<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
-  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
-    <dc-import name="Sidebar" active="calls" hint-size="232px,1060px"></dc-import>
-  </div>
-  <main style="flex: 999 1 560px; min-width: 0; padding: 32px 36px 56px; box-sizing: border-box">
-    <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
-
-      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
-        <div style="display: flex; flex-direction: column; gap: 4px">
-          <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.4px">Calls</h1>
-          <p class="muted" style="font-size: 15px">Every call, with what was said and what happened next.</p>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="calls"></dc-import></div>
+  <main class="main flush">
+    <div class="bar">
+      <h1 class="title">Call history</h1>
+      <a class="btn2" href="Agent.dc.html#test">Place a call</a>
+    </div>
+    <div class="ch">
+      <section class="ch-l" aria-label="Calls">
+        <div class="tools">
+          <div class="seg" role="group" aria-label="Date range">
+            <sc-for list="{{ ranges }}" as="r"><button type="button" aria-pressed="{{ r.pressed }}" onClick="{{ r.pick }}">{{ r.label }}</button></sc-for>
+          </div>
+          <div class="dd">
+            <button type="button" class="btn2 sm" onClick="{{ toggleFilter }}" aria-expanded="{{ filterOpen }}"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h18M6 12h12M10 19h4"></path></svg>Filter</button>
+            <sc-if value="{{ filter }}">
+              <div class="menu" role="menu">
+                <span class="g">Call</span><button type="button" role="menuitem">Agent</button><button type="button" role="menuitem">Outcome</button><button type="button" role="menuitem">Direction</button><button type="button" role="menuitem">Duration</button>
+                <span class="g">Quality</span><button type="button" role="menuitem">Reply time</button><button type="button" role="menuitem">Caller mood</button><button type="button" role="menuitem">Ended by</button>
+                <span class="g">Captured</span><button type="button" role="menuitem">Monthly bill</button><button type="button" role="menuitem">Visit time</button>
+              </div>
+            </sc-if>
+          </div>
+          <div class="chips">
+            <sc-for list="{{ quick }}" as="q"><button type="button" class="chip" aria-pressed="{{ q.pressed }}" onClick="{{ q.pick }}">{{ q.label }} <span class="n">{{ q.n }}</span></button></sc-for>
+          </div>
+          <span style="flex:1"></span>
+          <button type="button" class="btn2 sm">Export</button>
         </div>
-        <button type="button" class="btn">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg>
-          Place a call
-        </button>
-      </div>
-
-      <div style="display: flex; flex-wrap: wrap; gap: 8px">
-        <span class="pill b" style="padding: 8px 14px">All · 4</span>
-        <span class="pill" style="padding: 8px 14px">Goal reached · 1</span>
-        <span class="pill" style="padding: 8px 14px">Needs review · 1</span>
-        <span class="pill" style="padding: 8px 14px">No answer · 1</span>
-        <a class="pill" href="LiveCall.dc.html" style="padding: 8px 14px; text-decoration: none; background: #E3F4E8; color: #14672F">Live now · 2</a>
-      </div>
-
-      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
-        <section class="card" style="flex: 3 1 520px; min-width: 0; padding: 0; overflow-x: auto">
-          <table style="width: 100%; border-collapse: collapse">
-            <thead><tr><th>Contact</th><th>Agent</th><th>Outcome</th><th>Length</th><th>When</th></tr></thead>
+        <div class="scroll-x" style="flex:1">
+          <table class="calls">
+            <thead><tr><th>Time</th><th>Contact</th><th>Agent</th><th>Direction</th><th>Length</th><th>Outcome</th><th>Reply time</th><th>Cost</th></tr></thead>
             <tbody>
-              <sc-for list="{{ calls }}" as="c" hint-placeholder-count="4">
-                <tr style="{{ c.rowStyle }}">
-                  <td style="padding: 0"><button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; min-height: 56px; padding: 10px 12px; border: 0; background: transparent; text-align: left; cursor: pointer; font-family: Inter, system-ui, sans-serif"><span style="font-weight: 600; font-size: 14px; color: #15171E">{{ c.name }}</span><span style="font-size: 12.5px; color: #5B6070">{{ c.phone }}</span></button></td>
-                  <td style="padding: 10px 12px" class="muted">{{ c.agent }}</td>
-                  <td style="padding: 10px 12px"><span class="{{ c.cls }}">{{ c.outcome }}</span></td>
-                  <td style="padding: 10px 12px" class="muted">{{ c.len }}</td>
-                  <td style="padding: 10px 12px; white-space: nowrap" class="muted">{{ c.when }}</td>
+              <sc-for list="{{ rows }}" as="c">
+                <tr class="{{ c.cls }}" onClick="{{ c.open }}">
+                  <td class="small muted">{{ c.when }}</td>
+                  <td><button type="button" class="rowbtn who" onClick="{{ c.open }}" style="min-height:0"><span><b>{{ c.name }}</b><span class="small muted">{{ c.phone }}</span></span></button></td>
+                  <td class="small">{{ c.agent }}</td>
+                  <td class="small">{{ c.dir }}</td>
+                  <td>{{ c.len }}</td>
+                  <td><span class="{{ c.pill }}">{{ c.outcome }}</span></td>
+                  <td><span style="{{ c.repStyle }}">{{ c.reply }}</span></td>
+                  <td class="small muted">{{ c.cost }}</td>
                 </tr>
               </sc-for>
             </tbody>
           </table>
-        </section>
+        </div>
+        <div class="between small muted" style="padding:10px 18px;border-top:1px solid var(--line2)"><span>{{ countText }}</span><span>Page 1 of 1</span></div>
+      </section>
 
-        <aside class="card" style="flex: 2 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-          <div style="display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap">
-            <div style="display: flex; flex-direction: column; gap: 2px">
-              <a href="Contact.dc.html" style="font-size: 18px; font-weight: 700; color: #15171E; text-decoration: none">{{ sel.name }}</a>
-              <span class="muted" style="font-size: 13px">{{ sel.agent }} · {{ sel.len }} · {{ sel.when }}</span>
-            </div>
-            <span class="{{ sel.cls }}">{{ sel.outcome }}</span>
+      <sc-if value="{{ sel }}">
+        <aside class="drw" aria-label="Call details">
+          <div class="drw-h">
+            <span style="flex:1;min-width:0">
+              <a href="Contact.dc.html" style="font-weight:600;font-size:16px;color:var(--ink);text-decoration:none">{{ sel.name }}</a>
+              <span class="small muted" style="display:block">{{ sel.agent }} · {{ sel.dir }} · {{ sel.when }}</span>
+            </span>
+            <span class="{{ sel.pill }}">{{ sel.outcome }}</span>
+            <button type="button" class="ibtn sm ghost" aria-label="Close call details" onClick="{{ close }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
           </div>
-          <sc-if value="{{ sel.hasFlag }}" hint-placeholder-val="{{ false }}">
-            <div style="display: flex; gap: 10px; padding: 12px; border-radius: 10px; background: #FFF8F3; border: 1px solid #F3C9B3">
-              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="M12 3 2 20h20zM12 10v4M12 17v.5"></path></svg>
-              <div style="display: flex; flex-direction: column; gap: 4px">
-                <span style="font-weight: 700; color: #9A3412">{{ sel.flag }}</span>
-                <a href="Agent.dc.html" style="font-size: 13.5px; font-weight: 600">Fix in the agent’s conversation</a>
+          <div class="drw-b">
+            <sc-if value="{{ sel.rec }}">
+              <div class="player">
+                <button type="button" class="pbtn" aria-label="Play recording"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></svg></button>
+                <span class="bars" aria-hidden="true"><sc-for list="{{ wave }}" as="w"><i class="{{ w.cls }}" style="{{ w.style }}"></i></sc-for></span>
+                <span class="small muted">0:00 / {{ sel.len }}</span>
               </div>
+            </sc-if>
+            <sc-if value="{{ sel.flag }}">
+              <div class="note o"><span><b style="font-weight:600">{{ sel.flag }}</b> <a href="Agent.dc.html">Fix in the agent</a></span></div>
+            </sc-if>
+            <div class="oc">
+              <span style="font-weight:500">Summary</span>
+              <span class="small">{{ sel.summary }}</span>
+              <div class="kvs"><sc-for list="{{ sel.fields }}" as="k"><span>{{ k.k }}</span><span>{{ k.v }}</span></sc-for></div>
             </div>
-          </sc-if>
-          <div style="display: flex; flex-direction: column; gap: 6px">
-            <span class="lab">Summary</span>
-            <p>{{ sel.summary }}</p>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 10px">
-            <span class="lab">Transcript</span>
-            <sc-for list="{{ sel.lines }}" as="l" hint-placeholder-count="5">
-              <div style="{{ l.wrap }}">
-                <span style="font-size: 12px; font-weight: 600; color: #5B6070">{{ l.who }}</span>
-                <span style="{{ l.bubble }}">{{ l.text }}</span>
-                <sc-if value="{{ l.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12.5px; font-weight: 600; color: #9A3412">{{ l.note }}</span></sc-if>
+            <div class="tabs" role="tablist"><sc-for list="{{ dtabs }}" as="t"><button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}">{{ t.label }}</button></sc-for></div>
+            <sc-if value="{{ showTranscript }}">
+              <sc-for list="{{ sel.turns }}" as="t">
+                <div class="{{ t.cls }}"><span class="who2"><span>{{ t.who }}</span><span>{{ t.meta }}</span></span><p>{{ t.text }}</p></div>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ showDetails }}">
+              <div class="kvs">
+                <span>Call ID</span><span class="id">call_7f3a91c2</span>
+                <span>From</span><span>{{ sel.from }}</span>
+                <span>To</span><span>{{ sel.phone }}</span>
+                <span>Ended by</span><span>{{ sel.ended }}</span>
+                <span>Caller mood</span><span>{{ sel.mood }}</span>
+                <span>Average reply</span><span>{{ sel.reply }}</span>
+                <span>Cost</span><span>{{ sel.cost }}</span>
               </div>
-            </sc-for>
+            </sc-if>
           </div>
         </aside>
-      </div>
+      </sc-if>
     </div>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { sel: props.sub || 'rahul' };
+    this.state = { range: '7d', quick: 'all', sel: 'rahul', filter: false, dtab: 'transcript' };
   }
   renderVals() {
-    const selId = this.state.sel;
-    const A = (text) => ({ who: 'Agent', text });
-    const C = (text) => ({ who: 'Caller', text });
-    const data = [
-      { id: 'priya', name: 'Priya Nair', phone: '+91 98450 •• •12', agent: 'Apex Solar Advisor', outcome: 'Visit booked', cls: 'pill b', len: '2:56', when: 'Today, 2:33 pm',
-        summary: 'Owns her home, bill about ₹3,200 a month, roof partly shaded. Booked a site visit for Sat 1 Nov at 11:00.',
-        lines: [A('Hi Priya, this is Anika from Apex Solar. Is now a good time for two quick questions?'), C('Yes, go ahead.'), A('Roughly what is your monthly electricity bill?'), C('Around 3,200.'), A('Thanks. Would Saturday at 11 or Monday at 5 work for a free site visit?'), C('Saturday is fine.')] },
-      { id: 'rahul', name: 'Rahul Menon', phone: '+91 99610 •• •48', agent: 'Apex Solar Advisor', outcome: 'Needs review', cls: 'pill o', len: '1:23', when: 'Yesterday, 10:52 pm',
-        flag: 'Agent repeated the same line 5 times', summary: 'Caller asked to schedule a meeting. No step matched, so the agent kept asking for more detail until the caller went silent.',
-        lines: [A('Got it. Tell me a bit more about what you need, or say goodbye if that’s all.'), C('I want to just…'), A('Got it. Tell me a bit more about what you need, or say goodbye if that’s all.'), C('I want to schedule the meeting.'), { who: 'Agent', text: 'Got it. Tell me a bit more about what you need, or say goodbye if that’s all.', bad: true, note: '5th repeat · “schedule” matched no step' }, C('(silence)'), { who: 'Agent', text: 'Sorry, I didn’t catch that. Go ahead, I’m listening.', bad: true, note: 'Repeated 3 times, then the call ended' }] },
-      { id: 'anjali', name: 'Anjali Das', phone: '+91 90370 •• •05', agent: 'Apex Solar Advisor', outcome: 'No answer', cls: 'pill', len: '—', when: 'Yesterday, 10:51 pm',
-        summary: 'No answer. Retry scheduled, then a WhatsApp follow-up.', lines: [] },
-      { id: 'vikram', name: 'Vikram Rao', phone: '+91 97440 •• •61', agent: 'Apex Solar Advisor', outcome: 'Not interested', cls: 'pill', len: '0:48', when: 'Mon, 10:50 pm',
-        summary: 'Said he is not interested right now. Removed from the campaign.', lines: [A('Hi Vikram, this is Anika from Apex Solar…'), C('Not interested, thanks.'), A('No problem. Have a good evening.')] }
+    const s = this.state;
+    const C = [
+      { id: 'priya', when: 'Today, 2:33 pm', name: 'Priya Nair', phone: '+91 98450 ••12', agent: 'Apex Solar Advisor', dir: 'Outbound', len: '2:56', outcome: 'Visit booked', q: 'goal', reply: '1.2 s', cost: '₹14.80', rec: true, from: '+91 80 •••• 4210', ended: 'Agent, after goodbye', mood: 'Positive',
+        summary: 'Priya owns her home and pays about ₹4,000 a month. Booked a free site visit for Sat 1 Nov, 11:00; WhatsApp confirmation sent.',
+        fields: [{ k: 'Monthly bill', v: '₹4,000' }, { k: 'Roof shading', v: 'None' }, { k: 'Owns home', v: 'Yes' }, { k: 'Visit', v: 'Sat 1 Nov, 11:00' }],
+        turns: [['Agent', '0:00', 'Hi Priya, this is Anika from Apex Solar. Is now a good time for two quick questions?'], ['Priya', '0:06', 'Yes, go ahead.'], ['Agent', '1.1 s', 'Roughly what is your monthly electricity bill?'], ['Priya', '0:14', 'Around four thousand.'], ['Agent', '1.2 s', 'Thanks. Would Saturday at 11 or Monday at 5 work for a free site visit?'], ['Priya', '0:31', 'Saturday 11 is fine.']] },
+      { id: 'rahul', when: 'Yesterday, 10:52 pm', name: 'Rahul Menon', phone: '+91 99610 ••48', agent: 'Apex Solar Advisor', dir: 'Outbound', len: '1:23', outcome: 'Needs review', q: 'review', reply: '5.4 s', slow: true, cost: '₹7.10', rec: true, from: '+91 80 •••• 4210', ended: 'Caller hung up', mood: 'Frustrated',
+        flag: 'The agent repeated the same line 5 times.',
+        summary: 'Rahul asked to schedule a meeting. No route matched “schedule”, so the agent kept asking for more detail until he hung up.',
+        fields: [{ k: 'Monthly bill', v: 'Not captured' }, { k: 'Visit', v: 'Not booked' }, { k: 'Next step', v: 'Person calls at 6 pm' }],
+        turns: [['Agent', '0:00', 'Hi Rahul, this is Anika from Apex Solar. Is now a good time?'], ['Rahul', '0:05', 'I want to schedule the meeting.'], ['Agent', '5.6 s', 'Got it. Tell me a bit more about what you need, or say goodbye if that’s all.', 'bad'], ['Rahul', '0:19', 'I want to schedule the meeting.'], ['Agent', '5.2 s', 'Got it. Tell me a bit more about what you need, or say goodbye if that’s all.', 'bad'], ['Rahul', '0:33', 'Can I talk to a person?']] },
+      { id: 'anjali', when: 'Yesterday, 6:10 pm', name: 'Anjali Das', phone: '+91 90370 ••05', agent: 'Apex Solar Advisor', dir: 'Outbound', len: '—', outcome: 'No answer', q: 'none', reply: '—', cost: '₹0.40', rec: false, from: '+91 80 •••• 4210', ended: 'No answer after 30 s', mood: '—',
+        summary: 'Rang for 30 seconds with no answer. Retry tomorrow at 11 am, then a WhatsApp message.', fields: [{ k: 'Next try', v: 'Tomorrow, 11:00' }], turns: [] },
+      { id: 'vikram', when: 'Fri, 4:02 pm', name: 'Vikram Rao', phone: '+91 97400 ••77', agent: 'Apex Solar Advisor', dir: 'Outbound', len: '0:48', outcome: 'Hung up', q: 'review', reply: '4.9 s', slow: true, cost: '₹3.20', rec: true, from: '+91 80 •••• 4210', ended: 'Caller hung up', mood: 'Neutral',
+        flag: 'Long pause before the greeting.',
+        summary: 'Vikram answered but heard 4 seconds of silence and hung up after 10 seconds of the greeting.', fields: [{ k: 'Next try', v: 'Mon, 5 pm' }],
+        turns: [['Agent', '4.1 s', 'Hi Vikram, this is Anika from Apex Solar…', 'bad'], ['Vikram', '0:09', 'Not now.']] },
+      { id: 'front', when: 'Fri, 11:20 am', name: 'Meenu Thomas', phone: '+91 94470 ••33', agent: 'Front Desk', dir: 'Inbound', len: '3:10', outcome: 'Answered', q: 'goal', reply: '1.0 s', cost: '₹9.60', rec: true, from: '+91 94470 ••33', ended: 'Caller, after goodbye', mood: 'Positive',
+        summary: 'Asked about the panel warranty. Answered from the warranty guide: 25 years on panels, 5 on the inverter.', fields: [{ k: 'Topic', v: 'Warranty' }, { k: 'Resolved', v: 'Yes' }],
+        turns: [['Meenu', '0:00', 'Hi, how long is the warranty on the panels?'], ['Agent', '1.0 s', 'Panels have a 25-year performance warranty and the inverter has 5 years.']] }
     ];
-    const calls = data.map((c) => ({ ...c, pressed: c.id === selId ? 'true' : 'false', rowStyle: c.id === selId ? 'background:#F3F6FF' : '', pick: () => this.setState({ sel: c.id }) }));
-    const raw = data.find((c) => c.id === selId) || data[0];
-    const sel = {
-      ...raw, hasFlag: !!raw.flag,
-      lines: raw.lines.map((l) => ({
-        ...l, hasNote: !!l.note,
-        wrap: 'display:flex;flex-direction:column;gap:4px;' + (l.who === 'Caller' ? 'align-items:flex-end' : 'align-items:flex-start'),
-        bubble: 'max-width:88%;padding:10px 12px;border-radius:12px;font-size:14px;' + (l.who === 'Caller' ? 'background:#2F55D4;color:#FFFFFF' : (l.bad ? 'background:#FDEEE6;color:#4A2410;border:1px solid #F3C9B3' : 'background:#F1EFEA;color:#15171E'))
-      }))
+    const quickDefs = [['all', 'All'], ['review', 'Needs review'], ['goal', 'Goal reached'], ['none', 'No answer']];
+    const quick = quickDefs.map(([id, label]) => ({ label, n: id === 'all' ? C.length : C.filter((c) => c.q === id).length, pressed: s.quick === id ? 'true' : 'false', pick: () => this.setState({ quick: id }) }));
+    const shown = C.filter((c) => s.quick === 'all' || c.q === s.quick);
+    const pillOf = (o) => o === 'Visit booked' || o === 'Answered' ? 'pill g' : (o === 'Needs review' ? 'pill o' : 'pill');
+    const rows = shown.map((c) => ({ ...c, pill: pillOf(c.outcome), cls: s.sel === c.id ? 'sel' : '', repStyle: c.slow ? 'color:var(--warn-ink);font-weight:600' : '', open: () => this.setState({ sel: c.id }) }));
+    const cur = C.find((c) => c.id === s.sel);
+    const sel = cur ? { ...cur, pill: pillOf(cur.outcome), flag: cur.flag || '',
+      turns: cur.turns.map(([who, meta, text, bad]) => ({ who, meta, text, cls: 'turn' + (who === 'Agent' ? '' : ' u') + (bad ? ' bad' : '') })) } : null;
+    const wave = CX.sig(cur ? cur.name : 'x', 48).map((v, i) => ({ style: 'height:' + Math.round(4 + v * 22) + 'px', cls: i < 10 ? 'on' : '' }));
+    const ranges = [['today', 'Today'], ['7d', '7 days'], ['30d', '30 days']].map(([id, label]) => ({ label, pressed: s.range === id ? 'true' : 'false', pick: () => this.setState({ range: id }) }));
+    const dtabs = [['transcript', 'Transcript'], ['details', 'Details']].map(([id, label]) => ({ label, sel: s.dtab === id ? 'true' : 'false', pick: () => this.setState({ dtab: id }) }));
+    return {
+      ranges, quick, rows, sel, wave, dtabs, showTranscript: s.dtab === 'transcript', showDetails: s.dtab === 'details',
+      countText: shown.length + (shown.length === 1 ? ' call' : ' calls'),
+      filter: s.filter, filterOpen: s.filter ? 'true' : 'false', toggleFilter: () => this.setState({ filter: !s.filter }),
+      close: () => this.setState({ sel: null })
     };
-    return { calls, sel };
   }
 }
 </script>

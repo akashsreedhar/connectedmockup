@@ -8,74 +8,182 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0}
+.sb{position:sticky;top:0;box-sizing:border-box;width:100%;height:100vh;display:flex;flex-direction:column;gap:10px;padding:14px 10px 10px 12px;overflow-y:auto;color:var(--ink);font-size:13.5px;scrollbar-width:thin;scrollbar-color:transparent transparent}
+.sb:hover{scrollbar-color:#C9CFCB transparent}
+.sb>*{flex-shrink:0}
+.sb-logo{display:flex;align-items:center;gap:9px;padding:2px 6px 4px;text-decoration:none;color:var(--ink)}
+.sb-mark{width:26px;height:26px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center;gap:1.5px;flex:none}
+.sb-mark i{display:block;width:2px;border-radius:1px;background:#FFFFFF}
+.sb-name{font-weight:600;font-size:16px;letter-spacing:-.2px}
+.sb-ws{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:var(--sheet);text-decoration:none;color:var(--ink);box-shadow:0 1px 0 rgba(25,28,34,.03)}
+.sb-ws:hover{border-color:#C9CFCB;color:var(--ink)}
+.sb-ws .lg{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;background:#F6B23C;color:#3A2504;font-weight:600;font-size:12.5px}
+.sb-ws .k{font-size:11.5px;color:var(--mut);display:block}
+.sb-ws .v{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-ask{display:flex;align-items:center;gap:8px;min-height:34px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.6);font:400 13px var(--font);color:var(--mut);cursor:pointer;text-align:left}
+.sb-ask:hover{background:var(--sheet)}
+.sb-nav{display:flex;flex-direction:column;gap:1px}
+.sb-grp{font-size:12px;font-weight:500;color:var(--faint);padding:12px 8px 3px}
+.sb-a{display:flex;align-items:center;gap:9px;min-height:32px;padding:0 8px;border-radius:7px;text-decoration:none;color:var(--ink2);font-size:13.5px}
+.sb-a:hover{background:rgba(255,255,255,.7);color:var(--ink)}
+.sb-a[aria-current="page"]{background:var(--sheet);color:var(--ink);font-weight:500;box-shadow:0 1px 2px rgba(25,28,34,.08)}
+.sb-a[aria-current="page"] svg{color:var(--blue)}
+.sb-a svg{color:var(--mut);flex:none}
+.sb-a .bdg{margin-left:auto;font-size:11.5px;font-weight:600;min-width:18px;text-align:center;padding:0 5px;border-radius:999px;background:var(--blue);color:#FFFFFF}
+.sb-a .live{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:var(--teal-ink)}
+.sb-a .live i{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--teal-t)}
+.sb-box{border-radius:12px;border:1px solid var(--line);background:var(--sheet);overflow:hidden}
+.sb-gs-h{display:flex;align-items:center;gap:8px;width:100%;min-height:40px;padding:0 12px;border:0;background:transparent;font:500 13.5px var(--font);color:var(--ink);cursor:pointer;text-align:left}
+.sb-ring{width:18px;height:18px;flex:none}
+.sb-gs-l{display:flex;flex-direction:column;padding:0 6px 6px}
+.sb-gs-l a{display:flex;align-items:flex-start;gap:8px;padding:6px;border-radius:7px;text-decoration:none;color:var(--ink2);font-size:13px;line-height:1.35}
+.sb-gs-l a:hover{background:var(--fill)}
+.sb-gs-l a.done{color:var(--faint);text-decoration:line-through}
+.sb-gs-l svg{flex:none;margin-top:1px}
+.sb-plan{padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.sb-plan .r{display:flex;justify-content:space-between;color:var(--mut)}
+.sb-plan .r b{color:var(--ink);font-weight:500}
+.sb-user{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:10px;text-decoration:none;color:var(--ink)}
+.sb-user:hover{background:rgba(255,255,255,.7)}
+.sb-foot{display:flex;gap:4px;padding:0 2px}
+.sb-foot a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:30px;border-radius:7px;font-size:12.5px;color:var(--mut);text-decoration:none}
+.sb-foot a:hover{background:rgba(255,255,255,.7);color:var(--ink)}
+@media (max-width:760px){
+  .sb{position:static;height:auto;padding:10px 10px 0;gap:8px}
+  .sb-nav{flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:4px}
+  .sb-grp,.sb-hide{display:none}
+  .sb-a{flex:none;white-space:nowrap}
+}
 </style>
 </helmet>
-<nav aria-label="Main" style="box-sizing: border-box; width: 100%; min-height: 100%; display: flex; flex-direction: column; gap: 18px; padding: 20px 14px; font-family: Inter, system-ui, sans-serif; color: #15171E; font-size: 14px">
-  <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px">
-    <div style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center">
-      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg>
-    </div>
-    <span style="font-weight: 700; font-size: 17px; letter-spacing: -0.2px">Connekted</span>
-  </div>
-  <a href="Login.dc.html#pick" aria-label="Switch workspace" style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #E4E2DC; background: #FFFFFF; font: 600 13.5px Inter, system-ui, sans-serif; color: #15171E; text-decoration: none">
-    <span>Apex Solar</span>
-    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg>
+<nav class="sb" aria-label="Main">
+  <a class="sb-logo" href="Main.dc.html" aria-label="Connekted home">
+    <span class="sb-mark" aria-hidden="true"><i style="height:6px"></i><i style="height:12px"></i><i style="height:16px"></i><i style="height:10px"></i><i style="height:5px"></i></span>
+    <span class="sb-name">Connekted</span>
   </a>
-  <button type="button" onClick="{{ ask }}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #E4E2DC; background: #F6F5F2; font: 500 13.5px Inter, system-ui, sans-serif; color: #5B6070; cursor: pointer">
-    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-    <span style="flex: 1; text-align: left">Search or ask</span>
-    <span style="font-size: 12px; padding: 1px 6px; border-radius: 6px; border: 1px solid #D6D3CC">Ctrl K</span>
+
+  <a class="sb-ws" href="Login.dc.html#pick" aria-label="Switch workspace, current: Apex Solar">
+    <span class="lg" aria-hidden="true">AS</span>
+    <span style="flex:1;min-width:0"><span class="k">Workspace</span><span class="v">Apex Solar</span></span>
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--mut)"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>
+  </a>
+
+  <button type="button" class="sb-ask sb-hide" onClick="{{ ask }}">
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+    <span style="flex:1">Search or ask</span>
+    <span class="kbd">Ctrl K</span>
   </button>
-  <div style="display: flex; flex-direction: column; gap: 2px">
-    <sc-for list="{{ items }}" as="item" hint-placeholder-count="10">
-      <a href="{{ item.href }}" style="{{ item.style }}">
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ item.d }}"></path></svg>
-        <span style="flex: 1">{{ item.label }}</span>
-        <sc-if value="{{ item.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 600; padding: 0 7px; border-radius: 999px; background: #2F55D4; color: #FFFFFF">{{ item.badge }}</span></sc-if>
-      </a>
+
+  <div class="sb-nav">
+    <sc-for list="{{ groups }}" as="g">
+      <sc-if value="{{ g.label }}"><div class="sb-grp">{{ g.label }}</div></sc-if>
+      <sc-for list="{{ g.items }}" as="item">
+        <a class="sb-a" href="{{ item.href }}" aria-current="{{ item.current }}">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ item.d }}"></path></svg>
+          <span>{{ item.label }}</span>
+          <sc-if value="{{ item.badge }}"><span class="bdg" aria-label="{{ item.badgeLabel }}">{{ item.badge }}</span></sc-if>
+          <sc-if value="{{ item.live }}"><span class="live"><i></i>{{ item.live }}</span></sc-if>
+        </a>
+      </sc-for>
     </sc-for>
   </div>
-  <a href="LiveCall.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border-radius: 9px; background: #E3F4E8; color: #14672F; font-weight: 600; font-size: 13.5px; text-decoration: none">
-    <span style="width: 8px; height: 8px; border-radius: 50%; background: #15803D"></span>
-    <span style="flex: 1">2 calls live now</span>
-    <span>Listen</span>
+
+  <div style="flex:1" class="sb-hide"></div>
+
+  <div class="sb-box sb-hide">
+    <button type="button" class="sb-gs-h" onClick="{{ toggleGs }}" aria-expanded="{{ gsOpen }}">
+      <svg class="sb-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#E2E5E3" stroke-width="3"></circle><circle cx="10" cy="10" r="8" fill="none" stroke="#2B4ACB" stroke-width="3" stroke-dasharray="{{ ring }}" transform="rotate(-90 10 10)" stroke-linecap="round"></circle></svg>
+      <span style="flex:1">Getting started</span>
+      <span class="muted" style="font-weight:400;font-size:12.5px">{{ doneCount }}/{{ total }}</span>
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--mut)"><path d="{{ chev }}"></path></svg>
+    </button>
+    <sc-if value="{{ gsOpenBool }}">
+      <div class="sb-gs-l">
+        <sc-for list="{{ steps }}" as="s">
+          <a href="{{ s.href }}" class="{{ s.cls }}">
+            <sc-if value="{{ s.done }}"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></sc-if>
+            <sc-if value="{{ s.todo }}"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A909C" stroke-width="2" stroke-dasharray="3 3"><circle cx="12" cy="12" r="9"></circle></svg></sc-if>
+            <span>{{ s.label }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <a class="sb-box sb-plan sb-hide" href="Settings.dc.html#billing" style="text-decoration:none;color:inherit">
+    <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--ink)">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      Starter trial
+    </span>
+    <span class="r"><span>Credit left</span><b>₹840</b></span>
+    <span class="r"><span>Calls at once</span><b>2 of 10</b></span>
   </a>
-  <div style="flex: 1"></div>
-  <a href="Main.dc.html" style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 10px; background: #F6F5F2; text-decoration: none; color: #15171E">
-    <span style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600"><span>Getting started</span><span style="color: #2F55D4">4 of 5</span></span>
-    <span style="display: block; height: 6px; border-radius: 3px; background: #E4E2DC"><span style="display: block; width: 80%; height: 6px; border-radius: 3px; background: #2F55D4"></span></span>
+
+  <a class="sb-user sb-hide" href="Settings.dc.html#general">
+    <span class="av" style="width:28px;height:28px;background:#DCE7E1;color:#0A6550">MI</span>
+    <span style="flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Meera Iyer</span>
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--mut)"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>
   </a>
-  <a href="Settings.dc.html" style="{{ settingsStyle }}">
-    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>
-    <span>Settings</span>
-  </a>
+  <div class="sb-foot sb-hide">
+    <a href="#"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"></path></svg>Help</a>
+    <a href="#"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4h3l6 4V6l-6 4zM17 9a4 4 0 0 1 0 6"></path></svg>What's new</a>
+  </div>
 </nav>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["home","inbox","agents","campaigns","automations","contacts","companies","deals","calls","reports","settings"],"default":"home"},"$preview":{"width":232,"height":1060}}'>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["home","agents","knowledge","automations","numbers","campaigns","inbox","contacts","companies","deals","calls","live","reports","integrations","billing","settings"],"default":"home"},"$preview":{"width":248,"height":1060}}'>
 class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { gs: !!props.checklist };
+  }
   renderVals() {
     const active = this.props.active ?? 'home';
-    const base = 'display:flex;align-items:center;gap:10px;min-height:40px;padding:0 12px;border-radius:9px;text-decoration:none;font-size:14px;';
-    const on = base + 'background:#E8EDFF;color:#1E3A8A;font-weight:600';
-    const off = base + 'color:#3A3D46;font-weight:500';
-    const list = [
-      { key: 'home', label: 'Home', href: 'Main.dc.html', d: 'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z' },
-      { key: 'inbox', label: 'Inbox', href: 'Inbox.dc.html', d: 'M3 13h5l1.5 3h5L16 13h5M5.5 5h13L21 13v6H3v-6z', badge: '2' },
-      { key: 'agents', label: 'Agents', href: 'Agents.dc.html', d: 'M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3' },
-      { key: 'campaigns', label: 'Campaigns', href: 'Campaigns.dc.html', d: 'M4 10v4h3l6 4V6l-6 4zM17 9a4 4 0 0 1 0 6' },
-      { key: 'automations', label: 'Automations', href: 'Automations.dc.html', d: 'M13 2 4 14h7l-1 8 9-12h-7z' },
-      { key: 'contacts', label: 'Contacts', href: 'Contacts.dc.html', d: 'M16 20v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 20v-1a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8' },
-      { key: 'companies', label: 'Companies', href: 'Companies.dc.html', d: 'M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M2 21h20M8 7h4M8 11h4M8 15h4' },
-      { key: 'deals', label: 'Deals', href: 'Deals.dc.html', d: 'M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' },
-      { key: 'calls', label: 'Calls', href: 'Calls.dc.html', d: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z' },
-      { key: 'reports', label: 'Reports', href: 'Reports.dc.html', d: 'M4 20V11M10 20V4M16 20v-7M2 20h20' }
+    const I = {
+      home: 'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z',
+      agents: 'M8 8h8a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3zM12 4v4M9.5 13v1M14.5 13v1M2 13v2M22 13v2',
+      knowledge: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21a2 2 0 0 1 2-2h13v2H6',
+      automations: 'M13 2 4 14h7l-1 8 9-12h-7z',
+      numbers: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z',
+      campaigns: 'M4 10v4h3l6 4V6l-6 4zM17 9a4 4 0 0 1 0 6M19.5 6.5a8 8 0 0 1 0 11',
+      inbox: 'M3 13h5l1.5 3h5L16 13h5M5.5 5h13L21 13v6H3v-6z',
+      contacts: 'M16 20v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 20v-1a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',
+      companies: 'M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M2 21h20M8 7h4M8 11h4M8 15h4',
+      deals: 'M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18',
+      calls: 'M12 8v4l3 2M3.5 12a8.5 8.5 0 1 0 2.5-6M3 4v4h4',
+      live: 'M2 12h3l2-6 4 12 3-9 2 3h6',
+      reports: 'M4 20V11M10 20V4M16 20v-7M2 20h20',
+      integrations: 'M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0zM12 16v5',
+      billing: 'M3 6h18v12H3zM3 10h18M7 15h4',
+      settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z'
+    };
+    const it = (key, label, href, extra) => Object.assign({ key, label, href, d: I[key], current: key === active ? 'page' : false }, extra || {});
+    const groups = [
+      { label: '', items: [it('home', 'Home', 'Main.dc.html')] },
+      { label: 'Build', items: [it('agents', 'Agents', 'Agents.dc.html'), it('knowledge', 'Knowledge base', 'KnowledgeBase.dc.html'), it('automations', 'Automations', 'Automations.dc.html')] },
+      { label: 'Deploy', items: [it('numbers', 'Phone numbers', 'Numbers.dc.html'), it('campaigns', 'Campaigns', 'Campaigns.dc.html')] },
+      { label: 'Engage', items: [it('inbox', 'Inbox', 'Inbox.dc.html', { badge: '2', badgeLabel: '2 need a reply' }), it('contacts', 'Contacts', 'Contacts.dc.html'), it('companies', 'Companies', 'Companies.dc.html'), it('deals', 'Deals', 'Deals.dc.html')] },
+      { label: 'Monitor', items: [it('calls', 'Call history', 'Calls.dc.html'), it('live', 'Live calls', 'LiveCall.dc.html', { live: '2' }), it('reports', 'Analytics', 'Reports.dc.html')] },
+      { label: 'System', items: [it('integrations', 'Integrations', 'Settings.dc.html#integrations'), it('billing', 'Billing', 'Settings.dc.html#billing'), it('settings', 'Settings', 'Settings.dc.html')] }
     ];
+    const steps = [
+      { label: 'Build your first agent', href: 'Agent.dc.html', done: true },
+      { label: 'Talk to it in the browser', href: 'Agent.dc.html', done: true },
+      { label: 'Review the transcript', href: 'Calls.dc.html', done: true },
+      { label: 'Connect a phone number', href: 'Numbers.dc.html', done: true },
+      { label: 'Make your first real call', href: 'Agent.dc.html', done: false },
+      { label: 'Connect WhatsApp', href: 'Settings.dc.html#whatsapp', done: false },
+      { label: 'Invite a teammate', href: 'Settings.dc.html#team', done: false }
+    ].map((s) => ({ ...s, todo: !s.done, cls: s.done ? 'done' : '' }));
+    const doneCount = steps.filter((s) => s.done).length;
+    const C = 2 * Math.PI * 8;
+    const open = this.state.gs;
     return {
-      items: list.map((i) => ({ ...i, style: i.key === active ? on : off, hasBadge: !!i.badge })),
-      settingsStyle: active === 'settings' ? on : off,
+      groups, steps, doneCount, total: steps.length,
+      ring: (C * doneCount / steps.length).toFixed(1) + ' ' + C.toFixed(1),
+      gsOpen: open ? 'true' : 'false', gsOpenBool: open,
+      chev: open ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6',
+      toggleGs: () => this.setState({ gs: !open }),
       ask: () => window.dispatchEvent(new CustomEvent('cx-assistant'))
     };
   }

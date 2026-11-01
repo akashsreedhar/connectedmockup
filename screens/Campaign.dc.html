@@ -8,35 +8,22 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
-a{color:#2F55D4}a:hover{color:#1E3A8A}
-h1,h2,h3,p{margin:0}
-.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn:hover{background:#2446B8;color:#FFFFFF}
-.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn2:hover{background:#F1EFEA;color:#15171E}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
-.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
-.muted{color:#5B6070}
-.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
-.field{width:100%;box-sizing:border-box;min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid #D6D3CC;background:#FFFFFF;font:400 14px Inter,system-ui,sans-serif;color:#15171E}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #EFEDE8}
+.field{width:100%;box-sizing:border-box;min-height:36px;padding:10px 12px;border-radius:10px;border:1px solid #E2E5E3;background:#FFFFFF;font:400 14px var(--font);color:#191C22}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #EEF0EE}
 </style>
 </helmet>
-<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
-  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
-    <dc-import name="Sidebar" active="campaigns" hint-size="232px,1060px"></dc-import>
+<div class="shell">
+  <div class="side">
+    <dc-import name="Sidebar" active="campaigns"></dc-import>
   </div>
-  <main style="flex: 999 1 560px; min-width: 0; padding: 24px 36px 56px; box-sizing: border-box">
-    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+  <main class="main">
+    <div style="display: flex; flex-direction: column; gap: 20px">
 
       <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
         <div style="display: flex; flex-direction: column; gap: 2px">
           <span class="muted" style="font-size: 13px">Campaigns / New</span>
-          <h1 style="font-size: 24px; font-weight: 700; letter-spacing: -0.3px">Solar leads · October</h1>
+          <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.3px">Solar leads · October</h1>
         </div>
         <ol aria-label="Campaign steps" style="display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0">
           <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
@@ -51,10 +38,10 @@ h1,h2,h3,p{margin:0}
           <sc-if value="{{ s1 }}" hint-placeholder-val="{{ true }}">
             <div style="display: flex; flex-direction: column; gap: 20px">
               <section class="card" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
-                <span style="width: 44px; height: 44px; border-radius: 12px; background: #2F55D4; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700">AS</span>
+                <span style="width: 44px; height: 44px; border-radius: 12px; background: #2B4ACB; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 600">AS</span>
                 <div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 2px">
                   <span class="lab">Agent making the calls</span>
-                  <span style="font-weight: 700; font-size: 16px">Apex Solar Advisor</span>
+                  <span style="font-weight: 600; font-size: 16px">Apex Solar Advisor</span>
                   <span class="muted" style="font-size: 13px">Anika · calls from +91 80 •••• 4210 · goal: book a site visit</span>
                 </div>
                 <a class="btn2" href="Agents.dc.html" style="min-height: 40px">Change</a>
@@ -62,24 +49,24 @@ h1,h2,h3,p{margin:0}
 
               <section class="card" style="display: flex; flex-direction: column; gap: 4px">
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap">
-                  <h2 style="font-size: 17px; font-weight: 700">Sequence</h2>
+                  <h2 style="font-size: 17px; font-weight: 600">Sequence</h2>
                   <span class="muted" style="font-size: 13px">Stops for anyone who books, says no, or opts out</span>
                 </div>
                 <sc-for list="{{ seq }}" as="q" hint-placeholder-count="5">
                   <div style="display: flex; flex-direction: column">
                     <sc-if value="{{ q.hasCond }}" hint-placeholder-val="{{ false }}">
                       <div style="display: flex; align-items: center; gap: 10px; padding: 4px 0 4px 20px">
-                        <span style="width: 2px; height: 26px; background: #CCD7FA"></span>
-                        <span style="font-size: 12.5px; font-weight: 600; color: #1E3A8A; background: #F3F6FF; border: 1px solid #CCD7FA; padding: 2px 10px; border-radius: 999px">{{ q.cond }}</span>
+                        <span style="width: 2px; height: 26px; background: #C9D3F6"></span>
+                        <span style="font-size: 12.5px; font-weight: 600; color: #1D338C; background: #F4F6FE; border: 1px solid #C9D3F6; padding: 2px 10px; border-radius: 999px">{{ q.cond }}</span>
                       </div>
                     </sc-if>
                     <div style="{{ q.box }}">
                       <span style="{{ q.icon }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg></span>
                       <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
-                        <span style="font-weight: 700">{{ q.title }}</span>
+                        <span style="font-weight: 600">{{ q.title }}</span>
                         <span class="muted" style="font-size: 13px">{{ q.detail }}</span>
                       </div>
-                      <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E4E2DC; background: #FFFFFF; font: 600 13px Inter, system-ui, sans-serif; cursor: pointer">Edit</button>
+                      <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E2E5E3; background: #FFFFFF; font: 600 13px var(--font); cursor: pointer">Edit</button>
                     </div>
                   </div>
                 </sc-for>
@@ -97,7 +84,7 @@ h1,h2,h3,p{margin:0}
 
           <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
             <section class="card" style="display: flex; flex-direction: column; gap: 14px">
-              <h2 style="font-size: 17px; font-weight: 700">Who should the agent call?</h2>
+              <h2 style="font-size: 17px; font-weight: 600">Who should the agent call?</h2>
               <div style="display: flex; flex-wrap: wrap; gap: 8px">
                 <span class="pill b">Segment: Solar enquiries, last 30 days</span><span class="pill">+ Add condition</span>
               </div>
@@ -111,7 +98,7 @@ h1,h2,h3,p{margin:0}
 
           <sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}">
             <section class="card" style="display: flex; flex-direction: column; gap: 4px">
-              <h2 style="font-size: 17px; font-weight: 700; margin-bottom: 8px">When and how fast</h2>
+              <h2 style="font-size: 17px; font-weight: 600; margin-bottom: 8px">When and how fast</h2>
               <sc-for list="{{ opts }}" as="o" hint-placeholder-count="5">
                 <div class="row">
                   <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{ o.name }}</span><span class="muted" style="font-size: 13px">{{ o.help }}</span></div>
@@ -123,7 +110,7 @@ h1,h2,h3,p{margin:0}
 
           <sc-if value="{{ s4 }}" hint-placeholder-val="{{ false }}">
             <section class="card" style="display: flex; flex-direction: column; gap: 14px">
-              <h2 style="font-size: 17px; font-weight: 700">Ready to launch</h2>
+              <h2 style="font-size: 17px; font-weight: 600">Ready to launch</h2>
               <div class="row"><span class="muted">Agent</span><b>Apex Solar Advisor</b></div>
               <div class="row"><span class="muted">People</span><b>38</b></div>
               <div class="row"><span class="muted">Steps</span><b>AI call → retry → WhatsApp → email</b></div>
@@ -142,7 +129,7 @@ h1,h2,h3,p{margin:0}
         <aside style="flex: 2 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
           <section class="card" style="display: flex; flex-direction: column; gap: 12px">
             <span class="lab">Summary</span>
-            <div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 32px; font-weight: 700">38</span><span class="muted">people will be called</span></div>
+            <div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 32px; font-weight: 600">38</span><span class="muted">people will be called</span></div>
             <div style="display: flex; flex-direction: column; gap: 8px">
               <div style="display: flex; justify-content: space-between"><span class="muted">Calls per day</span><b>up to 60</b></div>
               <div style="display: flex; justify-content: space-between"><span class="muted">Calling hours</span><b>10 am to 7 pm IST</b></div>
@@ -151,10 +138,10 @@ h1,h2,h3,p{margin:0}
           </section>
           <section class="card" style="display: flex; flex-direction: column; gap: 10px">
             <span class="lab">Always on</span>
-            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Skips numbers on the DND registry</span></div>
-            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Never calls outside calling hours</span></div>
-            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Stops for anyone who asks not to be called</span></div>
-            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Results saved on each contact</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Skips numbers on the DND registry</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Never calls outside calling hours</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Stops for anyone who asks not to be called</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span>Results saved on each contact</span></div>
           </section>
         </aside>
       </div>
@@ -174,8 +161,8 @@ class Component extends DCLogic {
       const n = i + 1, cur = n === step, done = n < step;
       return {
         label, n: done ? '✓' : String(n), cur: cur ? 'step' : 'false',
-        style: 'display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px 0 6px;border-radius:999px;border:0;cursor:pointer;font:600 13.5px Inter,system-ui,sans-serif;' + (cur ? 'background:#E8EDFF;color:#1E3A8A' : 'background:transparent;color:#3A3D46'),
-        dot: 'width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;' + (cur || done ? 'background:#2F55D4;color:#FFFFFF' : 'background:#EFEDE8;color:#3A3D46'),
+        style: 'display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px 0 6px;border-radius:999px;border:0;cursor:pointer;font:600 13.5px var(--font);' + (cur ? 'background:#EAEEFC;color:#1D338C' : 'background:transparent;color:#3B404B'),
+        dot: 'width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;' + (cur || done ? 'background:#2B4ACB;color:#FFFFFF' : 'background:#EEF0EE;color:#3B404B'),
         pick: () => this.setState({ step: n })
       };
     });
@@ -187,8 +174,8 @@ class Component extends DCLogic {
       { title: 'Email next morning', detail: 'Template: “Your rooftop solar estimate”', d: 'M3 6h18v12H3zM3 7l9 6 9-6', cond: 'If no reply' }
     ].map((q) => ({
       ...q, hasCond: !!q.cond,
-      box: 'display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;' + (q.ai ? 'background:#F3F6FF;border:1px solid #CCD7FA' : 'background:#FFFFFF;border:1px solid #E4E2DC'),
-      icon: 'width:40px;height:40px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;' + (q.ai ? 'background:#2F55D4;color:#FFFFFF' : 'background:#F1EFEA;color:#3A3D46')
+      box: 'display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;' + (q.ai ? 'background:#F4F6FE;border:1px solid #C9D3F6' : 'background:#FFFFFF;border:1px solid #E2E5E3'),
+      icon: 'width:40px;height:40px;flex:none;border-radius:10px;display:flex;align-items:center;justify-content:center;' + (q.ai ? 'background:#2B4ACB;color:#FFFFFF' : 'background:#F5F6F4;color:#3B404B')
     }));
     const opts = [
       { name: 'Start', help: 'First calls go out in the next calling window', val: 'Now' },

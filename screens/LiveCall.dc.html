@@ -8,33 +8,33 @@
 <x-dc>
 <helmet>
 <style>
-.dark{background:#11131A;color:#F3F1EC;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.dark{background:#191C22;color:#F3F4F2;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
 .dark .muted{color:#A9ADBA}
 .dark .lab{color:#A9ADBA}
 .line-a,.line-c{display:flex;flex-direction:column;gap:4px;max-width:82%}
 .line-c{align-self:flex-end;align-items:flex-end}
 .bb{padding:10px 14px;border-radius:14px;font-size:14.5px;line-height:1.5}
-.line-a .bb{background:#262A36;border-top-left-radius:4px}
-.line-c .bb{background:#2F55D4;color:#FFFFFF;border-top-right-radius:4px}
-.line-y .bb{background:#14672F;color:#FFFFFF}
+.line-a .bb{background:#2C313B;border-top-left-radius:4px}
+.line-c .bb{background:#2B4ACB;color:#FFFFFF;border-top-right-radius:4px}
+.line-y .bb{background:#0A6550;color:#FFFFFF}
 .who{font-size:12px;color:#A9ADBA;display:flex;gap:8px;align-items:center}
-.lat{font-size:11.5px;padding:1px 7px;border-radius:999px;background:#262A36;color:#C9CCD6}
+.lat{font-size:11.5px;padding:1px 7px;border-radius:999px;background:#2C313B;color:#C9CCD6}
 .wave{display:flex;align-items:center;gap:3px;height:22px}
 .wave i{display:block;width:3px;border-radius:2px;background:#7C96E8;animation:w 1s ease-in-out infinite}
 .wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.4s}
 @keyframes w{0%,100%{height:5px}50%{height:20px}}
 @media (prefers-reduced-motion:reduce){.wave i{animation:none;height:10px}}
-.ctl{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:96px;min-height:64px;padding:8px 12px;border-radius:12px;border:1px solid #3A3F4E;background:#1B1E28;color:#F3F1EC;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
-.ctl:hover{background:#262A36}
-.ctl[aria-pressed="true"]{background:#2F55D4;border-color:#2F55D4}
+.ctl{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:96px;min-height:64px;padding:8px 12px;border-radius:12px;border:1px solid #3A3F4E;background:#1B1E28;color:#F3F4F2;font:600 13px var(--font);cursor:pointer}
+.ctl:hover{background:#2C313B}
+.ctl[aria-pressed="true"]{background:#2B4ACB;border-color:#2B4ACB}
 .ctl.end{background:#B42318;border-color:#B42318}
 .ctl.end:hover{background:#912018}
-.fld{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #EFEDE8}
+.fld{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #EEF0EE}
 .fld:last-child{border-bottom:0}
 </style>
 </helmet>
 <div class="shell">
-  <div class="side"><dc-import name="Sidebar" active="calls"></dc-import></div>
+  <div class="side"><dc-import name="Sidebar" active="live"></dc-import></div>
   <main class="main">
     <div class="wrap wide">
       <nav class="crumb" aria-label="Breadcrumb"><a href="Calls.dc.html">Calls</a> <span class="muted">/ Live now</span></nav>
@@ -43,15 +43,15 @@
         <section class="dark" style="flex: 3 1 520px; min-width: 0">
           <div class="between">
             <div style="display: flex; gap: 14px; align-items: center">
-              <span class="av lg" style="background: #262A36; color: #F3F1EC">DK</span>
+              <span class="av lg" style="background: #2C313B; color: #F3F4F2">DK</span>
               <div style="display: flex; flex-direction: column; gap: 2px">
-                <span style="font-size: 18px; font-weight: 700">Deepa Krishnan</span>
+                <span style="font-size: 18px; font-weight: 600">Deepa Krishnan</span>
                 <span class="small muted">+91 94470 •• •33 · Campaign: Website leads, call in 5 min</span>
               </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center">
               <span class="{{ statusCls }}">{{ statusText }}</span>
-              <span style="font-variant-numeric: tabular-nums; font-weight: 700; font-size: 18px" aria-label="Call length">{{ clock }}</span>
+              <span style="font-variant-numeric: tabular-nums; font-weight: 600; font-size: 18px" aria-label="Call length">{{ clock }}</span>
             </div>
           </div>
 
@@ -63,7 +63,7 @@
           <div role="log" aria-live="polite" aria-label="Live transcript" style="display: flex; flex-direction: column; gap: 12px; min-height: 320px">
             <sc-for list="{{ lines }}" as="l">
               <div class="{{ l.cls }}">
-                <span class="who">{{ l.who }}<sc-if value="{{ l.lat }}"><span class="lat">{{ l.lat }}</span></sc-if><sc-if value="{{ l.intent }}"><span class="lat" style="background: #1E3A8A; color: #E8EDFF">Intent: {{ l.intent }}</span></sc-if></span>
+                <span class="who">{{ l.who }}<sc-if value="{{ l.lat }}"><span class="lat">{{ l.lat }}</span></sc-if><sc-if value="{{ l.intent }}"><span class="lat" style="background: #1D338C; color: #EAEEFC">Intent: {{ l.intent }}</span></sc-if></span>
                 <span class="bb">{{ l.text }}</span>
               </div>
             </sc-for>
@@ -72,7 +72,7 @@
 
           <sc-if value="{{ whisperOpen }}">
             <div style="display: flex; gap: 8px; flex-wrap: wrap">
-              <input class="input" style="flex: 1 1 260px; background: #1B1E28; border-color: #3A3F4E; color: #F3F1EC" placeholder="Tell the agent something the caller can’t hear, e.g. offer Saturday" aria-label="Whisper to the agent">
+              <input class="input" style="flex: 1 1 260px; background: #1B1E28; border-color: #3A3F4E; color: #F3F4F2" placeholder="Tell the agent something the caller can’t hear, e.g. offer Saturday" aria-label="Whisper to the agent">
               <button type="button" class="btn sm" onClick="{{ closeWhisper }}">Send to agent</button>
             </div>
           </sc-if>
@@ -156,7 +156,7 @@ class Component extends DCLogic {
     const lines = shownLines.map((l) => ({ ...l, lat: l.lat || '', intent: l.intent || '', cls: l.who === 'Caller' ? 'line-c' : 'line-a' }));
     if (s.took) lines.push({ who: 'You (took over)', text: 'Hi Deepa, I’m Meera from Apex Solar, I’ll take it from here.', cls: 'line-a line-y', lat: '', intent: '' });
     const F = [['own', 'Owns the home'], ['bill', 'Monthly bill'], ['roof', 'Roof type'], ['shade', 'Shading'], ['visit', 'Site visit']];
-    const fields = F.map(([k, label]) => ({ k: label, v: got[k] || 'Listening…', style: got[k] ? 'font-weight:600' : 'color:#9AA0AE' }));
+    const fields = F.map(([k, label]) => ({ k: label, v: got[k] || 'Listening…', style: got[k] ? 'font-weight:600' : 'color:#8A909C' }));
     const mm = String(Math.floor(s.secs / 60)), ss = String(s.secs % 60).padStart(2, '0');
     const last = shownLines[shownLines.length - 1];
     const talking = !s.ended && !!last;

@@ -8,16 +8,16 @@
 <x-dc>
 <helmet>
 <style>
-.auto{display:flex;flex-direction:column;gap:4px;width:100%;padding:14px 16px;border:0;border-bottom:1px solid #EFEDE8;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.auto{display:flex;flex-direction:column;gap:4px;width:100%;padding:14px 16px;border:0;border-bottom:1px solid #EEF0EE;background:#FFFFFF;text-align:left;cursor:pointer;font:inherit;color:inherit}
 .auto:hover{background:#FAF9F6}
-.auto[aria-pressed="true"]{background:#F3F6FF;box-shadow:inset 3px 0 0 #2F55D4}
-.node{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;border:1px solid #E4E2DC;background:#FFFFFF}
+.auto[aria-pressed="true"]{background:#F4F6FE;box-shadow:inset 3px 0 0 #2B4ACB}
+.node{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;border:1px solid #E2E5E3;background:#FFFFFF}
 .node .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
-.link{width:2px;height:22px;background:#D6D3CC;margin-left:33px}
-.kind{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding:12px;border:1px dashed #CCD7FA;border-radius:12px;background:#F3F6FF}
-.pick button{min-height:44px;border-radius:9px;border:1px solid #E4E2DC;background:#FFFFFF;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;color:#15171E}
-.pick button:hover{border-color:#2F55D4}
+.link{width:2px;height:22px;background:#E2E5E3;margin-left:33px}
+.kind{font-size:11.5px;font-weight:600}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding:12px;border:1px dashed #C9D3F6;border-radius:12px;background:#F4F6FE}
+.pick button{min-height:36px;border-radius:9px;border:1px solid #E2E5E3;background:#FFFFFF;font:600 13px var(--font);cursor:pointer;color:#191C22}
+.pick button:hover{border-color:#2B4ACB}
 </style>
 </helmet>
 <div class="shell">
@@ -38,7 +38,7 @@
 
       <div class="row" style="gap: 16px">
         <section class="card flush" style="flex: 1 1 300px; min-width: 0; overflow: hidden">
-          <div style="padding: 14px 16px; border-bottom: 1px solid #E4E2DC" class="between"><span class="lab">{{ onCount }} on · {{ total }} total</span></div>
+          <div style="padding: 14px 16px; border-bottom: 1px solid #E2E5E3" class="between"><span class="lab">{{ onCount }} on · {{ total }} total</span></div>
           <sc-for list="{{ list }}" as="a">
             <button type="button" class="auto" aria-pressed="{{ a.pressed }}" onClick="{{ a.pick }}">
               <span class="between" style="flex-wrap: nowrap"><span style="font-weight: 600">{{ a.name }}</span><span class="{{ a.cls }}">{{ a.state }}</span></span>
@@ -51,7 +51,7 @@
         <section class="card" style="flex: 2.2 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
           <div class="between" style="align-items: flex-start">
             <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
-              <h2 style="font-size: 20px; font-weight: 700">{{ sel.name }}</h2>
+              <h2 style="font-size: 20px; font-weight: 600">{{ sel.name }}</h2>
               <span class="small muted">{{ sel.desc }}</span>
             </div>
             <label class="toggle"><input type="checkbox" checked="{{ sel.on }}" onChange="{{ toggleOn }}"><span class="tr"></span><span>{{ onLabel }}</span></label>
@@ -164,7 +164,7 @@ class Component extends DCLogic {
     const list = data.map((a) => ({ ...a, state: isOn(a) ? 'On' : 'Off', cls: isOn(a) ? 'pill g' : 'pill', pressed: String(a.id === s.sel), pick: () => this.setState({ sel: a.id, picking: false }) }));
     const raw = data.find((a) => a.id === s.sel) || data[0];
     const allNodes = raw.nodes.concat(s.added[raw.id] || []);
-    const styleFor = (k) => (k === 'When' ? ['background:#E8EDFF;color:#1E3A8A', 'color:#1E3A8A', 'border-color:#CCD7FA'] : (k === 'Only if' ? ['background:#FFF4D6;color:#7A5A00', 'color:#7A5A00', ''] : ['background:#F1EFEA;color:#3A3D46', 'color:#5B6070', '']));
+    const styleFor = (k) => (k === 'When' ? ['background:#EAEEFC;color:#1D338C', 'color:#1D338C', 'border-color:#C9D3F6'] : (k === 'Only if' ? ['background:#FFF4D6;color:#7A5A00', 'color:#7A5A00', ''] : ['background:#F5F6F4;color:#3B404B', 'color:#5A6170', '']));
     const nodes = allNodes.map((n, i) => { const st = styleFor(n.kind); return { ...n, detail: n.detail || '', notFirst: i > 0, icStyle: st[0], kindStyle: st[1], border: st[2] }; });
     const AC = [['wa', 'Send WhatsApp'], ['email', 'Send email'], ['call', 'Agent calls'], ['task', 'Create task'], ['deal', 'Update deal or stage'], ['wait', 'Wait'], ['cond', 'Add a condition'], ['hook', 'Webhook or Slack']];
     const actions = AC.map(([k, label]) => ({ label, add: () => {

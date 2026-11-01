@@ -8,26 +8,75 @@
 <x-dc>
 <helmet>
 <style>
-.auth{display:flex;flex-wrap:wrap;min-height:100vh;background:#FFFFFF}
-.auth-form{flex:1 1 480px;display:flex;flex-direction:column;padding:28px 40px 40px;box-sizing:border-box}
-.auth-in{width:100%;max-width:400px;margin:auto;display:flex;flex-direction:column;gap:18px;padding:32px 0}
-.auth-side{flex:1 1 420px;background:#11131A;color:#F3F1EC;display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:48px;box-sizing:border-box}
-.sso{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;border-radius:10px;border:1px solid #D6D3CC;background:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;color:#15171E;cursor:pointer;width:100%}
-.sso:hover{background:#F6F5F2}
-.or{display:flex;align-items:center;gap:12px;color:#5B6070;font-size:12.5px}
-.or::before,.or::after{content:"";flex:1;height:1px;background:#E4E2DC}
+body{padding-bottom:0}
+.auth{display:flex;min-height:100vh;background:var(--sheet)}
+.auth-side{flex:1 1 55%;min-width:0;position:relative;overflow:hidden;background:radial-gradient(120% 90% at 0% 0%,#24346F 0%,#141A33 55%,#0E1224 100%);color:#EEF1FA;display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:36px 48px 40px;box-sizing:border-box}
+.auth-side::after{content:"";position:absolute;right:-120px;bottom:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(43,74,203,.35),transparent 70%);pointer-events:none}
+.auth-form{flex:0 1 560px;min-width:0;display:flex;flex-direction:column;padding:28px 48px 28px;box-sizing:border-box;border-left:1px solid var(--line)}
+.auth-in{width:100%;max-width:380px;margin:auto;display:flex;flex-direction:column;gap:16px;padding:24px 0}
+.brand{display:flex;align-items:center;gap:10px;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:17px}
+.brand .mk{width:30px;height:30px;border-radius:8px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:2px}
+.brand .mk i{display:block;width:2.5px;border-radius:2px;background:var(--blue)}
+.hero h2{font-size:34px;font-weight:600;letter-spacing:-.8px;line-height:1.15;max-width:480px}
+.hero p{margin-top:10px;color:#AEB6D3;font-size:15px;max-width:440px}
+.demo{position:relative;z-index:1;max-width:440px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(6px);padding:16px;display:flex;flex-direction:column;gap:12px}
+.demo .top{display:flex;align-items:center;gap:10px}
+.demo .ag{width:34px;height:34px;border-radius:10px;background:#EAEEFC;display:flex;align-items:center;justify-content:center;gap:2px}
+.demo .ag i{display:block;width:2.5px;border-radius:2px;background:var(--blue)}
+.demo .live{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#7FE3C4}
+.demo .live b{width:7px;height:7px;border-radius:50%;background:#34D399;box-shadow:0 0 0 3px rgba(52,211,153,.2)}
+.wave{display:flex;align-items:center;gap:3px;height:34px}
+.wave i{flex:1;max-width:4px;border-radius:2px;background:#8FA3F5;animation:wv 1.2s ease-in-out infinite}
+@keyframes wv{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+.line{font-size:13.5px;line-height:1.45;padding:8px 12px;border-radius:12px;max-width:88%}
+.line.a{background:rgba(255,255,255,.1);align-self:flex-start;border-top-left-radius:4px}
+.line.u{background:#2B4ACB;align-self:flex-end;border-top-right-radius:4px}
+.res{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#CFE9DF;padding-top:10px;border-top:1px solid rgba(255,255,255,.1)}
+.res svg{color:#34D399}
+.form-top{display:flex;justify-content:flex-end;align-items:center;gap:12px}
+.auth-in .title{font-size:26px;letter-spacing:-.5px}
+.form-top .mob{display:none;margin-right:auto}
+.sso{display:flex;align-items:center;justify-content:center;gap:10px;min-height:46px;border-radius:10px;border:1px solid #E2E5E3;background:#FFFFFF;font:600 14px var(--font);color:#191C22;cursor:pointer;width:100%}
+.sso:hover{background:#F5F6F4}
+.or{display:flex;align-items:center;gap:12px;color:#5A6170;font-size:12.5px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:#E2E5E3}
 .err{display:flex;gap:8px;padding:10px 12px;border-radius:10px;background:#FDE8E7;color:#912018;font-size:13.5px}
-.org{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:12px;border:1px solid #E4E2DC;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:inherit;text-decoration:none;box-sizing:border-box}
-.org:hover{border-color:#2F55D4;background:#F3F6FF}
-.quote{border-left:3px solid #2F55D4;padding-left:16px;display:flex;flex-direction:column;gap:10px}
-@media (max-width:640px){.auth-form{padding:20px 16px 32px}.auth-side{padding:32px 16px}}
+.org{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:12px;border:1px solid #E2E5E3;background:#FFFFFF;cursor:pointer;text-align:left;font:inherit;color:inherit;text-decoration:none;box-sizing:border-box}
+.org:hover{border-color:#2B4ACB;background:#F4F6FE}
+.quote{position:relative;z-index:1;border-left:2px solid #5B74DE;padding-left:16px;display:flex;flex-direction:column;gap:8px;max-width:460px}
+@media (max-width:900px){.auth-side{display:none}.auth-form{flex:1 1 100%;border-left:0;padding:20px 16px 32px}.form-top .mob{display:flex}.form-top .mob.brand{color:var(--ink)}.form-top .mob .mk{background:var(--blue)}.form-top .mob .mk i{background:#FFFFFF}}
 </style>
 </helmet>
 <div class="auth">
+  <aside class="auth-side" aria-hidden="false">
+    <span class="brand"><span class="mk" aria-hidden="true"><i style="height:7px"></i><i style="height:13px"></i><i style="height:17px"></i><i style="height:11px"></i><i style="height:6px"></i></span>Connekted</span>
+    <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:26px">
+      <div class="hero">
+        <h2>Your AI agent makes the call. You close the deal.</h2>
+        <p>Voice agents that call, qualify and book, with every result saved to your CRM.</p>
+      </div>
+      <div class="demo" aria-label="Example of a live call">
+        <div class="top">
+          <span class="ag" aria-hidden="true"><i style="height:8px"></i><i style="height:14px"></i><i style="height:18px"></i><i style="height:11px"></i><i style="height:6px"></i></span>
+          <span><b style="font-weight:500;display:block;font-size:14px">Apex Solar Advisor</b><span style="font-size:12px;color:#AEB6D3">Calling Priya Nair · 1:42</span></span>
+          <span class="live"><b></b>Live</span>
+        </div>
+        <div class="wave" aria-hidden="true"><sc-for list="{{ wave }}" as="w"><i style="{{ w }}"></i></sc-for></div>
+        <span class="line a">Would Saturday at 11 work for a free site visit?</span>
+        <span class="line u">Yes, Saturday works.</span>
+        <span class="res"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>Visit booked · WhatsApp confirmation sent · saved to contact</span>
+      </div>
+    </div>
+    <div class="quote">
+      <p style="font-size:15px;line-height:1.55">“Our agent calls every website lead within five minutes. My team only talks to people who are ready.”</p>
+      <span class="small" style="color:#AEB6D3">[Customer name], [Role], [Company] · example quote</span>
+    </div>
+  </aside>
   <section class="auth-form">
-    <div class="between">
-      <span style="display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg></span><b style="font-size: 17px">Connekted</b></span>
-      <span class="small muted">New here? <a href="Signup.dc.html" style="font-weight: 600">Create an account</a></span>
+    <div class="form-top">
+      <span class="brand mob"><span class="mk" aria-hidden="true"><i style="height:7px"></i><i style="height:13px"></i><i style="height:17px"></i><i style="height:11px"></i><i style="height:6px"></i></span>Connekted</span>
+      <span class="small muted">New here? <a href="Signup.dc.html" style="font-weight: 500">Create an account</a></span>
     </div>
 
     <div class="auth-in">
@@ -38,9 +87,9 @@
         </div>
         <div class="stack" style="gap: 10px">
           <sc-for list="{{ orgs }}" as="o">
-            <a class="org" href="Main.dc.html"><span class="av sq" style="{{ o.style }}">{{ o.i }}</span><span style="flex: 1"><b style="display: block">{{ o.n }}</b><span class="small muted">{{ o.d }}</span></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"></path></svg></a>
+            <a class="org" href="Main.dc.html"><span class="av sq" style="{{ o.style }}">{{ o.i }}</span><span style="flex: 1"><b style="display: block">{{ o.n }}</b><span class="small muted">{{ o.d }}</span></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A6170" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"></path></svg></a>
           </sc-for>
-          <a class="org" href="Signup.dc.html#workspace" style="border-style: dashed"><span class="av sq" style="background: #E8EDFF; color: #2F55D4">+</span><span style="flex: 1"><b style="display: block">Create a new workspace</b><span class="small muted">For another business or brand</span></span></a>
+          <a class="org" href="Signup.dc.html#workspace" style="border-style: dashed"><span class="av sq" style="background: #EAEEFC; color: #2B4ACB">+</span><span style="flex: 1"><b style="display: block">Create a new workspace</b><span class="small muted">For another business or brand</span></span></a>
         </div>
         <button type="button" class="btn3" onClick="{{ toPassword }}" style="align-self: flex-start; padding: 0">Use a different account</button>
       </sc-if>
@@ -94,21 +143,6 @@
     <p class="small muted" style="text-align: center">By continuing you agree to the <a href="#">Terms</a> and <a href="#">Privacy policy</a>. Data hosted in India.</p>
   </section>
 
-  <aside class="auth-side">
-    <span class="lab" style="color: #A9ADBA">Connekted</span>
-    <div style="display: flex; flex-direction: column; gap: 20px; max-width: 460px">
-      <h2 style="font-size: 32px; font-weight: 700; letter-spacing: -.6px; line-height: 1.2">Your AI agent makes the call. You close the deal.</h2>
-      <div style="display: flex; gap: 28px; flex-wrap: wrap">
-        <div><span style="display: block; font-size: 26px; font-weight: 700">~1 s</span><span class="small" style="color: #A9ADBA">reply time on calls</span></div>
-        <div><span style="display: block; font-size: 26px; font-weight: 700">5</span><span class="small" style="color: #A9ADBA">channels, one inbox</span></div>
-        <div><span style="display: block; font-size: 26px; font-weight: 700">10 min</span><span class="small" style="color: #A9ADBA">to your first real call</span></div>
-      </div>
-    </div>
-    <div class="quote">
-      <p style="font-size: 15.5px; line-height: 1.55">“Our agent calls every website lead within five minutes. Site visits went up and my team only talks to people who are ready.”</p>
-      <span class="small" style="color: #A9ADBA">[Customer name], [Role], [Company] · example quote</span>
-    </div>
-  </aside>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -123,10 +157,12 @@ class Component extends DCLogic {
     const methods = [{ id: 'password', label: 'Email and password' }, { id: 'otp', label: 'Phone OTP' }]
       .map((m) => ({ ...m, pressed: String(m.id === s.method), pick: () => this.setState({ method: m.id, error: '' }) }));
     const orgs = [
-      { i: 'AS', n: 'Apex Solar', d: 'Admin · 3 agents · 2 calls live now', style: 'background:#2F55D4;color:#FFFFFF' },
+      { i: 'AS', n: 'Apex Solar', d: 'Admin · 3 agents · 2 calls live now', style: 'background:#2B4ACB;color:#FFFFFF' },
       { i: 'TO', n: 'Test Organization', d: 'Viewer · sandbox, test calls only', style: '' }
     ];
+    const wave = CX.sig('Apex Solar Advisor live', 36).map((v, i) => 'height:' + Math.round(8 + v * 26) + 'px;animation-delay:' + ((i % 9) * 0.1).toFixed(1) + 's');
     return {
+      wave,
       isMain: s.view === 'main', isForgot: s.view === 'forgot', isPick: s.view === 'pick',
       methods, isPassword: s.method === 'password', isOtp: s.method === 'otp',
       error: s.error, email: this.form.email, orgs,

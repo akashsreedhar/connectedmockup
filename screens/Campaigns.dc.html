@@ -3,164 +3,172 @@
 <head>
 <meta charset="utf-8">
 <title>Campaigns</title>
+<script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <style>
-.seqi{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#F1EFEA;color:#3A3D46}
-.seqa{color:#9AA0AE;font-size:12px}
-.step{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #EFEDE8}
-.step:last-child{border-bottom:0}
+.cp{display:flex;flex:1;min-height:0;flex-wrap:wrap}
+.cp-l{flex:1 1 560px;min-width:0;display:flex;flex-direction:column}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line)}
+.list tr{cursor:pointer}
+.nm b{font-weight:500;display:block}
+.steps{display:flex;gap:3px}
+.steps span{width:24px;height:24px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;background:var(--fog);color:var(--ink2)}
+.prog{display:flex;align-items:center;gap:8px;min-width:120px}
+.prog .track{flex:1}
+.drw{flex:0 0 400px;min-width:0;border-left:1px solid var(--line);display:flex;flex-direction:column}
+.drw-h{display:flex;align-items:flex-start;gap:10px;padding:16px 18px 10px}
+.drw-b{flex:1;overflow-y:auto;padding:0 18px 28px;display:flex;flex-direction:column;gap:16px}
+.fun{display:flex;flex-direction:column;gap:10px}
+.fs{display:grid;grid-template-columns:28px 1fr auto;gap:4px 10px;align-items:center}
+.fs .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--fog);color:var(--ink2);grid-row:span 2}
+.fs .n{font-weight:600;text-align:right}
+.fs .track{grid-column:2/4}
+.choose{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.choose .tile{gap:8px;padding:16px}
+.choose .ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+@media (max-width:1100px){.drw{flex:1 1 100%;border-left:0;border-top:1px solid var(--line)}}
 </style>
 </helmet>
 <div class="shell">
   <div class="side"><dc-import name="Sidebar" active="campaigns"></dc-import></div>
-  <main class="main">
-    <div class="wrap wide">
-
-      <div class="ph">
-        <div class="ph-t">
-          <h1 class="title">Campaigns</h1>
-          <p class="sub">Sequences across call, WhatsApp, SMS, email and LinkedIn that stop when the goal is met.</p>
+  <main class="main flush">
+    <div class="bar">
+      <h1 class="title">Campaigns</h1>
+      <button type="button" class="btn" onClick="{{ openNew }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>New campaign</button>
+    </div>
+    <div class="cp">
+      <section class="cp-l" aria-label="Campaign list">
+        <div class="tools">
+          <div class="chips"><sc-for list="{{ filters }}" as="f"><button type="button" class="chip" aria-pressed="{{ f.pressed }}" onClick="{{ f.pick }}">{{ f.label }} <span class="n">{{ f.n }}</span></button></sc-for></div>
         </div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap">
-          <button type="button" class="btn2">Templates</button>
-          <a class="btn" href="Campaign.dc.html">New campaign</a>
-        </div>
-      </div>
-
-      <div class="chips" role="group" aria-label="Status">
-        <sc-for list="{{ filters }}" as="f"><button type="button" class="chip" aria-pressed="{{ f.pressed }}" onClick="{{ f.pick }}">{{ f.label }} <span class="n">{{ f.n }}</span></button></sc-for>
-      </div>
-
-      <div class="row">
-        <section class="card flush scroll-x" style="flex: 3 1 560px; min-width: 0">
-          <table>
+        <div class="scroll-x">
+          <table class="list">
             <thead><tr><th>Campaign</th><th>Status</th><th>Steps</th><th>Progress</th><th>Goal reached</th></tr></thead>
             <tbody>
               <sc-for list="{{ rows }}" as="c">
-                <tr class="{{ c.rowCls }}">
-                  <td style="padding: 0 12px"><button type="button" class="rowbtn" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="min-height: 60px"><span><span style="display: block; font-weight: 600">{{ c.name }}</span><span class="small muted">{{ c.agent }} · {{ c.people }} people</span></span></button></td>
-                  <td><span class="{{ c.cls }}">{{ c.status }}</span></td>
-                  <td><span style="display: flex; align-items: center; gap: 4px">
-                    <sc-for list="{{ c.seq }}" as="q"><span class="seqi" title="{{ q.label }}"><svg role="img" aria-label="{{ q.label }}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.icon }}"></path></svg></span></sc-for>
-                  </span></td>
-                  <td style="min-width: 140px"><div class="track"><span style="{{ c.progW }}"></span></div><span class="small muted">{{ c.progText }}</span></td>
-                  <td><b>{{ c.goal }}</b> <span class="small muted">{{ c.goalPct }}</span></td>
+                <tr class="{{ c.cls }}" onClick="{{ c.open }}">
+                  <td class="nm"><b>{{ c.name }}</b><span class="small muted">{{ c.who }}</span></td>
+                  <td><span class="{{ c.pill }}">{{ c.status }}</span></td>
+                  <td><span class="steps" aria-label="{{ c.stepsLabel }}"><sc-for list="{{ c.steps }}" as="i"><span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ i }}"></path></svg></span></sc-for></span></td>
+                  <td><span class="prog"><span class="track"><span style="{{ c.bar }}"></span></span><span class="small muted">{{ c.pct }}</span></span></td>
+                  <td>{{ c.goal }}</td>
                 </tr>
               </sc-for>
             </tbody>
           </table>
-        </section>
+        </div>
+      </section>
 
-        <aside class="card" style="flex: 2 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
-          <div class="between" style="align-items: flex-start">
-            <div style="display: flex; flex-direction: column; gap: 2px">
-              <h2 style="font-size: 19px; font-weight: 700">{{ sel.name }}</h2>
-              <span class="small muted">Goal: {{ sel.goalName }} · {{ sel.when }}</span>
+      <sc-if value="{{ sel }}">
+        <aside class="drw" aria-label="Campaign details">
+          <div class="drw-h">
+            <span style="flex:1;min-width:0"><span style="font-weight:600;font-size:16px;display:block">{{ sel.name }}</span><span class="small muted">{{ sel.goalText }}</span></span>
+            <span class="{{ sel.pill }}">{{ sel.status }}</span>
+            <button type="button" class="ibtn sm ghost" aria-label="Close details" onClick="{{ close }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+          </div>
+          <div class="drw-b">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-if value="{{ sel.running }}"><button type="button" class="btn2 sm" onClick="{{ pause }}">Pause</button></sc-if>
+              <sc-if value="{{ sel.paused }}"><button type="button" class="btn sm" onClick="{{ resume }}">Resume</button></sc-if>
+              <a class="btn2 sm" href="Campaign.dc.html">Edit</a>
+              <a class="btn2 sm" href="Reports.dc.html">Report</a>
             </div>
-            <span class="{{ sel.cls }}">{{ sel.status }}</span>
-          </div>
-
-          <sc-if value="{{ sel.live }}">
-            <a href="LiveCall.dc.html" class="note g" style="text-decoration: none; align-items: center; justify-content: space-between"><span style="display: flex; gap: 8px; align-items: center"><span class="dot" style="background: #15803D"></span><b>{{ sel.live }}</b></span><span style="font-weight: 600">Listen in</span></a>
-          </sc-if>
-
-          <div style="display: flex; gap: 8px; flex-wrap: wrap">
-            <button type="button" class="btn2 sm" onClick="{{ togglePause }}">{{ pauseLabel }}</button>
-            <a class="btn2 sm" href="Campaign.dc.html">Edit</a>
-            <button type="button" class="btn2 sm">Duplicate</button>
-            <a class="btn2 sm" href="Reports.dc.html">Full report</a>
-          </div>
-
-          <div>
-            <span class="lab">How people moved through the steps</span>
-            <div style="margin-top: 6px">
-              <sc-for list="{{ sel.steps }}" as="t">
-                <div class="step">
-                  <span class="seqi" style="width: 34px; height: 34px; border-radius: 9px"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg></span>
-                  <span style="min-width: 0"><span style="display: block; font-weight: 600">{{ t.label }}</span><span class="small muted">{{ t.detail }}</span><span class="track" style="display: block; margin-top: 6px"><span style="{{ t.w }}"></span></span></span>
-                  <span style="text-align: right"><b style="display: block">{{ t.n }}</b><span class="small muted">{{ t.of }}</span></span>
+            <sc-if value="{{ sel.live }}"><a class="note g" href="LiveCall.dc.html" style="text-decoration:none"><span class="dot g" style="margin-top:6px"></span><span>{{ sel.live }}</span></a></sc-if>
+            <div class="fun">
+              <span class="lab">Step by step</span>
+              <sc-for list="{{ sel.fun }}" as="f">
+                <div class="fs">
+                  <span class="ic"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ f.icon }}"></path></svg></span>
+                  <span style="font-weight:500">{{ f.t }}</span>
+                  <span class="n">{{ f.n }}</span>
+                  <span class="track"><span style="{{ f.bar }}"></span></span>
                 </div>
               </sc-for>
             </div>
-          </div>
-
-          <div>
-            <span class="lab">Always-on rules</span>
-            <div style="margin-top: 6px">
-              <sc-for list="{{ sel.rules }}" as="r"><div class="kv"><span class="muted">{{ r.k }}</span><span style="text-align: right">{{ r.v }}</span></div></sc-for>
+            <div class="card fill" style="display:flex;flex-direction:column;gap:2px">
+              <div class="kv"><span class="muted">Agent</span><span>{{ sel.agent }}</span></div>
+              <div class="kv"><span class="muted">Calling hours</span><span>10 am – 7 pm IST</span></div>
+              <div class="kv"><span class="muted">DND numbers</span><span>Skipped</span></div>
             </div>
           </div>
         </aside>
-      </div>
+      </sc-if>
     </div>
   </main>
 </div>
+
+<sc-if value="{{ modal }}">
+  <div class="scrim" onClick="{{ closeScrim }}">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nc-h" style="width:min(620px,100%)">
+      <div class="modal-h"><h2 id="nc-h" class="h2">New campaign</h2><button type="button" class="ibtn sm" aria-label="Close" onClick="{{ closeNew }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
+      <div class="modal-b">
+        <div class="choose">
+          <button type="button" class="tile" aria-pressed="{{ kOnce }}" onClick="{{ pickOnce }}">
+            <span class="ic" style="background:var(--blue-t);color:var(--blue)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg></span>
+            <span class="t">One-time list</span><span class="d">Pick contacts or upload a CSV.</span>
+          </button>
+          <button type="button" class="tile" aria-pressed="{{ kAlways }}" onClick="{{ pickAlways }}">
+            <span class="ic" style="background:var(--teal-t);color:var(--teal)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0 0 8M18 8V4M18 8h-4"></path></svg></span>
+            <span class="t">Always on</span><span class="d">Adds new contacts as they match.</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-f"><button type="button" class="btn2" onClick="{{ closeNew }}">Cancel</button><a class="btn" href="Campaign.dc.html">Continue</a></div>
+    </div>
+  </div>
+</sc-if>
 </x-dc>
-<script type="text/x-dc" data-dc-script>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { filter: 'all', sel: 'oct', paused: {} };
+    this.state = { f: 'all', sel: 'oct', modal: false, kind: 'once', paused: {} };
   }
   renderVals() {
     const s = this.state;
-    const IC = {
+    const I = {
       call: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z',
-      wait: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
-      wa: 'M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.5A8.5 8.5 0 1 1 21 11.5z',
-      email: 'M3 5h18v14H3zM3 6l9 7 9-7',
-      sms: 'M4 4h16v12H8l-4 4z',
-      li: 'M4 9h4v11H4zM6 4.5a1.5 1.5 0 1 1 0 .01M10 20V9h4v2a4 4 0 0 1 7 2.5V20h-4v-6a2 2 0 0 0-4 0v6',
-      goal: 'm5 12.5 4.5 4.5L19 7.5'
+      wait: 'M12 8v4l3 2M21 12a9 9 0 1 1-9-9',
+      wa: 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z',
+      mail: 'M3 6h18v12H3zM3 7l9 6 9-6',
+      sms: 'M4 5h16v11H8l-4 4z',
+      li: 'M4 9h3v11H4zM5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM10 9h3v1.5c.6-1 1.8-1.8 3.4-1.8 2.6 0 3.6 1.7 3.6 4.5V20h-3v-6c0-1.4-.4-2.4-1.8-2.4S13 12.6 13 14v6h-3z',
+      done: 'm5 12 5 5 9-10'
     };
-    const LBL = { call: 'AI call', wait: 'Wait', wa: 'WhatsApp', email: 'Email', sms: 'SMS', li: 'LinkedIn' };
-    const ST = (k, label, detail, n, total) => ({ icon: IC[k], label, detail, n: String(n), of: 'of ' + total, w: 'width:' + Math.round((n / total) * 100) + '%' });
-    const data = [
-      { id: 'oct', name: 'October solar leads', agent: 'Apex Solar Advisor', people: 240, status: 'Running', seqKeys: ['call', 'wait', 'call', 'wa', 'email'], prog: 38, goal: 11, goalName: 'Site visit booked', when: 'Mon to Sat, 10 am to 7 pm IST',
-        live: '2 calls live now · 14 queued for this hour',
-        steps: [ST('call', 'AI call', 'Answered 61 of 92 calls · avg 2:10', 92, 240), ST('wait', 'Wait 1 day, retry no-answers', '31 retried', 31, 240), ST('wa', 'WhatsApp follow-up', 'Template “site_visit_offer” · 18 replied', 44, 240), ST('email', 'Email with subsidy guide', '9 opened', 20, 240), ST('goal', 'Site visit booked', 'Campaign stops for these people', 11, 240)],
-        rules: [{ k: 'Calling hours', v: '10 am to 7 pm, contact’s time zone' }, { k: 'Concurrent calls', v: '3' }, { k: 'Voicemail', v: 'Hang up, retry tomorrow' }, { k: 'DND registry', v: '17 skipped (NCPR)' }, { k: 'Stop when', v: 'Visit booked, opted out, or said not interested' }] },
-      { id: 'amc', name: 'Service contract renewals', agent: 'Sales Follow-up', people: 36, status: 'Scheduled', seqKeys: ['email', 'wait', 'call', 'wa'], prog: 0, goal: 0, goalName: 'Renewal accepted', when: 'Starts Mon 3 Nov, 10 am',
-        live: '', steps: [ST('email', 'Renewal reminder email', 'Not started', 0, 36), ST('call', 'AI call', 'Not started', 0, 36), ST('wa', 'WhatsApp payment link', 'Not started', 0, 36)],
-        rules: [{ k: 'Calling hours', v: '11 am to 6 pm' }, { k: 'Concurrent calls', v: '2' }, { k: 'DND registry', v: 'Transactional, allowed for customers' }] },
-      { id: 'rwa', name: 'RWA outreach Kakkanad', agent: 'You (manual)', people: 58, status: 'Paused', seqKeys: ['li', 'wait', 'email', 'call'], prog: 52, goal: 3, goalName: 'Meeting booked', when: 'Paused by Meera on 25 Oct',
-        live: '', steps: [ST('li', 'LinkedIn connection + note', '22 accepted', 30, 58), ST('email', 'Case study email', '14 opened', 26, 58), ST('call', 'AI call', 'Paused before this step', 0, 58), ST('goal', 'Meeting booked', '', 3, 58)],
-        rules: [{ k: 'LinkedIn daily limit', v: '25 invites' }, { k: 'Calling hours', v: '10 am to 6 pm' }] },
-      { id: 'web', name: 'Website leads, call in 5 min', agent: 'Apex Solar Advisor', people: 'Always on ·', status: 'Running', seqKeys: ['call', 'sms', 'wait', 'call'], prog: 100, goal: 7, goalName: 'Qualified', when: 'Triggered by new web form leads',
-        live: '', steps: [ST('call', 'AI call within 5 minutes', '23 of 31 answered', 31, 31), ST('sms', 'SMS if no answer', 'DLT template', 8, 31), ST('call', 'Retry next day', '5 answered', 8, 31), ST('goal', 'Qualified', '', 7, 31)],
-        rules: [{ k: 'Calling hours', v: '9 am to 8 pm (queued outside)' }, { k: 'Concurrent calls', v: '5' }] },
-      { id: 'sep', name: 'September subsidy webinar', agent: 'Front Desk', people: 410, status: 'Done', seqKeys: ['email', 'wa', 'call'], prog: 100, goal: 64, goalName: 'Registered', when: 'Ended 30 Sep',
-        live: '', steps: [ST('email', 'Invite email', '182 opened', 410, 410), ST('wa', 'WhatsApp reminder', '97 replied', 300, 410), ST('call', 'AI reminder call', '58 answered', 120, 410), ST('goal', 'Registered', '', 64, 410)],
-        rules: [{ k: 'Result', v: '64 registered · 41 attended' }] },
-      { id: 'draft', name: 'Diwali offer', agent: 'Not chosen', people: 0, status: 'Draft', seqKeys: ['wa'], prog: 0, goal: 0, goalName: 'Not set', when: 'Last edited Sun',
-        live: '', steps: [], rules: [{ k: 'Missing', v: 'Agent, audience, schedule' }] }
-    ];
-    const cls = { Running: 'pill g', Scheduled: 'pill b', Paused: 'pill o', Done: 'pill', Draft: 'pill' };
-    const statusOf = (c) => (s.paused[c.id] === true ? 'Paused' : (s.paused[c.id] === false ? 'Running' : c.status));
-    const filters = [{ id: 'all', label: 'All' }, { id: 'Running', label: 'Running' }, { id: 'Scheduled', label: 'Scheduled' }, { id: 'Paused', label: 'Paused' }, { id: 'Draft', label: 'Drafts' }, { id: 'Done', label: 'Done' }]
-      .map((f) => ({ ...f, n: data.filter((c) => f.id === 'all' || statusOf(c) === f.id).length, pressed: String(f.id === s.filter), pick: () => this.setState({ filter: f.id }) }));
-    const rows = data.filter((c) => s.filter === 'all' || statusOf(c) === s.filter).map((c) => {
-      const st = statusOf(c);
-      const total = typeof c.people === 'number' ? c.people : 31;
-      return {
-        ...c, status: st, cls: cls[st],
-        seq: c.seqKeys.map((k) => ({ icon: IC[k], label: LBL[k] })),
-        progW: 'width:' + c.prog + '%', progText: c.prog + '% through the sequence',
-        goalPct: total ? '(' + Math.round((c.goal / total) * 100) + '%)' : '',
-        pressed: String(c.id === s.sel), rowCls: c.id === s.sel ? 'sel' : '', pick: () => this.setState({ sel: c.id })
-      };
-    });
-    const raw = data.find((c) => c.id === s.sel) || data[0];
-    const st = statusOf(raw);
-    const sel = { ...raw, status: st, cls: cls[st], live: st === 'Running' ? raw.live : '' };
-    const canPause = st === 'Running' || st === 'Paused';
+    const C = [
+      { id: 'oct', name: 'October solar leads', agent: 'Apex Solar Advisor', who: 'Apex Solar Advisor · 240 people', status: 'Running', steps: ['call', 'wait', 'call', 'wa', 'mail'], pct: 38, goal: '11 (5%)', goalText: 'Goal: site visit booked', live: '2 calls live now · 14 queued this hour',
+        fun: [['call', 'AI call', 92], ['wait', 'Retry no-answers', 31], ['wa', 'WhatsApp follow-up', 44], ['mail', 'Email subsidy guide', 20], ['done', 'Visit booked', 11]], total: 240 },
+      { id: 'web', name: 'Website leads, call in 5 min', agent: 'Apex Solar Advisor', who: 'Always on · 31 people so far', status: 'Running', steps: ['call', 'sms', 'wait', 'call'], pct: 100, goal: '7 (23%)', goalText: 'Goal: site visit booked', live: '',
+        fun: [['call', 'AI call within 5 min', 31], ['sms', 'SMS if missed', 9], ['call', 'Second call', 9], ['done', 'Visit booked', 7]], total: 31 },
+      { id: 'amc', name: 'Service contract renewals', agent: 'Sales Follow-up', who: 'Sales Follow-up · 36 people', status: 'Scheduled', steps: ['mail', 'wait', 'call', 'wa'], pct: 0, goal: '—', goalText: 'Starts Mon 3 Nov, 10 am', live: '',
+        fun: [['mail', 'Renewal email', 0], ['call', 'AI call', 0], ['wa', 'WhatsApp link', 0], ['done', 'Renewed', 0]], total: 36 },
+      { id: 'rwa', name: 'RWA outreach, Kakkanad', agent: 'You (manual)', who: 'Manual · 58 people', status: 'Paused', steps: ['li', 'wait', 'mail', 'call'], pct: 52, goal: '3 (5%)', goalText: 'Goal: society meeting booked', live: '',
+        fun: [['li', 'LinkedIn message', 58], ['mail', 'Email', 30], ['call', 'Call', 12], ['done', 'Meeting booked', 3]], total: 58 },
+      { id: 'sep', name: 'September subsidy webinar', agent: 'Front Desk', who: 'Front Desk · 410 people', status: 'Done', steps: ['mail', 'wa', 'call'], pct: 100, goal: '64 (16%)', goalText: 'Goal: attended webinar', live: '',
+        fun: [['mail', 'Invite email', 410], ['wa', 'WhatsApp reminder', 380], ['call', 'Reminder call', 212], ['done', 'Attended', 64]], total: 410 }
+    ].map((c) => ({ ...c, status: s.paused[c.id] === true ? 'Paused' : (s.paused[c.id] === false ? 'Running' : c.status) }));
+    const pillOf = (st) => st === 'Running' ? 'pill g' : (st === 'Paused' ? 'pill o' : (st === 'Scheduled' ? 'pill b' : 'pill'));
+    const fdefs = [['all', 'All'], ['Running', 'Running'], ['Scheduled', 'Scheduled'], ['Paused', 'Paused'], ['Done', 'Done']];
+    const filters = fdefs.map(([id, label]) => ({ label, n: id === 'all' ? C.length : C.filter((c) => c.status === id).length, pressed: s.f === id ? 'true' : 'false', pick: () => this.setState({ f: id }) }));
+    const rows = C.filter((c) => s.f === 'all' || c.status === s.f).map((c) => ({
+      ...c, pill: pillOf(c.status), cls: s.sel === c.id ? 'sel' : '', steps: c.steps.map((k) => I[k]), stepsLabel: c.steps.length + ' steps',
+      bar: 'width:' + c.pct + '%', pct: c.pct + '%', open: () => this.setState({ sel: c.id })
+    }));
+    const cur = C.find((c) => c.id === s.sel);
+    const sel = cur ? { ...cur, pill: pillOf(cur.status), running: cur.status === 'Running', paused: cur.status === 'Paused', live: cur.status === 'Running' ? cur.live : '',
+      fun: cur.fun.map(([k, t, n]) => ({ icon: I[k], t, n: n + ' of ' + cur.total, bar: 'width:' + Math.round(n / cur.total * 100) + '%' })) } : null;
     return {
       filters, rows, sel,
-      pauseLabel: st === 'Running' ? 'Pause' : (st === 'Paused' ? 'Resume' : 'Launch'),
-      togglePause: () => { if (canPause) this.setState({ paused: { ...s.paused, [raw.id]: st === 'Running' } }); }
+      close: () => this.setState({ sel: null }),
+      pause: () => this.setState({ paused: Object.assign({}, s.paused, { [s.sel]: true }) }),
+      resume: () => this.setState({ paused: Object.assign({}, s.paused, { [s.sel]: false }) }),
+      modal: s.modal, openNew: () => this.setState({ modal: true }), closeNew: () => this.setState({ modal: false }),
+      closeScrim: (e) => { if (e.target === e.currentTarget) this.setState({ modal: false }); },
+      kOnce: s.kind === 'once' ? 'true' : 'false', kAlways: s.kind === 'always' ? 'true' : 'false',
+      pickOnce: () => this.setState({ kind: 'once' }), pickAlways: () => this.setState({ kind: 'always' })
     };
   }
 }

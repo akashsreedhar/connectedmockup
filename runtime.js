@@ -1,9 +1,20 @@
 // Minimal renderer for the Connekted mockup screens (.dc.html files).
 // Supports {{ holes }}, <sc-for>, <sc-if>, <dc-import>, onClick handlers and setState.
 (function () {
-  const SCREENS = ['Login', 'Signup', 'Assistant', 'Main', 'Onboarding', 'Inbox', 'Agents', 'Agent', 'LiveCall', 'Campaigns', 'Campaign', 'Automations', 'Contacts', 'Contact', 'Companies', 'Deals', 'Calls', 'Reports', 'Settings', 'Numbers', 'Sidebar'];
-  const NAMES = { Login: 'Sign in', Signup: 'Sign up and workspace setup', Main: 'Home', Onboarding: 'Setup', Inbox: 'Inbox', Agents: 'Agents', Agent: 'Agent page', LiveCall: 'Live call', Campaigns: 'Campaigns', Campaign: 'Campaign builder', Automations: 'Automations', Contacts: 'Contacts', Contact: 'Contact after a call', Companies: 'Companies', Deals: 'Deals', Calls: 'Calls review', Reports: 'Reports', Settings: 'Settings', Numbers: 'Settings › Phone numbers' };
+  const SCREENS = ['Login', 'Signup', 'Assistant', 'Main', 'Onboarding', 'Inbox', 'Agents', 'Agent', 'KnowledgeBase', 'LiveCall', 'Campaigns', 'Campaign', 'Automations', 'Contacts', 'Contact', 'Companies', 'Deals', 'Calls', 'Reports', 'Settings', 'Numbers', 'Sidebar'];
+  const NAMES = { Login: 'Sign in', Signup: 'Sign up and workspace setup', Main: 'Home', Onboarding: 'Setup', Inbox: 'Inbox', Agents: 'Agents', Agent: 'Agent editor', KnowledgeBase: 'Knowledge base', LiveCall: 'Live call', Campaigns: 'Campaigns', Campaign: 'Campaign builder', Automations: 'Automations', Contacts: 'Contacts', Contact: 'Contact after a call', Companies: 'Companies', Deals: 'Deals', Calls: 'Call history', Reports: 'Analytics', Settings: 'Settings', Numbers: 'Phone numbers' };
   const defs = {};
+
+  // Shared helpers for screens. sig(name) gives the bar heights of an agent's voice signature,
+  // the same every time for the same name; sigBars(name, px) gives ready-made inline styles.
+  window.CX = {
+    sig(name, n) {
+      n = n || 5; let h = 7;
+      for (const c of String(name)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+      return Array.from({ length: n }, (_, i) => { h = (h * 1103515245 + 12345) >>> 0; const mid = 1 - Math.abs(i - (n - 1) / 2) / n; return Math.round((0.35 + 0.65 * ((h >>> 16) % 100) / 100 * mid + 0.15) * 100) / 100; });
+    },
+    sigBars(name, px, n) { return CX.sig(name, n).map((v) => ({ style: 'height:' + Math.max(3, Math.round(v * px)) + 'px' })); }
+  };
 
   class DCLogic {
     constructor(props) { this.props = props || {}; this.state = {}; }
@@ -61,13 +72,13 @@
         const as = node.getAttribute('as') || 'item';
         (list || []).forEach((item, i) => {
           const child = Object.assign({}, scope, { [as]: item, $index: i });
-          frag.appendChild(build(Array.from(node.content.childNodes), child));
+          frag.appendChild(build(Array.from((node.content || node).childNodes), child));
         });
         return;
       }
       if (tag === 'template' && node.getAttribute('data-sc') === 'if') {
         const m = WHOLE.exec(node.getAttribute('value') || '');
-        if (m && lookup(m[1], scope)) frag.appendChild(build(Array.from(node.content.childNodes), scope));
+        if (m && lookup(m[1], scope)) frag.appendChild(build(Array.from((node.content || node).childNodes), scope));
         return;
       }
       if (tag === 'dc-import') {
@@ -109,8 +120,20 @@
 
   function mount(name, props, host) {
     const def = defs[name];
+    // Imported components (Sidebar, Assistant) bring their <helmet> styles along once.
+    if (host.id !== 'app' && def.css && !document.querySelector('style[data-comp="' + name + '"]')) {
+      const st = document.createElement('style'); st.setAttribute('data-comp', name); st.textContent = def.css;
+      document.head.insertBefore(st, document.getElementById('screen-css'));
+    }
     const inst = new def.Cls(props);
-    inst.__render = () => host.replaceChildren(build(def.nodes, inst.renderVals() || {}));
+    // Re-rendering replaces the DOM, so keep focus and caret on the element with the same id.
+    inst.__render = () => {
+      const a = document.activeElement;
+      const id = a && host.contains(a) && a.id;
+      const sel = id && typeof a.selectionStart === 'number' ? [a.selectionStart, a.selectionEnd] : null;
+      host.replaceChildren(build(def.nodes, inst.renderVals() || {}));
+      if (id) { const n = document.getElementById(id); if (n) { n.focus(); if (sel) try { n.setSelectionRange(sel[0], sel[1]); } catch (e) {} } }
+    };
     inst.__render();
     return def;
   }

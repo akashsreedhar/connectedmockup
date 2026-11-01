@@ -8,27 +8,17 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
-a{color:#2F55D4}a:hover{color:#1E3A8A}
-h1,h2,h3,p{margin:0}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 15px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn:hover{background:#2446B8;color:#FFFFFF}
-.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 15px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn2:hover{background:#F1EFEA;color:#15171E}
-.muted{color:#5B6070}
-.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
-.field{width:100%;box-sizing:border-box;min-height:48px;padding:12px 14px;border-radius:10px;border:1px solid #D6D3CC;background:#FFFFFF;font:400 15px Inter,system-ui,sans-serif;color:#15171E}
+.field{width:100%;box-sizing:border-box;min-height:40px;padding:12px 14px;border-radius:10px;border:1px solid #E2E5E3;background:#FFFFFF;font:400 15px var(--font);color:#191C22}
 </style>
 </helmet>
-<div style="min-height: 100vh; background: #F6F5F2; display: flex; flex-direction: column">
-  <header style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; padding: 20px 36px; background: #FFFFFF; border-bottom: 1px solid #E4E2DC">
+<div style="min-height: 100vh; background: #F5F6F4; display: flex; flex-direction: column">
+  <header style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; padding: 20px 36px; background: #FFFFFF; border-bottom: 1px solid #E2E5E3">
     <div style="display: flex; align-items: center; gap: 10px">
-      <div style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center">
+      <div style="width: 32px; height: 32px; border-radius: 9px; background: #2B4ACB; display: flex; align-items: center; justify-content: center">
         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg>
       </div>
-      <span style="font-weight: 700; font-size: 17px">Connekted</span>
+      <span style="font-weight: 600; font-size: 17px">Connekted</span>
     </div>
     <ol aria-label="Setup steps" style="display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0">
       <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
@@ -45,16 +35,16 @@ h1,h2,h3,p{margin:0}
         <div style="display: flex; flex-direction: column; gap: 28px">
           <div style="display: flex; flex-direction: column; gap: 8px">
             <span class="lab">Step 1 of 5</span>
-            <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.6px">What do you want your agent to do first?</h1>
+            <h1 style="font-size: 34px; font-weight: 600; letter-spacing: -0.6px">What do you want your agent to do first?</h1>
             <p class="muted" style="font-size: 16px">This sets up the right template and call direction. You can add more later.</p>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
             <sc-for list="{{ goals }}" as="g" hint-placeholder-count="3">
               <button type="button" onClick="{{ g.pick }}" aria-pressed="{{ g.pressed }}" style="{{ g.style }}">
                 <span style="{{ g.iconBox }}"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ g.d }}"></path></svg></span>
-                <span style="font-size: 18px; font-weight: 700; color: #15171E">{{ g.title }}</span>
-                <span style="font-size: 14.5px; color: #5B6070; line-height: 1.5">{{ g.body }}</span>
-                <span style="font-size: 13px; font-weight: 600; color: #1E3A8A">{{ g.meta }}</span>
+                <span style="font-size: 18px; font-weight: 600; color: #191C22">{{ g.title }}</span>
+                <span style="font-size: 14.5px; color: #5A6170; line-height: 1.5">{{ g.body }}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #1D338C">{{ g.meta }}</span>
               </button>
             </sc-for>
           </div>
@@ -65,7 +55,7 @@ h1,h2,h3,p{margin:0}
         <div style="display: flex; flex-direction: column; gap: 24px; max-width: 720px">
           <div style="display: flex; flex-direction: column; gap: 8px">
             <span class="lab">Step 2 of 5</span>
-            <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.6px">Tell us about your business</h1>
+            <h1 style="font-size: 34px; font-weight: 600; letter-spacing: -0.6px">Tell us about your business</h1>
             <p class="muted" style="font-size: 16px">We use this to write the agent’s brief and fill its knowledge. You can edit both afterwards.</p>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
@@ -80,9 +70,9 @@ h1,h2,h3,p{margin:0}
           <div style="display: flex; flex-direction: column; gap: 8px">
             <span style="font-weight: 600">Never say</span>
             <div style="display: flex; flex-wrap: wrap; gap: 8px">
-              <span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #D6D3CC; font-size: 13.5px">Exact system prices</span>
-              <span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #D6D3CC; font-size: 13.5px">Subsidy amounts as guaranteed</span>
-              <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 999px; background: #F6F5F2; border: 1px dashed #9AA6E8; color: #1E3A8A; font: 600 13.5px Inter, system-ui, sans-serif; cursor: pointer">+ Add rule</button>
+              <span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E2E5E3; font-size: 13.5px">Exact system prices</span>
+              <span style="padding: 8px 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E2E5E3; font-size: 13.5px">Subsidy amounts as guaranteed</span>
+              <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 999px; background: #F5F6F4; border: 1px dashed #9AA6E8; color: #1D338C; font: 600 13.5px var(--font); cursor: pointer">+ Add rule</button>
             </div>
           </div>
         </div>
@@ -92,17 +82,17 @@ h1,h2,h3,p{margin:0}
         <div style="display: flex; flex-direction: column; gap: 24px">
           <div style="display: flex; flex-direction: column; gap: 8px">
             <span class="lab">Step 3 of 5</span>
-            <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.6px">Pick a voice</h1>
+            <h1 style="font-size: 34px; font-weight: 600; letter-spacing: -0.6px">Pick a voice</h1>
             <p class="muted" style="font-size: 16px">Recommended for India, English. <a href="Agent.dc.html">See all 47 voices</a></p>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px">
             <sc-for list="{{ voices }}" as="v" hint-placeholder-count="4">
               <button type="button" onClick="{{ v.pick }}" aria-pressed="{{ v.pressed }}" style="{{ v.style }}">
                 <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-                  <span style="font-size: 18px; font-weight: 700; color: #15171E">{{ v.name }}</span>
-                  <span style="width: 40px; height: 40px; border-radius: 50%; background: #E8EDFF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#2F55D4"><path d="M7 4v16l13-8z"></path></svg></span>
+                  <span style="font-size: 18px; font-weight: 600; color: #191C22">{{ v.name }}</span>
+                  <span style="width: 40px; height: 40px; border-radius: 50%; background: #EAEEFC; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#2B4ACB"><path d="M7 4v16l13-8z"></path></svg></span>
                 </span>
-                <span style="font-size: 14px; color: #5B6070">{{ v.meta }}</span>
+                <span style="font-size: 14px; color: #5A6170">{{ v.meta }}</span>
                 <svg aria-hidden="true" width="100%" height="28" viewBox="0 0 160 28" preserveAspectRatio="none"><path d="M2 14h6M10 9v10M16 5v18M22 10v8M28 3v22M34 8v12M40 12v4M46 6v16M52 9v10M58 4v20M64 11v6M70 7v14M76 2v24M82 9v10M88 12v4M94 6v16M100 10v8M106 4v20M112 8v12M118 12v4M124 7v14M130 10v8M136 5v18M142 11v6M148 13v2" stroke="#9AA6E8" stroke-width="2.5" stroke-linecap="round"></path></svg>
               </button>
             </sc-for>
@@ -114,23 +104,23 @@ h1,h2,h3,p{margin:0}
         <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: stretch">
           <div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 18px; justify-content: center">
             <span class="lab">Step 4 of 5</span>
-            <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.6px">Talk to your agent</h1>
+            <h1 style="font-size: 34px; font-weight: 600; letter-spacing: -0.6px">Talk to your agent</h1>
             <p class="muted" style="font-size: 16px">Right here in the browser. No phone number needed, and nothing is saved to your contacts.</p>
             <div style="display: flex; gap: 10px; flex-wrap: wrap">
               <button type="button" class="btn" onClick="{{ toggleCall }}">{{ callLabel }}</button>
               <a class="btn2" href="Agent.dc.html">Edit what it says</a>
             </div>
           </div>
-          <div style="flex: 1 1 400px; background: #11131A; color: #F3F1EC; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-height: 340px; box-sizing: border-box">
+          <div style="flex: 1 1 400px; background: #191C22; color: #F3F4F2; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-height: 340px; box-sizing: border-box">
             <div style="display: flex; justify-content: space-between; align-items: center">
               <span style="font-weight: 600">Apex Solar Advisor · Anika</span>
               <span style="font-size: 13px; color: #A9AEBB">{{ callState }}</span>
             </div>
             <sc-if value="{{ inCall }}" hint-placeholder-val="{{ true }}">
               <div style="display: flex; flex-direction: column; gap: 10px">
-                <p style="align-self: flex-start; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #262A36; font-size: 14.5px">Hi, this is Anika from Apex Solar. You asked about rooftop solar. Is now a good time for two quick questions?</p>
-                <p style="align-self: flex-end; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #2F55D4; font-size: 14.5px">Yes, but I just want to schedule a visit.</p>
-                <p style="align-self: flex-start; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #262A36; font-size: 14.5px">Sure. Would Saturday at 11 or Monday at 5 work better?</p>
+                <p style="align-self: flex-start; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #2C313B; font-size: 14.5px">Hi, this is Anika from Apex Solar. You asked about rooftop solar. Is now a good time for two quick questions?</p>
+                <p style="align-self: flex-end; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #2B4ACB; font-size: 14.5px">Yes, but I just want to schedule a visit.</p>
+                <p style="align-self: flex-start; max-width: 85%; padding: 10px 14px; border-radius: 14px; background: #2C313B; font-size: 14.5px">Sure. Would Saturday at 11 or Monday at 5 work better?</p>
                 <span style="align-self: flex-start; font-size: 12.5px; color: #A9AEBB">Routed to Book · replied in 0.9 s</span>
               </div>
             </sc-if>
@@ -145,7 +135,7 @@ h1,h2,h3,p{margin:0}
         <div style="display: flex; flex-direction: column; gap: 24px; max-width: 720px">
           <div style="display: flex; flex-direction: column; gap: 8px">
             <span class="lab">Step 5 of 5</span>
-            <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.6px">Get a call from your agent</h1>
+            <h1 style="font-size: 34px; font-weight: 600; letter-spacing: -0.6px">Get a call from your agent</h1>
             <p class="muted" style="font-size: 16px">Connect a number, then your agent calls you. This is exactly what your customers will hear.</p>
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px">
@@ -167,7 +157,7 @@ h1,h2,h3,p{margin:0}
         </div>
       </sc-if>
 
-      <div style="display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid #E4E2DC; padding-top: 24px">
+      <div style="display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid #E2E5E3; padding-top: 24px">
         <button type="button" class="btn2" onClick="{{ back }}" disabled="{{ atStart }}">Back</button>
         <sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}">
           <button type="button" class="btn" onClick="{{ next }}">Continue</button>
@@ -195,28 +185,28 @@ class Component extends DCLogic {
       const cur = n === step, done = n < step;
       return {
         n: done ? '✓' : String(n), label,
-        style: 'display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;font-size:13.5px;font-weight:600;' + (cur ? 'background:#E8EDFF;color:#1E3A8A' : done ? 'color:#3A3D46' : 'color:#5B6070'),
-        dot: 'width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;' + (cur || done ? 'background:#2F55D4;color:#FFFFFF' : 'background:#EFEDE8;color:#3A3D46')
+        style: 'display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;font-size:13.5px;font-weight:600;' + (cur ? 'background:#EAEEFC;color:#1D338C' : done ? 'color:#3B404B' : 'color:#5A6170'),
+        dot: 'width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;' + (cur || done ? 'background:#2B4ACB;color:#FFFFFF' : 'background:#EEF0EE;color:#3B404B')
       };
     });
-    const card = 'display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:24px;border-radius:16px;background:#FFFFFF;cursor:pointer;font-family:Inter,system-ui,sans-serif;';
+    const card = 'display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:24px;border-radius:16px;background:#FFFFFF;cursor:pointer;font-family:var(--font);';
     const goals = [
       { id: 'out', title: 'Call my leads', body: 'The agent calls people from a list, qualifies them and books meetings.', meta: 'Outbound · most popular', d: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2zM15 3h6v6M21 3l-7 7' },
       { id: 'in', title: 'Answer my phone', body: 'The agent picks up when customers call, answers questions and takes bookings.', meta: 'Inbound', d: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2zM21 3l-7 7M14 4v6h6' },
       { id: 'multi', title: 'Run a multichannel campaign', body: 'Calls first, then WhatsApp and email follow-ups until someone books.', meta: 'Outbound + messages', d: 'M4 6h16v10H8l-4 4zM8 10h8M8 13h5' }
     ].map((g) => ({
       ...g, pressed: goal === g.id ? 'true' : 'false',
-      style: card + (goal === g.id ? 'border:2px solid #2F55D4;box-shadow:0 0 0 4px #E8EDFF' : 'border:1px solid #E4E2DC'),
-      iconBox: 'width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;' + (goal === g.id ? 'background:#2F55D4;color:#FFFFFF' : 'background:#F1EFEA;color:#3A3D46'),
+      style: card + (goal === g.id ? 'border:2px solid #2B4ACB;box-shadow:0 0 0 4px #EAEEFC' : 'border:1px solid #E2E5E3'),
+      iconBox: 'width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;' + (goal === g.id ? 'background:#2B4ACB;color:#FFFFFF' : 'background:#F5F6F4;color:#3B404B'),
       pick: () => this.setState({ goal: g.id })
     }));
-    const vcard = 'display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:20px;border-radius:16px;background:#FFFFFF;cursor:pointer;font-family:Inter,system-ui,sans-serif;';
+    const vcard = 'display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:20px;border-radius:16px;background:#FFFFFF;cursor:pointer;font-family:var(--font);';
     const voices = [
       { name: 'Anika', meta: 'Female · warm, calm' },
       { name: 'Arjun', meta: 'Male · clear, friendly' },
       { name: 'Diya', meta: 'Female · bright, upbeat' },
       { name: 'Kabir', meta: 'Male · steady, formal' }
-    ].map((v) => ({ ...v, pressed: voice === v.name ? 'true' : 'false', style: vcard + (voice === v.name ? 'border:2px solid #2F55D4;box-shadow:0 0 0 4px #E8EDFF' : 'border:1px solid #E4E2DC'), pick: () => this.setState({ voice: v.name }) }));
+    ].map((v) => ({ ...v, pressed: voice === v.name ? 'true' : 'false', style: vcard + (voice === v.name ? 'border:2px solid #2B4ACB;box-shadow:0 0 0 4px #EAEEFC' : 'border:1px solid #E2E5E3'), pick: () => this.setState({ voice: v.name }) }));
     return {
       steps, goals, voices,
       s1: step === 1, s2: step === 2, s3: step === 3, s4: step === 4, s5: step === 5,

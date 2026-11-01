@@ -8,63 +8,100 @@
 <x-dc>
 <helmet>
 <style>
-.su{min-height:100vh;background:#F6F5F2;display:flex;flex-direction:column}
-.su-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 28px;background:#FFFFFF;border-bottom:1px solid #E4E2DC}
-.su-body{flex:1;display:flex;flex-wrap:wrap;gap:28px;padding:32px 28px 56px;max-width:1180px;width:100%;margin:0 auto;box-sizing:border-box;align-items:flex-start}
-.rail{flex:1 1 210px;max-width:240px;display:flex;flex-direction:column;gap:2px}
-.rail .ph{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070;padding:12px 10px 6px}
-.rs{display:flex;align-items:center;gap:10px;min-height:38px;padding:0 10px;border-radius:9px;font-size:13.5px;font-weight:500;color:#5B6070}
-.rs .n{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;flex:none;background:#EFEDE8;color:#3A3D46}
-.rs.done{color:#3A3D46}.rs.done .n{background:#2F55D4;color:#FFFFFF}
-.rs.cur{background:#E8EDFF;color:#1E3A8A;font-weight:600}.rs.cur .n{background:#2F55D4;color:#FFFFFF}
-.panel{flex:3 1 520px;min-width:0;background:#FFFFFF;border:1px solid #E4E2DC;border-radius:16px;padding:32px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px}
-.why{flex:1 1 240px;max-width:300px;display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:14px;background:#F3F6FF;border:1px solid #CCD7FA;font-size:13.5px;color:#1E3A8A;box-sizing:border-box}
+body{padding-bottom:0}
+.su{display:flex;min-height:100vh;background:var(--sheet)}
+.brand{display:flex;align-items:center;gap:10px;color:#FFFFFF;font-weight:600;font-size:17px}
+.brand .mk{width:30px;height:30px;border-radius:8px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:2px;flex:none}
+.brand .mk i{display:block;width:2.5px;border-radius:2px;background:var(--blue)}
+.pv{flex:1 1 55%;min-width:0;position:sticky;top:0;height:100vh;align-self:flex-start;overflow:hidden;background:radial-gradient(120% 90% at 0% 0%,#24346F 0%,#141A33 55%,#0E1224 100%);display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:36px 0 36px 48px;box-sizing:border-box}
+.pv::after{content:"";position:absolute;right:-120px;bottom:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(43,74,203,.35),transparent 70%);pointer-events:none}
+.panel{flex:0 1 600px;min-width:0;padding:24px 44px 84px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px;border-left:1px solid var(--line)}
+.form-top{display:flex;justify-content:flex-end;align-items:center;gap:12px}
+.form-top .mob{display:none;margin-right:auto;color:var(--ink)}
+.form-top .mob .mk{background:var(--blue)}.form-top .mob .mk i{background:#FFFFFF}
+.su-prog{display:flex;align-items:center;gap:12px;min-height:30px}
+.su-prog .bar2{flex:1;height:4px;border-radius:2px;background:var(--fog);overflow:hidden}
+.su-prog .bar2 span{display:block;height:100%;background:var(--blue);border-radius:2px;transition:width .3s}
+.win{position:relative;z-index:1;width:620px;height:440px;flex:none;background:var(--fog);border:1px solid rgba(255,255,255,.18);border-radius:14px 0 0 14px;border-right:0;display:flex;overflow:hidden;transform-origin:0 0;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.win .sb{width:170px;padding:12px 10px;display:flex;flex-direction:column;gap:7px;box-sizing:border-box}
+.win .ws{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;border:1px solid var(--line);background:var(--sheet)}
+.win .lg{width:24px;height:24px;border-radius:7px;background:#F6B23C;color:#3A2504;font-weight:700;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex:none}
+.win .sk{display:block;height:7px;border-radius:4px;background:#DDE1DE}
+.win .nv{display:flex;align-items:center;gap:7px;height:20px;padding:0 6px;border-radius:6px;font-size:10.5px;color:var(--ink2)}
+.win .nv i{width:10px;height:10px;border-radius:3px;border:1.5px solid #9AA29D;flex:none}
+.win .nv.on{background:var(--sheet)}
+.win .gl{font-size:9.5px;color:var(--faint);padding:4px 6px 0}
+.win .main2{flex:1;margin:8px 0;background:var(--sheet);border:1px solid var(--line);border-right:0;border-radius:10px 0 0 10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.win .card2{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:11px}
+.frame{position:relative;z-index:1;height:440px;overflow:hidden;flex:none;border-radius:14px 0 0 14px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.why{position:relative;z-index:1;margin-right:48px;max-width:460px;display:flex;gap:6px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:13px;color:#C9D0EA;flex-direction:column}
+.why>span:first-child{color:#FFFFFF !important}
 .q{display:flex;flex-direction:column;gap:10px}
-.q>.qt{font-weight:700;font-size:15px}
-.q>.qh{font-size:13px;color:#5B6070;margin-top:-6px}
-.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
-.opt{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 14px;border-radius:10px;border:1px solid #E4E2DC;background:#FFFFFF;font:500 14px Inter,system-ui,sans-serif;color:#15171E;text-align:left;cursor:pointer;box-sizing:border-box}
-.opt:hover{border-color:#CCD7FA}
-.opt[aria-pressed="true"]{border:2px solid #2F55D4;padding:9px 13px;background:#F3F6FF;font-weight:600}
-.opt .box{width:18px;height:18px;border-radius:5px;border:2px solid #C9C6BF;flex:none;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:12px;box-sizing:border-box}
-.opt[aria-pressed="true"] .box{background:#2F55D4;border-color:#2F55D4}
+.q>.qt{font-weight:500;font-size:14px}
+.q>.qh{font-size:12.5px;color:var(--mut);margin-top:-6px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.opt{display:flex;align-items:center;gap:10px;min-height:42px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--sheet);font:400 13.5px var(--font);color:var(--ink);text-align:left;cursor:pointer;box-sizing:border-box}
+.opt:hover{border-color:#C9CFCB;background:#FCFCFB}
+.opt[aria-pressed="true"]{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);background:var(--blue-t2)}
+.opt .box{width:16px;height:16px;border-radius:5px;border:1.5px solid #B9C0BC;flex:none;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;box-sizing:border-box}
+.opt[aria-pressed="true"] .box{background:var(--blue);border-color:var(--blue)}
 .opt.radio .box{border-radius:50%}
-.big-opt{flex-direction:column;align-items:flex-start;min-height:96px;gap:4px}
-.err-t{font-size:12.5px;color:#912018;font-weight:600}
+.big-opt{flex-direction:column;align-items:flex-start;min-height:88px;gap:4px}
+.err-t{font-size:12.5px;color:#912018;font-weight:500}
 .code{display:flex;gap:8px}
-.code input{width:48px;height:56px;text-align:center;font:700 22px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;border-radius:10px}
-.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.sum>div{padding:16px;border-radius:12px;border:1px solid #E4E2DC;display:flex;flex-direction:column;gap:6px}
-.navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #EFEDE8}
-@media (max-width:900px){.rail,.why{max-width:none}}
-@media (max-width:640px){.su-body{padding:20px 16px 48px}.panel{padding:20px}.su-top{padding:14px 16px}}
+.code input{width:46px;height:52px;text-align:center;font:600 20px var(--font);border:1px solid var(--line);border-radius:10px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.sum>div{padding:14px;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:14px;border-top:1px solid var(--line2)}
+.panel .title{font-size:22px}
+@media (max-width:900px){.pv{display:none}.panel{flex:1 1 100%;border-left:0}.form-top .mob{display:flex}}
+@media (max-width:640px){.panel{padding:18px 16px 80px}}
+@media (prefers-reduced-motion:reduce){.win{transition:none}}
 </style>
 </helmet>
 <div class="su">
-  <header class="su-top">
-    <span style="display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 9px; background: #2F55D4; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"></path></svg></span><b style="font-size: 17px">Connekted</b></span>
-    <span class="small muted">{{ topNote }} <a href="Login.dc.html" style="font-weight: 600">{{ topLink }}</a></span>
-  </header>
 
-  <div class="su-body">
-    <nav class="rail" aria-label="Sign-up progress">
-      <sc-for list="{{ rail }}" as="p">
-        <span class="ph">{{ p.label }}</span>
-        <sc-for list="{{ p.steps }}" as="r"><span class="{{ r.cls }}" aria-current="{{ r.current }}"><span class="n">{{ r.mark }}</span>{{ r.label }}</span></sc-for>
-      </sc-for>
-      <span class="small muted" style="padding: 14px 10px">{{ timeLeft }}</span>
-    </nav>
-
+    <aside class="pv" aria-label="Preview of your workspace">
+      <span class="brand"><span class="mk" aria-hidden="true"><i style="height:7px"></i><i style="height:13px"></i><i style="height:17px"></i><i style="height:11px"></i><i style="height:6px"></i></span>Connekted</span>
+      <div class="frame"><div class="win" style="{{ winStyle }}" aria-hidden="true">
+        <div class="sb">
+          <span style="display:flex;align-items:center;gap:6px;font-weight:600;font-size:12px;padding:2px 4px"><span style="width:16px;height:16px;border-radius:5px;background:var(--blue)"></span>Connekted</span>
+          <span class="ws"><span class="lg" id="su-pv-ini">{{ pvIni }}</span><span style="min-width:0"><span style="display:block;font-size:9.5px;color:var(--mut)">Workspace</span><span id="su-pv-name" style="display:block;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ companyName }}</span></span></span>
+          <span class="nv on"><i></i>Home</span>
+          <span class="gl">Build</span><span class="nv"><i></i>Agents</span><span class="nv"><i></i>Knowledge base</span>
+          <span class="gl">Deploy</span><span class="nv"><i></i>Phone numbers</span><span class="nv"><i></i>Campaigns</span>
+          <span class="gl">Engage</span><span class="nv"><i></i>Inbox</span><span class="nv"><i></i>Contacts</span>
+        </div>
+        <div class="main2">
+          <span style="font-weight:600;font-size:13px">Good morning, {{ firstName }}</span>
+          <div class="card2"><span style="font-weight:500">{{ pvAgent }}</span><span class="muted">{{ pvAgentSub }}</span><span style="display:flex;gap:4px"><span class="pill b" style="font-size:10px">{{ pvLang }}</span><span class="pill" style="font-size:10px">IST · ₹ · +91</span></span></div>
+          <div class="card2"><span class="sk" style="width:60%"></span><span class="sk" style="width:85%"></span><span class="sk" style="width:40%"></span></div>
+          <div class="card2"><span class="sk" style="width:50%"></span><span class="sk" style="width:75%"></span></div>
+        </div>
+      </div></div>
+      <div class="why">
+        <span style="display:flex;gap:8px;align-items:center;font-weight:500;color:var(--ink)"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg>{{ why.t }}</span>
+        <sc-for list="{{ why.lines }}" as="l"><span>{{ l }}</span></sc-for>
+      </div>
+    </aside>
     <section class="panel">
+      <div class="form-top"><span class="brand mob"><span class="mk" aria-hidden="true"><i style="height:7px"></i><i style="height:13px"></i><i style="height:17px"></i><i style="height:11px"></i><i style="height:6px"></i></span>Connekted</span><span class="small muted">{{ topNote }} <a href="Login.dc.html" style="font-weight:500">{{ topLink }}</a></span></div>
+      <div class="su-prog">
+        <sc-if value="{{ canBack }}"><button type="button" class="ibtn sm ghost" aria-label="Back" onClick="{{ back }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M11 18l-6-6 6-6"></path></svg></button></sc-if>
+        <span class="small muted" style="white-space:nowrap">{{ stepText }}</span>
+        <span class="bar2" aria-hidden="true"><span style="{{ progStyle }}"></span></span>
+        <span class="small muted" style="white-space:nowrap">{{ timeLeft }}</span>
+      </div>
+
 
       <!-- 1. Account -->
       <sc-if value="{{ at.account }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 1 of 8</span><h1 class="title">Create your account</h1><p class="muted">Free for 14 days. No card needed until you go live.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Create your account</h1><p class="muted">Free for 14 days. No card needed until you go live.</p></div>
         <div class="row" style="gap: 10px">
           <button type="button" class="btn2" style="flex: 1 1 200px" onClick="{{ google }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"></path><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"></path><path fill="#FBBC05" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"></path><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"></path></svg>Sign up with Google</button>
           <button type="button" class="btn2" style="flex: 1 1 200px" onClick="{{ google }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><path fill="#F25022" d="M2 2h9.5v9.5H2z"></path><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"></path><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"></path><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"></path></svg>Sign up with Microsoft</button>
         </div>
-        <div style="display: flex; align-items: center; gap: 12px; color: #5B6070; font-size: 12.5px"><span style="flex: 1; height: 1px; background: #E4E2DC"></span>or with email<span style="flex: 1; height: 1px; background: #E4E2DC"></span></div>
+        <div style="display: flex; align-items: center; gap: 12px; color: #5A6170; font-size: 12.5px"><span style="flex: 1; height: 1px; background: #E2E5E3"></span>or with email<span style="flex: 1; height: 1px; background: #E2E5E3"></span></div>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
           <label class="field">Full name<input class="input" autocomplete="name" value="{{ f.name }}" onInput="{{ in.name }}" placeholder="Meera Iyer"><sc-if value="{{ err.name }}"><span class="err-t">{{ err.name }}</span></sc-if></label>
           <label class="field">Work email<input class="input" type="email" autocomplete="email" value="{{ f.email }}" onInput="{{ in.email }}" placeholder="you@company.com"><sc-if value="{{ err.email }}"><span class="err-t">{{ err.email }}</span></sc-if></label>
@@ -78,7 +115,7 @@
 
       <!-- 2. Verify -->
       <sc-if value="{{ at.verify }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 2 of 8</span><h1 class="title">Check your email</h1><p class="muted">We sent a 6-digit code to <b>{{ f.email }}</b>. It expires in 10 minutes.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Check your email</h1><p class="muted">We sent a 6-digit code to <b>{{ f.email }}</b>. It expires in 10 minutes.</p></div>
         <div class="code" role="group" aria-label="6-digit code">
           <input aria-label="Digit 1" inputmode="numeric" maxlength="1" value="4"><input aria-label="Digit 2" inputmode="numeric" maxlength="1" value="8"><input aria-label="Digit 3" inputmode="numeric" maxlength="1" value="2"><input aria-label="Digit 4" inputmode="numeric" maxlength="1" value="9"><input aria-label="Digit 5" inputmode="numeric" maxlength="1" value="1"><input aria-label="Digit 6" inputmode="numeric" maxlength="1" value="7">
         </div>
@@ -89,8 +126,8 @@
       <!-- 2b. Join existing -->
       <sc-if value="{{ at.join }}">
         <div class="stack" style="gap: 6px"><span class="lab">Your company is already here</span><h1 class="title">Join Apex Solar?</h1><p class="muted">3 people from <b>apexsolar.example</b> already use Connekted. Joining keeps everyone’s contacts, calls and agents in one place.</p></div>
-        <div style="display: flex; gap: 14px; align-items: center; padding: 16px; border: 1px solid #E4E2DC; border-radius: 12px; flex-wrap: wrap">
-          <span class="av sq lg" style="background: #2F55D4; color: #FFFFFF">AS</span>
+        <div style="display: flex; gap: 14px; align-items: center; padding: 16px; border: 1px solid #E2E5E3; border-radius: 12px; flex-wrap: wrap">
+          <span class="av sq lg" style="background: #2B4ACB; color: #FFFFFF">AS</span>
           <span style="flex: 1 1 200px"><b style="display: block">Apex Solar</b><span class="small muted">Admin: Meera Iyer · 3 members · Kochi</span></span>
           <a class="btn" href="Main.dc.html">Request to join</a>
         </div>
@@ -100,11 +137,11 @@
 
       <!-- 3. Workspace -->
       <sc-if value="{{ at.workspace }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 3 of 8</span><h1 class="title">Set up your workspace</h1><p class="muted">A workspace is your company in Connekted: your team, numbers, agents and contacts.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Set up your workspace</h1><p class="muted">A workspace is your company in Connekted: your team, numbers, agents and contacts.</p></div>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
           <label class="field">Company or brand name<input class="input" value="{{ f.company }}" onInput="{{ in.company }}" placeholder="Apex Solar"><sc-if value="{{ err.company }}"><span class="err-t">{{ err.company }}</span></sc-if></label>
           <label class="field">Website (optional)<input class="input" value="{{ f.site }}" onInput="{{ in.site }}" placeholder="apexsolar.in"><span class="small muted" style="font-weight: 400">We read it to draft your agent’s brief and knowledge.</span></label>
-          <label class="field">Workspace address<span style="display: flex; align-items: center; border: 1px solid #D6D3CC; border-radius: 10px; overflow: hidden"><input id="su-slug" class="input" style="border: 0; border-radius: 0" value="{{ slug }}" aria-label="Workspace address"><span class="muted" style="padding: 0 12px; white-space: nowrap">.connekted.app</span></span></label>
+          <label class="field">Workspace address<span style="display: flex; align-items: center; border: 1px solid #E2E5E3; border-radius: 10px; overflow: hidden"><input id="su-slug" class="input" style="border: 0; border-radius: 0" value="{{ slug }}" aria-label="Workspace address"><span class="muted" style="padding: 0 12px; white-space: nowrap">.connekted.app</span></span></label>
           <label class="field">Country<select class="input"><option>India</option><option>United Arab Emirates</option><option>Singapore</option><option>United States</option></select></label>
         </div>
         <div class="q">
@@ -116,7 +153,7 @@
 
       <!-- 4. Business -->
       <sc-if value="{{ at.business }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 4 of 8</span><h1 class="title">Tell us about {{ companyName }}</h1><p class="muted">Three quick questions. They decide which agent templates and reports you see first.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Tell us about {{ companyName }}</h1><p class="muted">Three quick questions. They decide which agent templates and reports you see first.</p></div>
         <div class="q"><span class="qt">Industry</span>
           <div class="opts"><sc-for list="{{ industries }}" as="o"><button type="button" class="opt radio" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span>{{ o.label }}</button></sc-for></div>
           <sc-if value="{{ err.industry }}"><span class="err-t">{{ err.industry }}</span></sc-if>
@@ -131,7 +168,7 @@
 
       <!-- 5. Use -->
       <sc-if value="{{ at.use }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 5 of 8</span><h1 class="title">How will you use Connekted?</h1><p class="muted">Pick everything that applies. We’ll suggest your first agent from this.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">How will you use Connekted?</h1><p class="muted">Pick everything that applies. We’ll suggest your first agent from this.</p></div>
         <div class="q"><span class="qt">What should your AI agents do?</span>
           <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))"><sc-for list="{{ uses }}" as="o"><button type="button" class="opt big-opt" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span style="display: flex; gap: 10px; align-items: center"><span class="box">{{ o.tick }}</span><b>{{ o.label }}</b></span><span class="small muted" style="font-weight: 400">{{ o.d }}</span></button></sc-for></div>
           <sc-if value="{{ err.uses }}"><span class="err-t">{{ err.uses }}</span></sc-if>
@@ -149,7 +186,7 @@
 
       <!-- 6. Tools -->
       <sc-if value="{{ at.tools }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 6 of 8</span><h1 class="title">Your tools and channels</h1><p class="muted">So we can bring your leads in and connect the right providers. Nothing connects until you say so.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Your tools and channels</h1><p class="muted">So we can bring your leads in and connect the right providers. Nothing connects until you say so.</p></div>
         <div class="q"><span class="qt">Where are your leads today?</span>
           <div class="opts"><sc-for list="{{ sources }}" as="o"><button type="button" class="opt" aria-pressed="{{ o.pressed }}" onClick="{{ o.pick }}"><span class="box">{{ o.tick }}</span>{{ o.label }}</button></sc-for></div>
         </div>
@@ -167,7 +204,7 @@
 
       <!-- 7. Team -->
       <sc-if value="{{ at.team }}">
-        <div class="stack" style="gap: 6px"><span class="lab">Step 7 of 8</span><h1 class="title">Invite your team</h1><p class="muted">Optional. People you invite can listen to calls, reply in the Inbox and work deals.</p></div>
+        <div class="stack" style="gap: 6px"><h1 class="title">Invite your team</h1><p class="muted">Optional. People you invite can listen to calls, reply in the Inbox and work deals.</p></div>
         <sc-for list="{{ invites }}" as="v">
           <div class="row" style="gap: 10px; align-items: center">
             <input class="input" style="flex: 3 1 240px" type="email" placeholder="name@company.com" value="{{ v.email }}" aria-label="{{ v.label }}">
@@ -182,15 +219,15 @@
       <!-- 8. Ready -->
       <sc-if value="{{ at.ready }}">
         <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
-          <span style="width: 56px; height: 56px; border-radius: 16px; background: #E3F4E8; color: #15803D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+          <span style="width: 56px; height: 56px; border-radius: 16px; background: #E2F3EE; color: #0B8A6A; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
           <div class="stack" style="gap: 4px"><h1 class="title">{{ companyName }} is ready</h1><p class="muted">Here’s what we set up from your answers. Next, build your first agent and hear it on a real call. About 10 minutes.</p></div>
         </div>
         <div class="sum">
           <sc-for list="{{ summary }}" as="x"><div><span class="lab">{{ x.l }}</span><b>{{ x.v }}</b><span class="small muted">{{ x.d }}</span></div></sc-for>
         </div>
         <div class="card blue" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap">
-          <span class="av sq lg" style="background: #2F55D4; color: #FFFFFF">{{ agentInitials }}</span>
-          <span style="flex: 1 1 260px"><span class="lab" style="color: #1E3A8A">Suggested first agent</span><b style="display: block; font-size: 16px">{{ agentName }}</b><span class="small muted">{{ agentDesc }}</span></span>
+          <span class="av sq lg" style="background: #2B4ACB; color: #FFFFFF">{{ agentInitials }}</span>
+          <span style="flex: 1 1 260px"><span class="lab" style="color: #1D338C">Suggested first agent</span><b style="display: block; font-size: 16px">{{ agentName }}</b><span class="small muted">{{ agentDesc }}</span></span>
           <a class="btn" href="Onboarding.dc.html">Build this agent</a>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap"><a class="btn2" href="Main.dc.html">Skip, go to Home</a><a class="btn2" href="Agents.dc.html">See all templates</a></div>
@@ -207,12 +244,6 @@
         </div>
       </sc-if>
     </section>
-
-    <aside class="why">
-      <span style="display: flex; gap: 8px; align-items: center; font-weight: 700"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg>{{ why.t }}</span>
-      <sc-for list="{{ why.lines }}" as="l"><span>{{ l }}</span></sc-for>
-    </aside>
-  </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -230,6 +261,7 @@ class Component extends DCLogic {
     };
     this.f = { name: '', email: '', phone: '', pass: '', terms: true, company: '', site: '' };
   }
+  initials(s) { return (s || 'Your company').split(/\s+/).filter(Boolean).map((w) => w[0]).join('').slice(0, 2).toUpperCase(); }
   slugify(s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'your-company'; }
   go(step) { this.setState({ step, err: {} }); window.scrollTo(0, 0); }
   renderVals() {
@@ -256,7 +288,7 @@ class Component extends DCLogic {
     const providers = single('provider', [{ id: 'plivo', label: 'Plivo', rec: true }, { id: 'vonage', label: 'Vonage' }, { id: 'twilio', label: 'Twilio' }, { id: 'telnyx', label: 'Telnyx' }, { id: 'sip', label: 'My own SIP trunk' }, { id: 'none', label: 'None yet, help me pick' }]).map((o) => ({ ...o, rec: !!o.rec }));
     const channels = multi('channels', [{ id: 'wa', label: 'WhatsApp Business' }, { id: 'email', label: 'Email (Google or Outlook)' }, { id: 'sms', label: 'SMS' }, { id: 'li', label: 'LinkedIn' }]);
     const dlt = single('dlt', ['Yes', 'No', 'Not sure']);
-    const company = this.f.company || 'Apex Solar';
+    const company = this.f.company || 'Your company';
     const domain = (this.f.email.split('@')[1]) || 'apexsolar.in';
     const useLabels = uses.filter((u) => u.pressed === 'true').map((u) => u.label);
     const langLabels = langs.filter((u) => u.pressed === 'true').map((u) => u.label);
@@ -287,7 +319,7 @@ class Component extends DCLogic {
       phone: (e) => { this.f.phone = e.target.value; },
       pass: (e) => { this.f.pass = e.target.value; },
       terms: (e) => { this.f.terms = e.target.checked; },
-      company: (e) => { this.f.company = e.target.value; const el = document.getElementById('su-slug'); if (el) el.value = this.slugify(e.target.value); },
+      company: (e) => { this.f.company = e.target.value; const el = document.getElementById('su-slug'); if (el) el.value = this.slugify(e.target.value); const nm = document.getElementById('su-pv-name'); if (nm) nm.textContent = e.target.value || 'Your company'; const ini = document.getElementById('su-pv-ini'); if (ini) ini.textContent = this.initials(e.target.value); },
       site: (e) => { this.f.site = e.target.value; }
     };
     const validate = () => {
@@ -318,6 +350,11 @@ class Component extends DCLogic {
       addInvite: () => this.setState({ invites: s.invites.concat([{ email: '', role: 'Sales rep' }]) }),
       summary, agentName: ag[0], agentDesc: ag[1], agentInitials: ag[0].split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase(),
       why: WHY[s.step],
+      stepText: 'Step ' + (idx + 1) + ' of ' + ORDER.length + ' · ' + LBL[s.step === 'join' ? 'verify' : s.step],
+      progStyle: 'width:' + Math.round((idx + 1) / ORDER.length * 100) + '%',
+      winStyle: s.step === 'workspace' ? 'transform:scale(1.55) translate(-4px,-6px)' : (s.step === 'use' || s.step === 'ready' ? 'transform:scale(1.25) translate(-172px,-4px)' : ''),
+      pvIni: this.initials(this.f.company), firstName: (this.f.name.split(' ')[0] || 'there'),
+      pvAgent: ag[0], pvAgentSub: 'Suggested first agent · ' + (useLabels[0] || 'Call new leads'), pvLang: (langLabels[0] || 'English') + ' (India)',
       timeLeft: remaining > 0 ? 'About ' + Math.max(1, Math.ceil(remaining * 0.4)) + ' min left' : 'All done',
       topNote: s.step === 'account' ? 'Already have an account?' : 'Signed in as ' + (this.f.email || 'meera@apexsolar.in') + ' ·',
       topLink: s.step === 'account' ? 'Sign in' : 'Sign out',

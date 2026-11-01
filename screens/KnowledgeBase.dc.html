@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Knowledge base</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.kb{display:flex;flex-wrap:wrap;flex:1;min-height:0}
+.kb-l{flex:0 0 290px;box-sizing:border-box;border-right:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px}
+.kb-i{display:flex;flex-direction:column;gap:3px;width:100%;padding:10px 12px;border-radius:10px;border:1px solid transparent;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.kb-i:hover{background:var(--fill)}
+.kb-i[aria-pressed="true"]{background:var(--blue-t2);border-color:var(--blue-b)}
+.kb-d{flex:1 1 520px;min-width:0;padding:20px 24px 40px;display:flex;flex-direction:column;gap:18px}
+.src-ic{width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ans{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--fill);border:1px solid var(--line2)}
+.cite{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--sheet);border:1px solid var(--line);color:var(--ink2)}
+.menu{position:absolute;right:0;top:calc(100% + 6px);z-index:20;min-width:230px;padding:6px;border-radius:12px;background:var(--sheet);border:1px solid var(--line);box-shadow:0 12px 32px rgba(25,28,34,.14);display:flex;flex-direction:column}
+.menu button{display:flex;gap:10px;align-items:center;min-height:36px;padding:0 10px;border-radius:8px;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.menu button:hover{background:var(--fill)}
+@media (max-width:760px){.kb-l{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line)}.kb-d{padding:16px}}
+</style>
+</helmet>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="knowledge"></dc-import></div>
+  <main class="main flush">
+    <div class="bar">
+      <h1 class="title">Knowledge base</h1>
+      <span class="small muted hide-sm">{{ usage }}</span>
+      <button type="button" class="btn" onClick="{{ openAdd }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>New knowledge base</button>
+    </div>
+    <div class="kb">
+      <aside class="kb-l" aria-label="Knowledge bases">
+        <label class="search" style="flex:none"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--mut)"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><span class="sr">Search knowledge bases</span><input type="search" placeholder="Search"></label>
+        <sc-for list="{{ list }}" as="k">
+          <button type="button" class="kb-i" aria-pressed="{{ k.pressed }}" onClick="{{ k.pick }}">
+            <span style="font-weight:500">{{ k.name }}</span>
+            <span class="small muted">{{ k.meta }}</span>
+          </button>
+        </sc-for>
+      </aside>
+
+      <section class="kb-d" aria-label="Knowledge base details">
+        <div class="ph">
+          <div class="ph-t"><h2 class="title" style="font-size:18px">{{ cur.name }}</h2><span class="sub">{{ cur.desc }}</span></div>
+          <div style="display:flex;gap:8px;position:relative">
+            <button type="button" class="btn2">Rename</button>
+            <button type="button" class="btn2" onClick="{{ toggleMenu }}" aria-expanded="{{ menuOpen }}" aria-haspopup="true">Add source<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <sc-if value="{{ menu }}">
+              <div class="menu" role="menu">
+                <button type="button" role="menuitem"><span class="src-ic" style="background:var(--blue-t);color:var(--blue)"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6v18h12V7z"></path></svg></span>Upload a file (PDF, DOCX, XLSX)</button>
+                <button type="button" role="menuitem"><span class="src-ic" style="background:var(--teal-t);color:var(--teal)"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18"></path></svg></span>Add a website</button>
+                <button type="button" role="menuitem"><span class="src-ic" style="background:var(--fog);color:var(--ink2)"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></span>Write or paste text</button>
+                <button type="button" role="menuitem"><span class="src-ic" style="background:#FBF0DC;color:#9A5B00"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 3h8l6 11-4 7H6l-4-7z"></path></svg></span>Google Drive folder</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div class="row" style="gap:8px;align-items:center">
+          <span class="small muted">Used by</span>
+          <sc-for list="{{ cur.agents }}" as="a"><a class="pill out" href="Agent.dc.html" style="text-decoration:none;color:var(--ink2)">{{ a }}</a></sc-for>
+        </div>
+
+        <div class="card flush scroll-x">
+          <table>
+            <thead><tr><th>Source</th><th>Status</th><th>Size</th><th>Updated</th><th><span class="sr">Actions</span></th></tr></thead>
+            <tbody>
+              <sc-for list="{{ cur.sources }}" as="s">
+                <tr>
+                  <td><span style="display:flex;align-items:center;gap:10px"><span class="src-ic" style="{{ s.icStyle }}"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="{{ s.icon }}"></path></svg></span><span><span style="display:block;font-weight:500">{{ s.name }}</span><span class="small muted">{{ s.kind }}</span></span></span></td>
+                  <td><span class="{{ s.pill }}"><span class="{{ s.dot }}"></span>{{ s.status }}</span></td>
+                  <td class="muted">{{ s.size }}</td>
+                  <td class="muted small">{{ s.updated }}</td>
+                  <td style="text-align:right"><button type="button" class="ibtn sm ghost" aria-label="{{ s.more }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg></button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+
+        <section class="card" style="display:flex;flex-direction:column;gap:12px">
+          <div class="between"><h3 class="h2">Try a question</h3><span class="small muted">See what the agent would answer, and from where</span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label class="search" style="flex:1 1 300px"><span class="sr">Question</span><input id="kb-q" value="{{ q }}" onInput="{{ typeQ }}" placeholder="Ask like a caller would"></label>
+            <button type="button" class="btn" onClick="{{ ask }}">Ask</button>
+          </div>
+          <sc-if value="{{ answered }}">
+            <div class="ans">
+              <span>{{ cur.answer }}</span>
+              <span style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ cur.cites }}" as="c"><span class="cite">{{ c }}</span></sc-for></span>
+            </div>
+          </sc-if>
+        </section>
+      </section>
+    </div>
+  </main>
+</div>
+
+<sc-if value="{{ add }}">
+  <div class="scrim" onClick="{{ closeScrim }}">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="kb-h" style="width:min(560px,100%)">
+      <div class="modal-h"><h2 id="kb-h" class="h2">New knowledge base</h2><button type="button" class="ibtn sm" aria-label="Close" onClick="{{ closeAdd }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></div>
+      <div class="modal-b">
+        <label class="field">Name<input class="input" placeholder="For example: Loan products 2026"></label>
+        <div class="stack" style="gap:8px">
+          <span class="field" style="gap:0">Sources</span>
+          <div class="tiles" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+            <button type="button" class="tile"><span class="t">Upload files</span><span class="d">PDF, Word, Excel, up to 50 MB</span></button>
+            <button type="button" class="tile"><span class="t">Website</span><span class="d">Pages are re-read every day</span></button>
+            <button type="button" class="tile"><span class="t">Write text</span><span class="d">FAQs, policies, price lists</span></button>
+            <button type="button" class="tile"><span class="t">Google Drive</span><span class="d">Keeps a folder in sync</span></button>
+          </div>
+        </div>
+        <span class="note">Your first 10 knowledge bases are included in every plan.</span>
+      </div>
+      <div class="modal-f"><button type="button" class="btn2" onClick="{{ closeAdd }}">Cancel</button><button type="button" class="btn" onClick="{{ closeAdd }}">Create</button></div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'subsidy', menu: false, add: false, q: 'How much subsidy do I get for 3 kW?', answered: true };
+  }
+  renderVals() {
+    const s = this.state;
+    const I = {
+      pdf: ['M14 3H6v18h12V7zM14 3v4h4', 'background:var(--blue-t);color:var(--blue)'],
+      web: ['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3a14 14 0 0 1 0 18', 'background:var(--teal-t);color:var(--teal)'],
+      text: ['M4 6h16M4 12h16M4 18h10', 'background:var(--fog);color:var(--ink2)'],
+      sheet: ['M4 4h16v16H4zM4 10h16M10 4v16', 'background:#E2F3EE;color:#0B8A6A']
+    };
+    const src = (kind, name, status, size, updated) => ({ kind: { pdf: 'PDF', web: 'Website', text: 'Text', sheet: 'Spreadsheet' }[kind], name, status, size, updated, icon: I[kind][0], icStyle: I[kind][1], pill: status === 'Ready' ? 'pill g' : 'pill o', dot: status === 'Ready' ? 'dot g' : 'dot o', more: 'More actions for ' + name });
+    const KB = {
+      subsidy: { name: 'Solar subsidy (PM Surya Ghar)', desc: 'Government subsidy rules, eligibility and how to apply.', agents: ['Apex Solar Advisor', 'WhatsApp Concierge'],
+        sources: [src('pdf', 'Subsidy guide 2026.pdf', 'Ready', '42 chunks', 'Today, 9:10 am'), src('web', 'pmsuryaghar.gov.in/faq', 'Ready', '18 pages', 'Synced daily'), src('text', 'What we say about timelines', 'Ready', '1 note', '12 Oct')],
+        answer: 'For a 3 kW rooftop system you can get up to ₹78,000: ₹30,000 per kW for the first 2 kW and ₹18,000 for the third. It is paid to your bank account after the installation is inspected.',
+        cites: ['Subsidy guide 2026.pdf · page 4', 'pmsuryaghar.gov.in/faq'] },
+      pricing: { name: 'Apex pricing and FAQs', desc: 'Price per kW, EMI options and common questions.', agents: ['Apex Solar Advisor', 'Front Desk'],
+        sources: [src('web', 'apexsolar.example/pricing', 'Ready', '6 pages', 'Synced daily'), src('sheet', 'Price list Nov 2026.xlsx', 'Processing', '—', 'Just now')],
+        answer: 'A 3 kW system costs about ₹1,85,000 before subsidy. EMI starts at ₹3,900 a month for 36 months.', cites: ['apexsolar.example/pricing'] },
+      warranty: { name: 'Warranty and service', desc: 'Panel and inverter warranty, service visits.', agents: ['Front Desk'],
+        sources: [src('pdf', 'Warranty terms.pdf', 'Ready', '11 chunks', '2 Sep')],
+        answer: 'Panels have a 25-year performance warranty and the inverter has 5 years. Service visits are free in the first year.', cites: ['Warranty terms.pdf · page 2'] }
+    };
+    const list = Object.keys(KB).map((id) => ({ name: KB[id].name, meta: KB[id].sources.length + ' sources · used by ' + KB[id].agents.length + (KB[id].agents.length === 1 ? ' agent' : ' agents'), pressed: s.sel === id ? 'true' : 'false', pick: () => this.setState({ sel: id, answered: false, menu: false }) }));
+    return {
+      list, cur: KB[s.sel], usage: '3 of 10 included',
+      menu: s.menu, menuOpen: s.menu ? 'true' : 'false', toggleMenu: () => this.setState({ menu: !s.menu }),
+      q: s.q, typeQ: (e) => this.setState({ q: e.target.value, answered: false }), answered: s.answered, ask: () => this.setState({ answered: true }),
+      add: s.add, openAdd: () => this.setState({ add: true }), closeAdd: () => this.setState({ add: false }),
+      closeScrim: (e) => { if (e.target === e.currentTarget) this.setState({ add: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

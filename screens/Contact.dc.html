@@ -8,37 +8,23 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
-a{color:#2F55D4}a:hover{color:#1E3A8A}
-h1,h2,h3,p{margin:0}
-.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn:hover{background:#2446B8;color:#FFFFFF}
-.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn2:hover{background:#F1EFEA;color:#15171E}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
-.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
-.muted{color:#5B6070}
-.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
-.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #EFEDE8}
 </style>
 </helmet>
-<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
-  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
-    <dc-import name="Sidebar" active="contacts" hint-size="232px,1060px"></dc-import>
+<div class="shell">
+  <div class="side">
+    <dc-import name="Sidebar" active="contacts"></dc-import>
   </div>
-  <main style="flex: 999 1 560px; min-width: 0; padding: 24px 36px 56px; box-sizing: border-box">
-    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+  <main class="main">
+    <div style="display: flex; flex-direction: column; gap: 20px">
 
       <nav aria-label="Breadcrumb" style="font-size: 13.5px"><a href="Contacts.dc.html">Contacts</a> <span class="muted">/ Priya Nair</span></nav>
 
       <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
         <div style="display: flex; gap: 16px; align-items: center">
-          <span style="width: 56px; height: 56px; border-radius: 50%; background: #F1EFEA; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #3A3D46">PN</span>
+          <span style="width: 56px; height: 56px; border-radius: 50%; background: #F5F6F4; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; color: #3B404B">PN</span>
           <div style="display: flex; flex-direction: column; gap: 4px">
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><h1 style="font-size: 26px; font-weight: 700; letter-spacing: -0.4px">Priya Nair</h1><span class="pill b">Qualified</span><span class="pill">Score 82</span></div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap"><h1 style="font-size: 26px; font-weight: 600; letter-spacing: -0.4px">Priya Nair</h1><span class="pill b">Qualified</span><span class="pill">Score 82</span></div>
             <p class="muted">Homeowner · Kochi · +91 98450 •• •12</p>
           </div>
         </div>
@@ -56,13 +42,13 @@ h1,h2,h3,p{margin:0}
       <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
         <div style="flex: 3 1 540px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 
-          <section class="card" style="display: flex; flex-direction: column; gap: 16px; border: 2px solid #2F55D4">
+          <section class="card" style="display: flex; flex-direction: column; gap: 16px; border: 2px solid #2B4ACB">
             <div style="display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap">
               <div style="display: flex; flex-direction: column; gap: 2px">
-                <span class="lab" style="color: #1E3A8A">Last call · today, 2:33 pm · 2:56</span>
+                <span class="lab" style="color: #1D338C">Last call · today, 2:33 pm · 2:56</span>
                 <span style="font-weight: 600">Apex Solar Advisor</span>
               </div>
-              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #2F55D4; color: #FFFFFF; font-weight: 700">
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: #2B4ACB; color: #FFFFFF; font-weight: 600">
                 <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
                 Site visit booked · Sat 1 Nov, 11:00
               </span>
@@ -74,14 +60,14 @@ h1,h2,h3,p{margin:0}
             <div style="display: flex; flex-direction: column; gap: 8px">
               <span class="lab">Collected on the call</span>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px">
-                <div style="padding: 12px; border-radius: 10px; background: #F3F6FF"><div class="muted" style="font-size: 12.5px">Monthly bill</div><div style="font-weight: 700; font-size: 16px">₹3,200</div></div>
-                <div style="padding: 12px; border-radius: 10px; background: #F3F6FF"><div class="muted" style="font-size: 12.5px">Owns the home</div><div style="font-weight: 700; font-size: 16px">Yes</div></div>
-                <div style="padding: 12px; border-radius: 10px; background: #F3F6FF"><div class="muted" style="font-size: 12.5px">Roof</div><div style="font-weight: 700; font-size: 16px">Partly shaded</div></div>
-                <div style="padding: 12px; border-radius: 10px; background: #F3F6FF"><div class="muted" style="font-size: 12.5px">Visit</div><div style="font-weight: 700; font-size: 16px">Sat 11:00</div></div>
+                <div style="padding: 12px; border-radius: 10px; background: #F4F6FE"><div class="muted" style="font-size: 12.5px">Monthly bill</div><div style="font-weight: 600; font-size: 16px">₹3,200</div></div>
+                <div style="padding: 12px; border-radius: 10px; background: #F4F6FE"><div class="muted" style="font-size: 12.5px">Owns the home</div><div style="font-weight: 600; font-size: 16px">Yes</div></div>
+                <div style="padding: 12px; border-radius: 10px; background: #F4F6FE"><div class="muted" style="font-size: 12.5px">Roof</div><div style="font-weight: 600; font-size: 16px">Partly shaded</div></div>
+                <div style="padding: 12px; border-radius: 10px; background: #F4F6FE"><div class="muted" style="font-size: 12.5px">Visit</div><div style="font-weight: 600; font-size: 16px">Sat 11:00</div></div>
               </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #F6F5F2">
-              <button type="button" aria-label="Play recording" onClick="{{ toggle }}" style="width: 44px; height: 44px; flex: none; border-radius: 50%; border: 0; background: #2F55D4; cursor: pointer; display: flex; align-items: center; justify-content: center">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #F5F6F4">
+              <button type="button" aria-label="Play recording" onClick="{{ toggle }}" style="width: 44px; height: 44px; flex: none; border-radius: 50%; border: 0; background: #2B4ACB; cursor: pointer; display: flex; align-items: center; justify-content: center">
                 <sc-if value="{{ paused }}" hint-placeholder-val="{{ true }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M7 4v16l13-8z"></path></svg></sc-if>
                 <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg></sc-if>
               </button>
@@ -92,11 +78,11 @@ h1,h2,h3,p{margin:0}
           </section>
 
           <section class="card" style="display: flex; flex-direction: column; gap: 14px">
-            <h2 style="font-size: 17px; font-weight: 700">Activity</h2>
+            <h2 style="font-size: 17px; font-weight: 600">Activity</h2>
             <sc-for list="{{ activity }}" as="a" hint-placeholder-count="5">
               <div style="display: flex; gap: 14px">
                 <span style="{{ a.icon }}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.d }}"></path></svg></span>
-                <div style="flex: 1; min-width: 0; display: flex; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #EFEDE8; flex-wrap: wrap">
+                <div style="flex: 1; min-width: 0; display: flex; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid #EEF0EE; flex-wrap: wrap">
                   <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{ a.title }}</span><span class="muted" style="font-size: 13px">{{ a.detail }}</span></div>
                   <span class="muted" style="font-size: 13px; white-space: nowrap">{{ a.when }}</span>
                 </div>
@@ -106,9 +92,9 @@ h1,h2,h3,p{margin:0}
         </div>
 
         <aside style="flex: 2 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
-          <section class="card" style="display: flex; flex-direction: column; gap: 12px; background: #F3F6FF; border-color: #CCD7FA">
-            <span class="lab" style="color: #1E3A8A">Next step</span>
-            <span style="font-weight: 700; font-size: 16px">Site visit on Sat 1 Nov, 11:00</span>
+          <section class="card" style="display: flex; flex-direction: column; gap: 12px; background: #F4F6FE; border-color: #C9D3F6">
+            <span class="lab" style="color: #1D338C">Next step</span>
+            <span style="font-weight: 600; font-size: 16px">Site visit on Sat 1 Nov, 11:00</span>
             <span class="muted">WhatsApp reminder goes out Friday evening. Assign someone to visit.</span>
             <button type="button" class="btn" style="align-self: flex-start">Assign visit</button>
           </section>
@@ -123,7 +109,7 @@ h1,h2,h3,p{margin:0}
           </section>
           <section class="card" style="display: flex; flex-direction: column; gap: 8px">
             <span class="lab">Deal</span>
-            <span style="font-weight: 700">Rooftop solar · 3 kW</span>
+            <span style="font-weight: 600">Rooftop solar · 3 kW</span>
             <span class="muted">Stage: Site visit · Value [₹ add quote]</span>
           </section>
         </aside>
@@ -143,11 +129,11 @@ class Component extends DCLogic {
     const ic = (bg, fg) => 'width:34px;height:34px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:' + bg + ';color:' + fg;
     const phone = 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z';
     const activity = [
-      { title: 'WhatsApp confirmation delivered', detail: '“Your free site visit is booked for Sat 1 Nov, 11:00”', when: 'Today, 2:36 pm', d: 'M4 6h16v10H8l-4 4z', icon: ic('#E3F4E8', '#14672F') },
-      { title: 'AI call · visit booked', detail: 'Apex Solar Advisor · 2:56 · stage moved to Qualified', when: 'Today, 2:33 pm', d: phone, icon: ic('#2F55D4', '#FFFFFF') },
-      { title: 'AI call · no answer', detail: 'Retry scheduled for 2 hours later', when: 'Today, 12:30 pm', d: phone, icon: ic('#F1EFEA', '#3A3D46') },
-      { title: 'Added to campaign', detail: 'Solar leads · October', when: 'Yesterday', d: 'M4 10v4h3l6 4V6l-6 4z', icon: ic('#F1EFEA', '#3A3D46') },
-      { title: 'Filled the enquiry form', detail: 'apexsolar.in/contact', when: '24 Oct', d: 'M4 4h16v16H4zM8 9h8M8 13h5', icon: ic('#F1EFEA', '#3A3D46') }
+      { title: 'WhatsApp confirmation delivered', detail: '“Your free site visit is booked for Sat 1 Nov, 11:00”', when: 'Today, 2:36 pm', d: 'M4 6h16v10H8l-4 4z', icon: ic('#E2F3EE', '#0A6550') },
+      { title: 'AI call · visit booked', detail: 'Apex Solar Advisor · 2:56 · stage moved to Qualified', when: 'Today, 2:33 pm', d: phone, icon: ic('#2B4ACB', '#FFFFFF') },
+      { title: 'AI call · no answer', detail: 'Retry scheduled for 2 hours later', when: 'Today, 12:30 pm', d: phone, icon: ic('#F5F6F4', '#3B404B') },
+      { title: 'Added to campaign', detail: 'Solar leads · October', when: 'Yesterday', d: 'M4 10v4h3l6 4V6l-6 4z', icon: ic('#F5F6F4', '#3B404B') },
+      { title: 'Filled the enquiry form', detail: 'apexsolar.in/contact', when: '24 Oct', d: 'M4 4h16v16H4zM8 9h8M8 13h5', icon: ic('#F5F6F4', '#3B404B') }
     ];
     return { activity, playing, paused: !playing, time: playing ? '0:42 / 2:56' : '2:56', toggle: () => this.setState({ playing: !playing }) };
   }

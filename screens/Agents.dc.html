@@ -8,129 +8,346 @@
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&amp;display=swap">
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;color:#15171E;background:#F6F5F2;font-size:14px;line-height:1.45}
-a{color:#2F55D4}a:hover{color:#1E3A8A}
-h1,h2,h3,p{margin:0}
-.card{background:#FFFFFF;border:1px solid #E4E2DC;border-radius:14px;padding:20px;box-sizing:border-box}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;background:#2F55D4;color:#FFFFFF;font:600 14px Inter,system-ui,sans-serif;border:0;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn:hover{background:#2446B8;color:#FFFFFF}
-.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;background:#FFFFFF;color:#15171E;font:600 14px Inter,system-ui,sans-serif;border:1px solid #D6D3CC;text-decoration:none;cursor:pointer;box-sizing:border-box}
-.btn2:hover{background:#F1EFEA;color:#15171E}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:#EFEDE8;color:#3A3D46;white-space:nowrap}
-.pill.b{background:#E8EDFF;color:#1E3A8A}.pill.g{background:#E3F4E8;color:#14672F}.pill.o{background:#FDEEE6;color:#9A3412}
-.muted{color:#5B6070}
-.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5B6070}
+.ag{display:flex;flex-wrap:wrap;flex:1;min-height:0}
+.ag-f{flex:0 0 220px;box-sizing:border-box;border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.ag-f .hd{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:500;color:var(--faint);padding:14px 4px 4px 10px}
+.ag-t{flex:1 1 560px;min-width:0;display:flex;flex-direction:column}
+.ag-name{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.ag-name:hover .nm{color:var(--blue)}
+.ag-name .nm{font-weight:500}
+.agt{table-layout:fixed;min-width:760px}
+.agt td{height:60px;padding-top:0;padding-bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agt th,.agt td{padding-left:18px}
+.ty{display:inline-flex;align-items:center;gap:8px}
+.ty .ti{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:#FFFFFF;flex:none}
+.ag-name .gl{font-size:12.5px;color:var(--mut);display:block;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.menu{position:absolute;right:0;top:calc(100% + 6px);z-index:20;min-width:260px;padding:6px;border-radius:12px;background:var(--sheet);border:1px solid var(--line);box-shadow:0 12px 32px rgba(25,28,34,.14);display:flex;flex-direction:column}
+.menu button{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.menu button:hover{background:var(--fill)}
+.menu .d{display:block;font-size:12.5px;color:var(--mut)}
+.typ{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.typ .tile{flex-direction:row;gap:12px;align-items:center;padding:12px 14px}
+.typ .pic{flex:none;line-height:0}
+.typ .tile[aria-pressed="true"] .pic svg rect:first-child{stroke:#C9D3F6}
+.typ .ic{width:28px;height:28px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center}
+.tpl{min-height:118px;padding:14px;gap:6px}
+.tpl .tic{display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.tpl .tic>span{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center}
+.tpl .tic .bdg2{width:auto;height:auto;margin-left:auto;padding:1px 8px;border-radius:999px;background:var(--fog);font-size:11.5px;color:var(--ink2)}
+.tpl .tg{display:flex;gap:4px;min-height:18px;margin-bottom:4px}
+.tpl .tg>span{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--fog);color:var(--ink2)}
+.tpl .tg>span.in{background:var(--teal-t);color:var(--teal-ink)}
+.tpl .tg>span.out{background:var(--blue-t);color:var(--blue-ink)}
+.tpl .tg>span.none{display:none}
+@media (max-width:640px){.typ .pic{display:none}}
+.warnrow td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+@media (max-width:760px){.ag-f{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap}.ag-f .hd{display:none}}
 </style>
 </helmet>
-<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F6F5F2">
-  <div style="flex: 1 1 232px; background: #FFFFFF; border-right: 1px solid #E4E2DC">
-    <dc-import name="Sidebar" active="agents" hint-size="232px,1060px"></dc-import>
-  </div>
-  <main style="flex: 999 1 560px; min-width: 0; padding: 32px 36px 56px; box-sizing: border-box">
-    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
-
-      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
-        <div style="display: flex; flex-direction: column; gap: 4px">
-          <h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.4px">Agents</h1>
-          <p class="muted" style="font-size: 15px">Each agent has its own voice, number and way of talking. Campaigns and phone numbers pick an agent.</p>
-        </div>
-        <a class="btn" href="Onboarding.dc.html">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-          New agent
-        </a>
+<div class="shell">
+  <div class="side"><dc-import name="Sidebar" active="agents"></dc-import></div>
+  <main class="main flush">
+    <div class="bar">
+      <h1 class="title">Agents</h1>
+      <label class="search" style="flex:0 1 280px">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--mut)"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <span class="sr">Search agents</span>
+        <input id="ag-q" type="search" placeholder="Search agents" value="{{ q }}" onInput="{{ search }}">
+      </label>
+      <button type="button" class="btn2">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3M7 10l5 5 5-5M4 21h16"></path></svg>
+        Import
+      </button>
+      <div style="position:relative">
+        <button type="button" class="btn" onClick="{{ toggleMenu }}" aria-expanded="{{ menuOpen }}" aria-haspopup="true">
+          Create agent
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <sc-if value="{{ menu }}">
+          <div class="menu" role="menu">
+            <button type="button" role="menuitem" onClick="{{ openVoice }}">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B4ACB" stroke-width="2" stroke-linecap="round" style="margin-top:2px;flex:none"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+              <span><span style="font-weight:500">Voice agent</span><span class="d">Makes and answers phone calls</span></span>
+            </button>
+            <button type="button" role="menuitem" onClick="{{ openChat }}">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2" stroke-linecap="round" style="margin-top:2px;flex:none"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg>
+              <span><span style="font-weight:500">Chat agent</span><span class="d">Replies on WhatsApp and website chat</span></span>
+            </button>
+          </div>
+        </sc-if>
       </div>
+    </div>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
-        <div role="group" aria-label="Filter agents" style="display: flex; gap: 6px; padding: 4px; background: #EFEDE8; border-radius: 12px">
-          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
-            <button type="button" onClick="{{ f.pick }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}">{{ f.label }}</button>
-          </sc-for>
-        </div>
-        <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #D6D3CC; background: #FFFFFF; min-width: 260px; box-sizing: border-box">
-          <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-          <span style="position: absolute; left: -9999px">Search agents</span>
-          <input type="search" placeholder="Search agents" style="border: 0; outline: 0; font: 400 14px Inter, system-ui, sans-serif; flex: 1; background: transparent">
-        </label>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px">
-        <sc-for list="{{ shown }}" as="a" hint-placeholder-count="3">
-          <a href="Agent.dc.html" class="card" style="display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: #15171E">
-            <div style="display: flex; gap: 14px; align-items: flex-start">
-              <span style="{{ a.avatar }}">{{ a.initials }}</span>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
-                <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center">
-                  <span style="font-size: 17px; font-weight: 700">{{ a.name }}</span>
-                  <span class="{{ a.statusClass }}">{{ a.status }}</span>
-                </div>
-                <span class="muted" style="font-size: 13.5px">{{ a.goal }}</span>
-              </div>
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 6px">
-              <span class="pill">{{ a.dir }}</span>
-              <span class="pill">{{ a.voice }}</span>
-              <span class="pill">{{ a.number }}</span>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding-top: 14px; border-top: 1px solid #EFEDE8">
-              <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700">{{ a.calls }}</span><span class="muted" style="font-size: 12.5px">Calls, 7 days</span></div>
-              <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700">{{ a.booked }}</span><span class="muted" style="font-size: 12.5px">Goal reached</span></div>
-              <div style="display: flex; flex-direction: column; gap: 2px"><span style="{{ a.replyStyle }}">{{ a.reply }}</span><span class="muted" style="font-size: 12.5px">Reply time</span></div>
-            </div>
-            <sc-if value="{{ a.hasWarn }}" hint-placeholder-val="{{ false }}">
-              <span style="font-size: 13px; color: #9A3412; background: #FDEEE6; border-radius: 8px; padding: 8px 10px">{{ a.warn }}</span>
-            </sc-if>
-          </a>
+    <div class="ag">
+      <aside class="ag-f" aria-label="Folders">
+        <sc-for list="{{ views }}" as="v">
+          <div class="vnav"><button type="button" aria-pressed="{{ v.pressed }}" onClick="{{ v.pick }}">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ v.d }}"></path></svg>
+            {{ v.label }}<span class="n">{{ v.n }}</span>
+          </button></div>
         </sc-for>
-      </div>
+        <div class="hd">Folders <button type="button" class="ibtn sm ghost" aria-label="New folder"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button></div>
+        <sc-for list="{{ folders }}" as="v">
+          <div class="vnav"><button type="button" aria-pressed="{{ v.pressed }}" onClick="{{ v.pick }}">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            {{ v.label }}<span class="n">{{ v.n }}</span>
+          </button></div>
+        </sc-for>
+      </aside>
 
-      <section style="display: flex; flex-direction: column; gap: 14px; margin-top: 8px">
-        <div style="display: flex; justify-content: space-between; align-items: baseline">
-          <h2 style="font-size: 17px; font-weight: 700">Start from a template</h2>
-          <span class="muted" style="font-size: 13px">Each one comes with steps, fields to capture and test cases</span>
+      <section class="ag-t" aria-label="Agent list">
+        <div class="scroll-x">
+          <table class="agt">
+            <colgroup><col style="width:34%"><col style="width:20%"><col style="width:16%"><col style="width:18%"><col style="width:12%"></colgroup>
+            <thead><tr><th>Agent</th><th>Type</th><th>Voice</th><th>Phone number</th><th>Status</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ shown }}" as="a">
+                <tr>
+                  <td>
+                    <a class="ag-name" href="{{ a.href }}">
+                      <span class="{{ a.sigCls }}" aria-hidden="true"><sc-for list="{{ a.bars }}" as="b"><i style="{{ b.style }}"></i></sc-for></span>
+                      <span class="nm">{{ a.name }}</span>
+                    </a>
+                  </td>
+                  <td><span class="ty"><span class="ti" style="{{ a.tyStyle }}"><svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="{{ a.tyIcon }}"></path></svg></span>{{ a.type }}</span></td>
+                  <td>{{ a.voice }}</td>
+                  <td class="{{ a.numCls }}">{{ a.number }}</td>
+                  <td><span class="{{ a.statusClass }}"><span class="{{ a.dotCls }}"></span>{{ a.status }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px">
-          <sc-for list="{{ templates }}" as="t" hint-placeholder-count="4">
-            <a href="Onboarding.dc.html" style="display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 12px; border: 1px dashed #C9C5BB; background: #FBFAF7; text-decoration: none; color: #15171E">
-              <span style="font-weight: 700">{{ t.name }}</span>
-              <span class="muted" style="font-size: 13px">{{ t.body }}</span>
-              <span style="font-size: 12.5px; font-weight: 600; color: #1E3A8A">{{ t.dir }}</span>
-            </a>
-          </sc-for>
-        </div>
+        <sc-if value="{{ none }}">
+          <div class="empty">
+            <span class="ico"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+            <b>No agents here</b>
+            <span>Try another search or folder.</span>
+          </div>
+        </sc-if>
       </section>
-
     </div>
   </main>
 </div>
+
+<sc-if value="{{ modal }}">
+  <div class="scrim" onClick="{{ closeScrim }}">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ca-h" style="width:min(880px,100%)">
+      <div class="modal-h">
+        <h2 id="ca-h" class="h2">{{ modalTitle }}</h2>
+        <button type="button" class="ibtn sm" aria-label="Close" onClick="{{ close }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+      </div>
+      <sc-if value="{{ stepDescribe }}">
+        <div class="modal-b">
+          <label class="field">Your website<input class="input" id="ca-site" value="apexsolar.example"></label>
+          <label class="field">What should the agent do?<textarea class="input" id="ca-desc" rows="5">Call people who fill the rooftop solar form on our website within 5 minutes. Ask about their monthly bill, roof shading and whether they own the home. If they qualify, book a free site visit and send a WhatsApp confirmation.</textarea></label>
+        </div>
+      </sc-if>
+      <sc-if value="{{ stepBuilding }}">
+        <div class="modal-b" style="min-height:300px;justify-content:center">
+          <div class="stack" style="gap:10px;max-width:420px;margin:0 auto;width:100%">
+            <sc-for list="{{ buildSteps }}" as="b">
+              <div style="display:flex;align-items:center;gap:10px">
+                <sc-if value="{{ b.done }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B8A6A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></sc-if>
+                <sc-if value="{{ b.todo }}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A909C" stroke-width="2" stroke-dasharray="3 3"><circle cx="12" cy="12" r="9"></circle></svg></sc-if>
+                <span style="{{ b.style }}">{{ b.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ stepPick }}">
+      <div class="modal-b">
+        <div class="stack" style="gap:8px">
+          <div class="between"><span class="lab">Type</span><button type="button" class="btn3 sm" onClick="{{ toggleOther }}" aria-expanded="{{ otherOpen }}">Other options</button></div>
+          <div class="typ">
+            <button type="button" class="tile" aria-pressed="{{ tPrompt }}" onClick="{{ pickPrompt }}">
+              <span class="ic" style="background:#0B8A6A;color:#FFFFFF"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2"></path></svg></span>
+              <span><span class="t" style="display:block">Single prompt</span><span class="d" style="display:block">Easy to start. Natural, free-flowing calls.</span></span>
+            </button>
+            <button type="button" class="tile" aria-pressed="{{ tFlow }}" onClick="{{ pickFlow }}">
+              <span class="ic" style="background:#6D3FC0;color:#FFFFFF"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="2"></circle><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="19" r="2"></circle><path d="M12 7v4M12 11l-6 6M12 11l6 6"></path></svg></span>
+              <span><span class="t" style="display:block">Conversation flow</span><span class="d" style="display:block">Step-by-step calls you fully control.</span></span>
+            </button>
+          </div>
+          <sc-if value="{{ other }}">
+            <div class="typ">
+              <button type="button" class="tile" aria-pressed="{{ tLlm }}" onClick="{{ pickLlm }}"><span><span class="t" style="display:block">Your own AI model</span><span class="d" style="display:block">Use your own AI server.</span></span></button>
+              <button type="button" class="tile" aria-pressed="{{ tImport }}" onClick="{{ pickImport }}"><span><span class="t" style="display:block">Import an agent</span><span class="d" style="display:block">Upload an agent file.</span></span></button>
+            </div>
+          </sc-if>
+        </div>
+        <div class="stack" style="gap:8px">
+          <span class="lab">Templates</span>
+          <div class="tabs" role="tablist" aria-label="Template categories">
+            <sc-for list="{{ cats }}" as="c"><button type="button" role="tab" aria-selected="{{ c.sel }}" onClick="{{ c.pick }}">{{ c.label }}</button></sc-for>
+          </div>
+          <div class="tiles" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+            <sc-for list="{{ tpls }}" as="t">
+              <button type="button" class="tile tpl" aria-pressed="{{ t.sel }}" onClick="{{ t.pick }}" onDblclick="{{ t.go }}" style="{{ t.style }}">
+                <span class="tic"><sc-for list="{{ t.icons }}" as="i"><span style="{{ i.style }}" title="{{ i.title }}"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ i.d }}"></path></svg></span></sc-for><sc-if value="{{ t.badge }}"><span class="bdg2">{{ t.badge }}</span></sc-if></span>
+                <span class="t">{{ t.name }}</span>
+                <span class="d">{{ t.body }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <div class="modal-f">
+        <span class="small muted" style="margin-right:auto;align-self:center">{{ footNote }}</span>
+        <sc-if value="{{ showBack }}"><button type="button" class="btn2" onClick="{{ backStep }}">Back</button></sc-if>
+        <sc-if value="{{ showCancel }}"><button type="button" class="btn2" onClick="{{ close }}">Cancel</button></sc-if>
+        <button type="button" class="btn" onClick="{{ primary }}" disabled="{{ busy }}">{{ primaryLabel }}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { filter: 'all' };
+    this.state = { view: 'all', q: '', menu: false, modal: false, kind: 'voice', type: 'flow', cat: 'all', tpl: 'site' };
   }
   renderVals() {
-    const filter = this.state.filter;
-    const fbase = 'min-height:36px;padding:0 14px;border-radius:9px;border:0;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;';
-    const filters = [
-      { id: 'all', label: 'All · 3' }, { id: 'out', label: 'Outbound · 2' }, { id: 'in', label: 'Inbound · 1' }, { id: 'draft', label: 'Drafts · 1' }
-    ].map((f) => ({ ...f, pressed: filter === f.id ? 'true' : 'false', style: fbase + (filter === f.id ? 'background:#FFFFFF;color:#15171E;box-shadow:0 1px 2px rgba(0,0,0,.08)' : 'background:transparent;color:#3A3D46'), pick: () => this.setState({ filter: f.id }) }));
-    const av = (bg, fg) => 'width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;background:' + bg + ';color:' + fg;
+    const s = this.state;
     const agents = [
-      { name: 'Apex Solar Advisor', initials: 'AS', avatar: av('#2F55D4', '#FFFFFF'), goal: 'Qualifies solar leads and books site visits', dir: 'Outbound', kind: 'out', voice: 'Anika · English (India)', number: '+91 80 •••• 4210', status: 'Live', statusClass: 'pill g', calls: '4', booked: '1', reply: '5.4 s', slow: true, warn: 'Slow replies. Callers wait over 5 seconds.' },
-      { name: 'Front Desk', initials: 'FD', avatar: av('#E8EDFF', '#1E3A8A'), goal: 'Answers the main line, books and reschedules', dir: 'Inbound', kind: 'in', voice: 'Arjun · English (India)', number: '+91 80 •••• 7781', status: 'Live', statusClass: 'pill g', calls: '0', booked: '—', reply: '1.1 s', slow: false },
-      { name: 'Sales Follow-up', initials: 'SF', avatar: av('#EFEDE8', '#3A3D46'), goal: 'Calls people who opened the quote email', dir: 'Outbound', kind: 'draft', voice: 'Diya · English (India)', number: 'No number yet', status: 'Draft', statusClass: 'pill', calls: '—', booked: '—', reply: '—', slow: false, warn: 'Needs a number and a test call before it can go live.' }
-    ].map((a) => ({ ...a, hasWarn: !!a.warn, replyStyle: 'font-size:18px;font-weight:700;' + (a.slow ? 'color:#9A3412' : 'color:#15171E') }));
-    const shown = agents.filter((a) => filter === 'all' || (filter === 'draft' ? a.kind === 'draft' : (filter === 'out' ? a.dir === 'Outbound' : a.dir === 'Inbound')));
-    const templates = [
-      { name: 'Lead qualification', body: 'Ask 3 to 5 questions, score the lead, book if ready', dir: 'Outbound' },
-      { name: 'Appointment booking', body: 'Find a slot, confirm by WhatsApp, handle reschedules', dir: 'Inbound or outbound' },
-      { name: 'Receptionist', body: 'Answer, route to the right person or take a message', dir: 'Inbound' },
-      { name: 'Payment reminder', body: 'Remind politely, offer a link, log the promise date', dir: 'Outbound' }
+      { name: 'Apex Solar Advisor', kind: 'flow', voice: 'Anika', number: '+91 80 •••• 4210', status: 'Live', folder: 'sales' },
+      { name: 'Front Desk', kind: 'flow', voice: 'Arjun', number: '+91 80 •••• 7781', status: 'Live', folder: 'support' },
+      { name: 'Sales Follow-up', kind: 'prompt', voice: 'Diya', number: '', status: 'Draft', folder: 'sales' },
+      { name: 'WhatsApp Concierge', kind: 'chat', voice: '—', number: 'WhatsApp', status: 'Live', folder: 'support' }
     ];
-    return { filters, shown, templates };
+    const KIND = {
+      flow: ['Conversation flow', '#6D3FC0', 'M12 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM12 7v4M12 11l-6 6M12 11l6 6M6 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM18 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4z'],
+      prompt: ['Single prompt', '#0B8A6A', 'M8 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2'],
+      chat: ['Chat agent', '#2B4ACB', 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z']
+    };
+    const count = (fn) => agents.filter(fn).length;
+    const mk = (id, label, n, d) => ({ id, label, n, d, pressed: s.view === id ? 'true' : 'false', pick: () => this.setState({ view: id }) });
+    const views = [
+      mk('all', 'All agents', agents.length, 'M8 8h8a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3zM12 4v4'),
+      mk('draft', 'Drafts', count((a) => a.status === 'Draft'), 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4')
+    ];
+    const folders = [mk('sales', 'Sales', count((a) => a.folder === 'sales')), mk('support', 'Support', count((a) => a.folder === 'support'))];
+    const q = s.q.trim().toLowerCase();
+    const shown = agents.filter((a) => {
+      if (s.view === 'draft' && a.status !== 'Draft') return false;
+      if ((s.view === 'sales' || s.view === 'support') && a.folder !== s.view) return false;
+      return !q || a.name.toLowerCase().includes(q);
+    }).map((a) => ({
+      ...a,
+      href: a.kind === 'prompt' ? 'Agent.dc.html#brief' : 'Agent.dc.html',
+      type: KIND[a.kind][0], tyStyle: 'background:' + KIND[a.kind][1], tyIcon: KIND[a.kind][2],
+      number: a.number || 'Not set', numCls: a.number ? '' : 'muted',
+      bars: CX.sigBars(a.name, 18),
+      sigCls: 'sig' + (a.status === 'Draft' ? ' grey' : a.kind === 'chat' ? ' teal' : ''),
+      statusClass: a.status === 'Live' ? 'pill g' : 'pill',
+      dotCls: a.status === 'Live' ? 'dot g' : 'dot'
+    }));
+
+    const catList = [['all', 'All'], ['recep', 'Receptionist'], ['sales', 'Outbound Sales & Reactivation'], ['book', 'Appointment Booking'], ['qual', 'Lead Qualification'], ['support', 'Customer Support & After-Hours'], ['collect', 'Payments & Collections'], ['office', 'Back-Office Tasks'], ['ivr', 'IVR & Keypad'], ['survey', 'Surveys & Reviews']];
+    const cats = catList.map(([id, label]) => ({ label, sel: s.cat === id ? 'true' : 'false', pick: () => this.setState({ cat: id }) }));
+    const IN = 'M15 4h5v5M20 4l-7 7M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z';
+    const OUT = 'M14 10l7-7M16 3h5v5M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z';
+    const T = [
+      { id: 'scratch', name: 'Build from scratch', body: 'Start with a blank agent.', cat: 'all', dashed: true, ic: ['plus'] },
+      { id: 'site', name: 'Generate from a description', body: 'Describe it, AI builds your agent.', cat: 'all', ic: ['ai'], badge: 'Suggested' },
+      { id: 'recep', name: 'Front Desk Receptionist', body: 'Answer the main line, help callers and route them.', cat: 'recep', ic: ['in'] },
+      { id: 'clinic', name: 'Clinic Receptionist', body: 'Book, move and cancel patient appointments.', cat: 'recep', ic: ['in', 'cal'] },
+      { id: 'router', name: 'Multi-Department Router', body: 'Send callers to sales, service or accounts.', cat: 'recep', ic: ['in', 'xfer'] },
+      { id: 'multi', name: 'Multilingual Receptionist', body: 'Answer in English, Hindi, Tamil or Malayalam.', cat: 'recep', ic: ['in'] },
+      { id: 'react', name: 'Lead Reactivation', body: 'Re-engage cold leads with a personal call.', cat: 'sales', ic: ['out'] },
+      { id: 'quote', name: 'Quote Follow-Up', body: 'Call people who opened a quote and close the gap.', cat: 'sales', ic: ['out', 'wa'] },
+      { id: 'winback', name: 'Win-Back Campaign', body: 'Bring back customers who did not renew.', cat: 'sales', ic: ['out'] },
+      { id: 'indiamart', name: 'IndiaMART / JustDial Enquiry Caller', body: 'Call marketplace enquiries within minutes.', cat: 'sales', ic: ['out'] },
+      { id: 'visit', name: 'Site Visit Booking', body: 'Find a slot and confirm it on WhatsApp.', cat: 'book', ic: ['out', 'cal', 'wa'] },
+      { id: 'noshow', name: 'Reminder & No-Show Reducer', body: 'Confirm upcoming visits and offer a new time.', cat: 'book', ic: ['out', 'cal'] },
+      { id: 'webinar', name: 'Event / Webinar Reminder', body: 'Remind registrants before an event starts.', cat: 'book', ic: ['out'] },
+      { id: 'demo', name: 'B2B Demo Booking', body: 'Qualify demo requests and book with sales.', cat: 'book', ic: ['in', 'cal'] },
+      { id: 'lead', name: 'Basic Lead Qualification', body: 'Ask qualifying questions and score the lead.', cat: 'qual', ic: ['out'] },
+      { id: 'hot', name: 'High-Intent Lead Screener', body: 'Spot ready-to-buy leads and pass them on fast.', cat: 'qual', ic: ['in', 'xfer'] },
+      { id: 'admission', name: 'Admissions Counsellor', body: 'Answer course and fee questions, book a session.', cat: 'qual', ic: ['out', 'cal'] },
+      { id: 'loan', name: 'Loan Eligibility Caller', body: 'Check basic eligibility and collect documents.', cat: 'qual', ic: ['out', 'wa'] },
+      { id: 'faq', name: 'FAQ Voice Agent', body: 'Answer common questions over the phone.', cat: 'support', ic: ['in', 'kb'] },
+      { id: 'triage', name: 'Support Triage', body: 'Understand the issue and route to the right team.', cat: 'support', ic: ['in', 'xfer'] },
+      { id: 'after', name: 'After-Hours Line', body: 'Take messages outside office hours.', cat: 'support', ic: ['in'] },
+      { id: 'status', name: 'Order & Service Status', body: 'Tell callers where their order or ticket stands.', cat: 'support', ic: ['in'] },
+      { id: 'emi', name: 'EMI Payment Reminder', body: 'Remind before the due date and send a UPI link.', cat: 'collect', ic: ['out', 'wa'] },
+      { id: 'overdue', name: 'Overdue Payment Collection', body: 'Collect overdue payments politely, log promises.', cat: 'collect', ic: ['out'] },
+      { id: 'cod', name: 'COD Order Confirmation', body: 'Confirm cash-on-delivery orders before dispatch.', cat: 'collect', ic: ['out'] },
+      { id: 'docs', name: 'Document Request Caller', body: 'Ask for missing documents and follow up.', cat: 'office', ic: ['out', 'wa'] },
+      { id: 'delivery', name: 'Delivery Status Caller', body: 'Check and share delivery updates.', cat: 'office', ic: ['out'] },
+      { id: 'verify', name: 'Address Verification', body: 'Confirm customer address and landmark details.', cat: 'office', ic: ['out'] },
+      { id: 'ivr', name: 'IVR Navigation Bot', body: 'Get through phone menus on your behalf.', cat: 'ivr', ic: ['out', 'key'] },
+      { id: 'ivrbook', name: 'IVR Appointment Scheduler', body: 'Book service slots using keypad input.', cat: 'ivr', ic: ['in', 'key', 'cal'] },
+      { id: 'nps', name: 'After-Install Survey', body: 'Ask three questions and flag unhappy customers.', cat: 'survey', ic: ['out'] },
+      { id: 'review', name: 'Google Review Request', body: 'Thank happy customers and send a review link.', cat: 'survey', ic: ['out', 'wa'] }
+    ];
+    const ICON = {
+      plus: ['M12 5v14M5 12h14', '#EEF0EE', '#5A6170', 'Blank'],
+      ai: ['M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z', '#EAEEFC', '#2B4ACB', 'Built by AI'],
+      in: ['M15 4h5v5M20 4l-7 7M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z', '#E2F3EE', '#0B8A6A', 'Answers calls'],
+      out: ['M14 10l7-7M16 3h5v5M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z', '#FCEDE4', '#B4470F', 'Makes calls'],
+      cal: ['M8 2v4M16 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2z', '#FBF0DC', '#9A5B00', 'Books appointments'],
+      wa: ['M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z', '#E2F3EE', '#0B8A6A', 'Sends WhatsApp'],
+      xfer: ['M17 3l4 4-4 4M21 7H9M7 21l-4-4 4-4M3 17h12', '#FBE8EE', '#A1294F', 'Transfers calls'],
+      kb: ['M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21a2 2 0 0 1 2-2h13', '#E0F2F6', '#0E7490', 'Uses knowledge base'],
+      key: ['M5 5h2M11 5h2M17 5h2M5 11h2M11 11h2M17 11h2M5 17h2M11 17h2M17 17h2', '#F0EAFB', '#6D3FC0', 'Keypad / IVR']
+    };
+    const isBrief = s.type === 'prompt';
+    const special = s.type === 'llm' || s.type === 'import';
+    const editorHash = isBrief ? '/Agent/brief' : '/Agent';
+    const create = (id) => { if (special) return this.go('/Agent'); if (id === 'site') return this.setState({ tpl: id, step: 'describe' }); this.go(editorHash); };
+    const tpls = T.filter((t) => s.cat === 'all' || t.cat === s.cat || t.cat === 'all').map((t) => ({
+      icons: t.ic.map((k) => ({ d: ICON[k][0], style: 'background:' + ICON[k][1] + ';color:' + ICON[k][2], title: ICON[k][3] })), badge: t.badge || '',
+      ...t, sel: s.tpl === t.id ? 'true' : 'false', pick: () => this.setState({ tpl: t.id }), go: () => create(t.id), style: t.dashed ? 'border-style:dashed' : '',
+      tag: t.tag || (t.dir === 'in' ? 'Answers calls' : t.dir === 'out' ? 'Makes calls' : ''),
+      tagCls: t.tagCls === 'b' ? 'out' : (t.dir === 'in' ? 'in' : t.dir === 'out' ? 'out' : 'none'),
+      tagIcon: t.tag ? 'M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z' : (t.dir === 'in' ? IN : OUT)
+    }));
+    const picked = T.find((t) => t.id === s.tpl) || T[0];
+    const BUILD = isBrief
+      ? ['Reading apexsolar.example (6 pages)', 'Writing the agent brief', 'Choosing actions: book, WhatsApp, transfer', 'Adding 6 fields to capture', 'Creating 7 test cases']
+      : ['Reading apexsolar.example (6 pages)', 'Writing the agent brief', 'Building 10 conversation steps', 'Adding 6 fields to capture', 'Creating 7 test cases'];
+    const step = s.step || 'pick';
+
+    const open = (kind) => () => this.setState({ menu: false, modal: true, kind, step: 'pick' });
+    return {
+      q: s.q, views, folders, shown, none: shown.length === 0,
+      search: (e) => this.setState({ q: e.target.value }),
+      menu: s.menu, menuOpen: s.menu ? 'true' : 'false',
+      toggleMenu: () => this.setState({ menu: !s.menu }),
+      openVoice: open('voice'), openChat: open('chat'),
+      modal: s.modal, modalTitle: s.kind === 'chat' ? 'Create chat agent' : 'Create voice agent',
+      close: () => this.setState({ modal: false }),
+      closeScrim: (e) => { if (e.target === e.currentTarget) this.setState({ modal: false }); },
+      tPrompt: s.type === 'prompt' ? 'true' : 'false', tFlow: s.type === 'flow' ? 'true' : 'false',
+      pickPrompt: () => this.setState({ type: 'prompt' }), pickFlow: () => this.setState({ type: 'flow' }),
+      tLlm: s.type === 'llm' ? 'true' : 'false', tImport: s.type === 'import' ? 'true' : 'false',
+      pickLlm: () => this.setState({ type: 'llm' }), pickImport: () => this.setState({ type: 'import' }),
+      other: !!s.other, otherOpen: s.other ? 'true' : 'false', toggleOther: () => this.setState({ other: !s.other }),
+      tplNote: special ? 'Templates do not apply to this type' : (isBrief ? 'Opens in the prompt editor' : 'Opens on the flow canvas'),
+      cats, tpls,
+      stepPick: step === 'pick', stepDescribe: step === 'describe', stepBuilding: step === 'building',
+      buildSteps: BUILD.map((label, i) => ({ label, done: i < (s.built || 0), todo: i >= (s.built || 0), style: i < (s.built || 0) ? '' : 'color:var(--mut)' })),
+      footNote: step === 'describe' ? 'You can change everything later.' : '',
+      showBack: step === 'describe', showCancel: step !== 'building',
+      backStep: () => this.setState({ step: 'pick' }),
+      busy: step === 'building',
+      primaryLabel: step === 'pick' ? (special ? (s.type === 'llm' ? 'Connect my model' : 'Choose a file') : (picked.id === 'site' ? 'Continue' : (picked.id === 'scratch' ? 'Create blank agent' : 'Create ' + picked.name))) : (step === 'describe' ? 'Build my agent' : 'Building…'),
+      primary: () => { if (step === 'pick') return create(picked.id); if (step === 'describe') return this.build(BUILD.length); }
+    };
+  }
+  go(h) { this.setState({ modal: false }); location.hash = h || (this.state.type === 'prompt' ? '/Agent/brief' : '/Agent'); }
+  build(n) {
+    this.setState({ step: 'building', built: 0 });
+    const t = setInterval(() => {
+      const b = (this.state.built || 0) + 1;
+      this.setState({ built: b });
+      if (b >= n) { clearInterval(t); setTimeout(() => this.go(), 600); }
+    }, 550);
   }
 }
 </script>
